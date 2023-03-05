@@ -1,6 +1,43 @@
-// http://doc.aldebaran.com/java/2-1/com/aldebaran/qi/helper/proxies/ALLeds.html
+//http://doc.aldebaran.com/2-8/naoqi/sensors/alleds.html
+//http://doc.aldebaran.com/2-8/naoqi/sensors/alleds-api.html#ALLedsProxy::fade__ssCR.floatCR.floatCR
 
 package src;
 
+import com.aldebaran.qi.Application;
+import com.aldebaran.qi.helper.proxies.ALLeds;
+import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
+
 public class RodeOgen {
+    private String naam;
+    private Application application;
+
+    public void verbind(String hostname, int port){
+        String robotUrl = "tcp://" + hostname + ":" + port;
+        // Create a new application
+        this.application = new Application(new String[]{}, robotUrl);
+        // Start your application
+        application.start();
+
+    }
+
+    public void ogenAan() throws Exception {
+        ALLeds ogenLeds = new ALLeds(this.application.session());
+        ogenLeds.fadeRGB("FaceLeds", "red", 2F);
+        ogenLeds.on("FaceLeds");
+
+
+    }
+
+    public void ogenUit() throws Exception {
+        ALLeds ogenLeds = new ALLeds(this.application.session());
+        ogenLeds.off("FaceLeds");
+
+    }
+
+    public void praten(String tekst) throws Exception {
+        // Create an ALTextToSpeech object and link it to your current session
+        ALTextToSpeech tts = new ALTextToSpeech(this.application.session());
+        // Make your robot say something
+        tts.say(tekst);
+    }
 }
