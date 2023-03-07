@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="942aac4f-06df-4202-995a-7ba396808a44" name="Changes" comment="ini groene ogen branch; groene ogen code">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="942aac4f-06df-4202-995a-7ba396808a44" name="Changes" comment="git ignore files weg halen" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,6 +45,11 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/git ignore" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
@@ -95,7 +98,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678207466595</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="git ignore files weg halen">
+      <created>1678208012188</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1678208012188</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -115,6 +125,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ini valentijn dev branch" />
     <MESSAGE value="ini groene ogen branch; groene ogen code" />
-    <option name="LAST_COMMIT_MESSAGE" value="ini groene ogen branch; groene ogen code" />
+    <MESSAGE value="git ignore files weg halen" />
+    <option name="LAST_COMMIT_MESSAGE" value="git ignore files weg halen" />
   </component>
 </project>

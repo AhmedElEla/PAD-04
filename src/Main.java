@@ -8,6 +8,7 @@ public class Main {
         nao.verbind("nao.local", 9559);
         nao.zeg("Hallo Mats! Fijne vakantie gehad?");
         nao.groeneOgen();
+        nao.zeg("Fijn om te horen! Ik krijg daar helemaal groene ogen van!!!");
 
     }
 }
