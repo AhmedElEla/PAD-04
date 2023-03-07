@@ -1,3 +1,7 @@
+// Valentijn Bruggeman
+// Klas IT101
+// Dit programma is de main van de objecten van de NAO robot (hij roept de programmas aan)
+
 public class Main {
     public static void main(String[] args) throws Exception {
         NAO nao = new NAO();
