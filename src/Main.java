@@ -5,16 +5,21 @@ import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        NAOArmenBewegen nao = new NAOArmenBewegen();
+        HoofdBewegen nao = new HoofdBewegen();
         nao.verbind("nao.local", 9559);
-        nao.praten("Ik ben cute");
-        nao.rightShoulderUP();
+        nao.praten("Hello World");
+        nao.staan();
         Thread.sleep(10);
-        nao.leftShoulderUP();
+        nao.hoofdLinks();
         Thread.sleep(10);
-        nao.leftShoulder();
+        nao.hoofdRechts();
         Thread.sleep(10);
-        nao.rightShoulder();
+        nao.hoofdMidden();
+        Thread.sleep(10);
+        nao.hoofdBoven();
+        Thread.sleep(10);
+        nao.hoofdBeneden();
+
 
 
 
