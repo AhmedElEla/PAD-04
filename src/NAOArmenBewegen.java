@@ -17,6 +17,10 @@ public class NAOArmenBewegen {
         // Start your application
         application.start();
     }
+    public void staan() throws Exception {
+        ALRobotPosture robotPosture = new ALRobotPosture(this.application.session());
+        robotPosture.goToPosture("StandInit", 0.8f);
+    }
     public void praten(String tekst) throws Exception {
         // Create an ALTextToSpeech object and link it to your current session
         ALTextToSpeech tts = new ALTextToSpeech(this.application.session());
@@ -44,6 +48,6 @@ public class NAOArmenBewegen {
     public void leftShoulderUP() throws Exception {
         ALMotion robotPosture;
         robotPosture = new ALMotion(this.application.session());
-        robotPosture.angleInterpolation("RShoulderPitch", Math.PI / 2, 1.0f, true);
+        robotPosture.angleInterpolation("LShoulderPitch", Math.PI / -2, 1.0f, true);
     }
 }
