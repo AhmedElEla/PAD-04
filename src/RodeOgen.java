@@ -22,15 +22,15 @@ public class RodeOgen {
 
     public void ogenAan() throws Exception {
         ALLeds ogenLeds = new ALLeds(this.application.session());
-        ogenLeds.fadeRGB("FaceLeds", "red", 2F);
-        ogenLeds.on("FaceLeds");
+        ogenLeds.fadeRGB("FaceLeds", "red", 0.1f);
+
 
 
     }
 
     public void ogenUit() throws Exception {
         ALLeds ogenLeds = new ALLeds(this.application.session());
-        ogenLeds.off("FaceLeds");
+        ogenLeds.on("FaceLeds");
 
     }
 
