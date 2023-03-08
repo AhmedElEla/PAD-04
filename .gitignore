@@ -1,0 +1,6 @@
+#ignore specific files
+pad-4.iml
+
+#ignore specific directories
+/.idea/
+/out/

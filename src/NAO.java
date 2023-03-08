@@ -48,37 +48,16 @@ public class NAO {
     }
     public void groeneOgen () throws Exception {
         ALLeds leds = new ALLeds(this.application.session());
-        leds.fadeRGB("FaceLeds", "green", (float)1.0); // float value om het te specificeren
-        leds.setIntensity("FaceLeds", (float)0.9);
+        leds.fadeRGB("FaceLeds", "green", 0.1F); // float value om het te specificeren
+        //leds.setIntensity("FaceLeds", (float)0.9);
+        //leds.fadeRGB("FeetLeds", "green", 0.1F );
+        //leds.fadeRGB("ChestLeds", "green", 0.1F);
+    }
+
+    public void ledsWit () throws Exception {
+        ALLeds leds = new ALLeds(this.application.session());
+        leds.on("FaceLeds");
+        //leds.on("AllLeds");
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -6,9 +6,10 @@ public class Main {
     public static void main(String[] args) throws Exception {
         NAO nao = new NAO();
         nao.verbind("nao.local", 9559);
-        nao.zeg("Hallo Mats! Fijne vakantie gehad?");
+        //nao.zeg("Hallo Mats! Fijne vakantie gehad?");
         nao.groeneOgen();
-        nao.zeg("Fijn om te horen! Ik krijg daar helemaal groene ogen van!!!");
-
+        //nao.zeg("Ik ben blij om te zien dat u de beweging goed na doet! Ik krijg daar zelfs helemaal groene ogen van!!!");
+        Thread.sleep(5000);
+        nao.ledsWit();
     }
 }
