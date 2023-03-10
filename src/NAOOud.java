@@ -6,7 +6,7 @@ import com.aldebaran.qi.Application;
 import com.aldebaran.qi.helper.proxies.ALLeds;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
-public class NAO {
+public class NAOOud {
     private String naam;
     private Application application;
 
