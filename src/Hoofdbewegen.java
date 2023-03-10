@@ -5,7 +5,7 @@ import com.aldebaran.qi.helper.proxies.ALMotion;
 import com.aldebaran.qi.helper.proxies.ALRobotPosture;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
-public class HoofdBewegen {
+public class Hoofdbewegen {
     private String naam;
     private Application application;
 
