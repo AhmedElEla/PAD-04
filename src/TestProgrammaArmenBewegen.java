@@ -2,18 +2,30 @@ package src;
 
 public class TestProgrammaArmenBewegen {
     public static void main(String[] args) throws Exception {
-        NAOArmenBewegen nao = new NAOArmenBewegen();
+        HoofdBewegen nao = new HoofdBewegen();
         nao.verbind("nao.local", 9559);
         nao.praten("Ik ben NAONAO");
         nao.staan();
-        nao.rightShoulderUP();
-        Thread.sleep(10);
-        nao.leftShoulderUP();
-        Thread.sleep(10);
+        //nao.rightShoulderUP();
+
+        nao.praten("Hello World");
         nao.staan();
-        nao.leftShoulder();
+
         Thread.sleep(10);
-        nao.rightShoulder();
+        nao.hoofdLinks();
+        Thread.sleep(10);
+
+        nao.staan();
+        //nao.leftShoulder();
+
+        nao.hoofdRechts();
+        Thread.sleep(10);
+        nao.hoofdMidden();
+        Thread.sleep(10);
+        nao.hoofdBoven();
+        Thread.sleep(10);
+        nao.hoofdBeneden();
+
 
 
 

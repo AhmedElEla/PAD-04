@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4fc8afdc-5262-4214-8e4a-064717b046c3" name="Changes" comment="NAOArmenBewegen geupdate">
-      <change afterPath="$PROJECT_DIR$/src/NAOArmenBeweeg.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/NAOMain.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TestProgrammaArmenBeweeg.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/pad-4/src/HoofdBewegen.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/pad-4/production/pad-4/production/pad-4/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/pad-4/production/pad-4/production/pad-4/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/pad-4/production/pad-4/production/pad-4/src/RodeOgen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/pad-4/production/pad-4/production/pad-4/src/RodeOgen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/pad-4/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/pad-4/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/pad-4/src/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/pad-4/src/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/pad-4/src/NAOArmenBewegen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/pad-4/src/NAOArmenBewegen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HoofdBewegen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HoofdBewegen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/NAOArmenBewegen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TestProgrammaArmenBewegen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TestProgrammaArmenBewegen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
