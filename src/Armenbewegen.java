@@ -4,7 +4,7 @@ import com.aldebaran.qi.helper.proxies.ALMotion;
 import com.aldebaran.qi.helper.proxies.ALRobotPosture;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
-public class NAOArmenBeweeg {
+public class Armenbewegen {
 
     private String naam;
     private Application application;
