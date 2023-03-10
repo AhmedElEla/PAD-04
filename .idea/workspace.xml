@@ -51,8 +51,8 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="TestProgrammaArmenBewegen" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="src.TestProgrammaArmenBewegen" />
+    <configuration name="TestProgrammaArmenBeweeg" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="src.TestProgrammaArmenBeweeg" />
       <module name="pad-4" />
       <extension name="coverage">
         <pattern>
@@ -79,10 +79,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.TestProgrammaArmenBewegen" />
-        <item itemvalue="Application.TestProgrammaArmenBewegen" />
-        <item itemvalue="Application.TestProgrammaArmenBewegen" />
-        <item itemvalue="Application.TestProgrammaArmenBewegen" />
+        <item itemvalue="Application.TestProgrammaArmenBeweeg" />
       </list>
     </recent_temporary>
   </component>
