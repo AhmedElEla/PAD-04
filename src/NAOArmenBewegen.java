@@ -1,10 +1,11 @@
 package src;
 import com.aldebaran.qi.Application;
+import com.aldebaran.qi.helper.proxies.ALMemory;
 import com.aldebaran.qi.helper.proxies.ALMotion;
 import com.aldebaran.qi.helper.proxies.ALRobotPosture;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
-public class NAOArmenBeweeg {
+public class NAOArmenBewegen {
 
     private String naam;
     private Application application;
