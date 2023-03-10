@@ -1,9 +1,6 @@
 package src;
 
-import com.aldebaran.qi.Application;
-import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
-
-public class Main {
+public class TestProgrammaArmenBewegen {
     public static void main(String[] args) throws Exception {
         NAOArmenBewegen nao = new NAOArmenBewegen();
         nao.verbind("nao.local", 9559);
