@@ -34,7 +34,10 @@ public class Rodeogen {
         ALTextToSpeech tts = new ALTextToSpeech(this.application.session());
         // Make your robot say something
         tts.say(tekst);
+
     }
+
+
 }
 
 
