@@ -1,8 +1,8 @@
 package src;
 
-public class TestProgrammaArmenBewegen {
+public class TestProgrammaArmenBeweeg {
     public static void main(String[] args) throws Exception {
-        NAOArmenBewegen nao = new NAOArmenBewegen();
+        NAOArmenBeweeg nao = new NAOArmenBeweeg();
         nao.verbind("nao.local", 9559);
         nao.praten("Ik ben NAONAO");
         nao.staan();

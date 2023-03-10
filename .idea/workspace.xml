@@ -31,6 +31,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2MBarMTeoyk2DsreLOzn0GwR537" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -52,8 +53,8 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="TestProgrammaArmenBewegen" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="src.TestProgrammaArmenBewegen" />
+    <configuration name="TestProgrammaArmenBeweeg" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="src.TestProgrammaArmenBeweeg" />
       <module name="pad-4" />
       <extension name="coverage">
         <pattern>
@@ -67,7 +68,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.TestProgrammaArmenBewegen" />
+        <item itemvalue="Application.TestProgrammaArmenBeweeg" />
       </list>
     </recent_temporary>
   </component>
