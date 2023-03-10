@@ -1,6 +1,7 @@
-package src;
+import src.RodeOgen;
 
-public class NAOArmenBeweegTestProgramma {
+public class Main {
+
     public static void main(String[] args) throws Exception {
         RodeOgen nao = new RodeOgen();
         nao.verbind("nao.local", 9559);
