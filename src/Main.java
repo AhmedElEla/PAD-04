@@ -1,6 +1,6 @@
 import src.RodeOgen;
 
-public class NAOMain {
+public class Main {
 
     public static void main(String[] args) throws Exception {
         RodeOgen nao = new RodeOgen();
