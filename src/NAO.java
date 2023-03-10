@@ -4,8 +4,6 @@
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.helper.proxies.ALLeds;
-import com.aldebaran.qi.helper.proxies.ALMotion;
-import com.aldebaran.qi.helper.proxies.ALRobotPosture;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
 public class NAO {
@@ -27,25 +25,7 @@ public class NAO {
         tts.say(tekst);
     }
 
-    public void staan () throws Exception {
-        {
-            ALRobotPosture robotPosture = new ALRobotPosture(this.application.session());
-            robotPosture.goToPosture("StandInit", 0.99f);
-
-        }
-    }
-    public void zitten () throws Exception {
-        {
-            ALRobotPosture robotPosture = new ALRobotPosture(this.application.session());
-            robotPosture.goToPosture("Sit", 0.6f);
-        }
-
-    }
-
-    public void rechterArm () throws Exception {
-        ALMotion motion = new ALMotion(this.application.session());
-        // motion.stiffnessInterpolation("Rechterarm",0.5; 0.8; 1; 0.8; 0.5; 0.0 , 1);
-    }
+    //Groene ogen user story
     public void groeneOgen () throws Exception {
         ALLeds leds = new ALLeds(this.application.session());
         leds.fadeRGB("FaceLeds", "green", 0.1F); // float value om het te specificeren
@@ -58,6 +38,11 @@ public class NAO {
         ALLeds leds = new ALLeds(this.application.session());
         leds.on("FaceLeds");
         //leds.on("AllLeds");
+    }
+
+    // RoodHerkennen User Story
+    public void roodHerkennen () throws Exception {
+
     }
 
 }

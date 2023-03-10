@@ -3,4 +3,5 @@ pad-4.iml
 
 #ignore specific directories
 /.idea/
-/out/production/pad-4/
+out/production/pad-4/
+
