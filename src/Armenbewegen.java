@@ -36,7 +36,7 @@ public class Armenbewegen {
     public void leftShoulder() throws Exception {
         ALMotion robotPosture;
         robotPosture = new ALMotion(this.application.session());
-        robotPosture.angleInterpolation("LShoulderRoll", Math.PI / 4, 0.2f, true);
+        robotPosture.angleInterpolation("LShoulderRoll", -119.5, 0.2f, true);
     }
     public void rightShoulderUP() throws Exception {
         ALMotion robotPosture;
@@ -48,5 +48,11 @@ public class Armenbewegen {
         ALMotion robotPosture;
         robotPosture = new ALMotion(this.application.session());
         robotPosture.angleInterpolation("LShoulderPitch", Math.PI / -2, 1.0f, true);
+    }
+
+    public void leftElbowUP() throws Exception {
+        ALMotion robotPosture;
+        robotPosture = new ALMotion(this.application.session());
+        robotPosture.angleInterpolation("LElbowRoll", -88.5, 1.0f,true );
     }
 }

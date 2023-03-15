@@ -3,9 +3,15 @@ package src;
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        Nao naoRobot = new Nao();
-        naoRobot.verbind("127.0.0.1", 9559);
-        naoRobot.zeg("Hallo wereld!");
+        Armenbewegen nao = new Armenbewegen();
+        nao.verbind("localhost", 50992);
+        nao.praten("Hallo wereld!");
+        nao.staan();
+
+
+
+
+
 
 
     }
