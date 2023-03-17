@@ -1,9 +1,9 @@
-package src;
+package src.speech;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
-public class Nao {
+public class Praten {
 
     private Application application;
 

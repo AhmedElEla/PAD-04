@@ -1,9 +1,11 @@
 package src;
 
-public class Main {
+import src.speech.Praten;
+
+public class Mpraten {
     public static void main(String[] args) throws Exception {
 
-        Nao naoRobot = new Nao();
+        Praten naoRobot = new Praten();
         naoRobot.verbind("127.0.0.1", 9559);
         naoRobot.zeg("Hallo wereld!");
 

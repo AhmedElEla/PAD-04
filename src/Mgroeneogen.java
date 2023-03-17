@@ -1,4 +1,7 @@
 package src;
+
+import src.leds.Groeneogen;
+
 // Valentijn Bruggeman
 // Klas IT101
 // Dit programma is de main van de objecten van de NAO robot (hij roept de programmas aan)
