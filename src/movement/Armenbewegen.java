@@ -1,4 +1,4 @@
-package src;
+package src.movement;
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.helper.proxies.ALMotion;
 import com.aldebaran.qi.helper.proxies.ALRobotPosture;

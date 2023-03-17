@@ -1,5 +1,7 @@
 package src;
 
+import src.movement.Hoofdbewegen;
+
 public class Mhoofdbewegen {
     public static void main(String[] args) throws Exception {
         Hoofdbewegen nao = new Hoofdbewegen();

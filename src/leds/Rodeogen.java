@@ -1,4 +1,4 @@
-package src;
+package src.leds;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.helper.proxies.ALLeds;
