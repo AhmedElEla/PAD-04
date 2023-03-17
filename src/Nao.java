@@ -1,16 +1,17 @@
 package src;
 
 import com.aldebaran.qi.Application;
-import com.aldebaran.qi.helper.proxies.ALLeds;
-import com.aldebaran.qi.helper.proxies.ALMotion;
-import com.aldebaran.qi.helper.proxies.ALRobotPosture;
-import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
+import com.aldebaran.qi.helper.proxies.*;
+import src.configuration.ConfigureNao;
+import src.leds.bepaalOogKleur;
+import src.speech.TextToSpeech;
 
 public class Nao {
     private Application application;
+    private TextToSpeech tts;
 // Verbind met robot
-    public void verbind(String hostname, int port) {
-        String robotUrl = "tcp://" + hostname + ":" + port;
+    public void verbind() {
+        String robotUrl = "tcp://" + ConfigureNao.HOSTNAME + ":" + ConfigureNao.PORT;
         // Create a new application
         this.application = new Application(new String[]{}, robotUrl);
         // Start your application
@@ -19,24 +20,13 @@ public class Nao {
 // Praten
     public void praten(String tekst) throws Exception {
         // Create an ALTextToSpeech object and link it to your current session
-        ALTextToSpeech tts = new ALTextToSpeech(this.application.session());
-        // Make your robot say something
-        tts.say(tekst);
+        // (als de verandering niet werkt dit weer gebruiken tijdelijk) ALTextToSpeech tts = new ALTextToSpeech(this.application.session());
+        // Robot iets laten zeggen
+        this.tts.praten(tekst);
     }
-// Rode ogen
-    public void rodeOgen() throws Exception {
-        ALLeds ogenLeds = new ALLeds(this.application.session());
-        ogenLeds.fadeRGB("FaceLeds", "red", 0.1f);
-    }
-// Groene ogen
-    public void groeneOgen() throws Exception {
-        ALLeds leds = new ALLeds(this.application.session());
-        leds.fadeRGB("FaceLeds", "green", 0.1F); // float value om het te specificeren
-    }
-// Ogen worden wit
-    public void ogenUit() throws Exception {
-        ALLeds ogenLeds = new ALLeds(this.application.session());
-        ogenLeds.on("FaceLeds");
+// Oog leds bedienen
+    public void bepaalOogKleur(String color, float duration) throws Exception {
+        return;
     }
 // Armen bewegen
     public void staan() throws Exception {
@@ -95,4 +85,9 @@ public class Nao {
         robotPosture = new ALMotion(this.application.session());
         robotPosture.angleInterpolation("HeadPitch", Math.PI / -2, 2.0f,true);
     }
+// Rood herkennen
+/*    public void roodHerkennen() throws Exception {
+        ALRedBallDetection rodebal = new ALRedBallDetection(this.application.session());
+        rodebal.
+    }*/
 }
