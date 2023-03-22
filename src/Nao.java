@@ -3,7 +3,6 @@ package src;
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.helper.proxies.*;
 import src.configuration.ConfigureNao;
-import src.leds.bepaalOogKleur;
 import src.speech.TextToSpeech;
 
 public class Nao {

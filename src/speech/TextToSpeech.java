@@ -9,7 +9,6 @@ public class TextToSpeech {
     public TextToSpeech(Session session) throws Exception {
         this.tts = new ALTextToSpeech(session);
     }
-
     public void praten(String tekst) throws Exception {
         this.tts.say(tekst);
     }
