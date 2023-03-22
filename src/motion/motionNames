@@ -1,0 +1,10 @@
+joint names:
+http://doc.aldebaran.com/2-5/family/robots/joints_robot.html
+Armen:
+1. "LShoulderRoll", Math.PI / 4, 0.2f, true
+2. "RShoulderPitch", Math.PI / -2, 1.0f, true
+3. "LShoulderPitch", Math.PI / -2, 1.0f, true
+
+Hoofd:
+1. "HeadYaw", Math.PI / 2, 1.0f, true
+2. "HeadPitch", Math.PI / 4, 2.0f,true
