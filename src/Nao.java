@@ -6,8 +6,10 @@ import com.aldebaran.qi.helper.proxies.*;
 import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
 import src.leds.OogController;
+import src.memory.Memory;
 import src.motion.MotionController;
 import src.motion.PostureController;
+import src.red_detection.RedBallDetection;
 import src.speech.TextToSpeech;
 
 public class Nao {
@@ -16,7 +18,9 @@ public class Nao {
     private OogController ogen;
     private PostureController posture;
     private MotionController motion;
-    private BehaviourController behaviour;
+    private RedBallDetection redBallDetection;
+    private Memory memory;
+	private BehaviourController behaviour;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -30,7 +34,10 @@ public class Nao {
         ogen = new OogController(application.session());
         posture = new PostureController(application.session());
         motion = new MotionController(application.session());
-        behaviour = new BehaviourController(application.session());
+        redBallDetection = new RedBallDetection(application.session());
+        memory = new Memory(application.session());
+		behaviour = new BehaviourController(application.session());
+
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -48,11 +55,24 @@ public class Nao {
     public void bepaalMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
         motion.bepaalMotion(names, angleLists, timeLists, isAbsolute);
     }
-    public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
+
+    public void roodHerkennen() throws Exception {
+        // Create an instance of ALMemory and subscribe to the "redBallDetected" event
+        redBallDetection.subscribeToEvent("redBallDetected",new EventCallback<ArrayList>() {
+            @Override
+            public void onEvent(ArrayList o) throws InterruptedException, CallError {
+                System.out.println(memory.getEventList());
+                for (Object redData : o) {
+                    System.out.println(redData);
+                }
+            }
+        });
+    }
+	 public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
         behaviour.bepaalBehaviour(behavior);
     }
     public void behaviorTest() throws Exception {
         ALBehaviorManager behavior = new ALBehaviorManager(this.application.session());
         behavior.startBehavior("pad4-4efa3c/dans");
-    }
+	}
 }
