@@ -2,14 +2,16 @@ package src;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
-import com.aldebaran.qi.helper.proxies.*;
+import com.aldebaran.qi.Session;
+import com.aldebaran.qi.helper.EventCallback;
 import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
 import src.leds.OogController;
 import src.memory.Memory;
 import src.motion.MotionController;
 import src.motion.PostureController;
-import src.red_detection.RedBallDetection;
+import src.motion.TrackerController;
+import src.vision.RedBallDetection;
 import src.speech.TextToSpeech;
 
 public class Nao {
@@ -19,8 +21,12 @@ public class Nao {
     private PostureController posture;
     private MotionController motion;
     private RedBallDetection redBallDetection;
-    private Memory memory;
+    private Memory redballmemory;
+    private TrackerController RedBalltracker;
+    private long redBallid;
 	private BehaviourController behaviour;
+
+
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -35,7 +41,8 @@ public class Nao {
         posture = new PostureController(application.session());
         motion = new MotionController(application.session());
         redBallDetection = new RedBallDetection(application.session());
-        memory = new Memory(application.session());
+        redballmemory = new Memory(application.session());
+        RedBalltracker = new TrackerController(application.session());
 		behaviour = new BehaviourController(application.session());
 
     }
@@ -55,10 +62,25 @@ public class Nao {
     public void bepaalMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
         motion.bepaalMotion(names, angleLists, timeLists, isAbsolute);
     }
+// rood herkennen (is nog niet helemaal netjes
+    public void trackRedBall(Session session) throws Exception {
+        redBallDetection.subscribe("redBallDetected");
 
-    public void roodHerkennen() throws Exception {
+        redBallid = redballmemory.subscribeToEvent("redBallDetected", new EventCallback<>() {
+            @Override
+            public void onEvent(Object o) throws InterruptedException, CallError {
+
+                System.out.println(redBallid);
+
+            }
+        });
+
+
+    }
+
+    /*public void roodHerkennen() throws Exception {
         // Create an instance of ALMemory and subscribe to the "redBallDetected" event
-        redBallDetection.subscribeToEvent("redBallDetected",new EventCallback<ArrayList>() {
+        redBallDetection.subscribeToEvent("redBallDetected",new EventCallback<ArrayList>() ){
             @Override
             public void onEvent(ArrayList o) throws InterruptedException, CallError {
                 System.out.println(memory.getEventList());
@@ -66,6 +88,8 @@ public class Nao {
                     System.out.println(redData);
                 }
             }
+        };
+    }*/
         });
     }
 	 public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
