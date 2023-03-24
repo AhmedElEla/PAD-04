@@ -1,12 +1,16 @@
 package src;
 
 import com.aldebaran.qi.Application;
+import com.aldebaran.qi.CallError;
+import com.aldebaran.qi.helper.EventCallback;
 import com.aldebaran.qi.helper.proxies.*;
 import src.configuration.ConfigureNao;
 import src.leds.OogController;
 import src.motion.MotionController;
 import src.motion.PostureController;
 import src.speech.TextToSpeech;
+
+import java.util.ArrayList;
 
 public class Nao {
     private Application application;
@@ -43,5 +47,22 @@ public class Nao {
     }
     public void bepaalMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
         motion.bepaalMotion(names, angleLists, timeLists, isAbsolute);
+    }
+
+    public void roodHerkennen() throws Exception {
+        // Create an instance of ALMemory and subscribe to the "redBallDetected" event
+        ALMemory alMemory = new ALMemory(this.application.session());
+        alMemory.subscribeToEvent("redBallDetected", new EventCallback() {
+            @Override
+            public void onEvent(Object o) throws InterruptedException, CallError {
+                ArrayList<?> redBallList = (ArrayList<?>) o;
+
+                System.out.println("Ik zie een rode object");
+                for (Object redData : redBallList) {
+                    System.out.println(redData);
+                    // Perform any additional actions here
+                }
+            }
+        });
     }
 }
