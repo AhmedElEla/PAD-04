@@ -7,8 +7,8 @@ public class RedBallDetection {
     private ALRedBallDetection redBallDetection;
     public RedBallDetection(Session session) throws Exception{
         redBallDetection = new ALRedBallDetection(session);
-
     }
-    public void subscribe(String event) {
+    public void subscribe() throws Exception {
+        redBallDetection.subscribe("redBallDetected");
     }
 }

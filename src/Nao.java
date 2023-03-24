@@ -2,8 +2,6 @@ package src;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
-import com.aldebaran.qi.Session;
-import com.aldebaran.qi.helper.EventCallback;
 import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
 import src.leds.OogController;
@@ -22,11 +20,10 @@ public class Nao {
     private MotionController motion;
     private RedBallDetection redBallDetection;
     private Memory redballmemory;
-    private TrackerController RedBalltracker;
+    private TrackerController redBallTracker;
+    // can be used in later code maybe??
     private long redBallid;
 	private BehaviourController behaviour;
-
-
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -42,7 +39,7 @@ public class Nao {
         motion = new MotionController(application.session());
         redBallDetection = new RedBallDetection(application.session());
         redballmemory = new Memory(application.session());
-        RedBalltracker = new TrackerController(application.session());
+        redBalltracker = new TrackerController(application.session());
 		behaviour = new BehaviourController(application.session());
 
     }
@@ -62,22 +59,17 @@ public class Nao {
     public void bepaalMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
         motion.bepaalMotion(names, angleLists, timeLists, isAbsolute);
     }
-// rood herkennen (is nog niet helemaal netjes
-    public void trackRedBall(Session session) throws Exception {
-        redBallDetection.subscribe("redBallDetected");
-
-        redBallid = redballmemory.subscribeToEvent("redBallDetected", new EventCallback<>() {
-            @Override
-            public void onEvent(Object o) throws InterruptedException, CallError {
-
-                System.out.println(redBallid);
-
-            }
-        });
-
-
+// rood herkennen (is nog niet helemaal netjes)
+    public void detectRedBall() throws Exception {
+        redBallDetection.subscribe();
+        redballmemory.subscribeToEvent("redBallDetected", data ->
+                System.out.println("Red ball detected"));
     }
 
+// rode bal tracken (bekijk de TrackerController voor comments)
+    public void track(String pMode, Float pMaxDistance, String pTarget, Object pParams, String pEffector) throws CallError, InterruptedException {
+        redBallTracker.track(pMode, pMaxDistance, pTarget, pParams, pEffector);
+    }
     /*public void roodHerkennen() throws Exception {
         // Create an instance of ALMemory and subscribe to the "redBallDetected" event
         redBallDetection.subscribeToEvent("redBallDetected",new EventCallback<ArrayList>() ){
