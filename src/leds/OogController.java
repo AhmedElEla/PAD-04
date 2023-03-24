@@ -13,4 +13,5 @@ public class OogController {
     public void bepaalOogKleur(String color, float duration) throws Exception {
         this.ogenLeds.fadeRGB ("FaceLeds", color, duration);
     }
+
 }
