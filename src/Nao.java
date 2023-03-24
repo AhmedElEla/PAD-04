@@ -44,4 +44,12 @@ public class Nao {
     public void bepaalMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
         motion.bepaalMotion(names, angleLists, timeLists, isAbsolute);
     }
+
+
+//    naoTyrone.behaviorTest();
+//    public void behaviorTest() throws Exception {
+//        ALBehaviorManager behavior = new ALBehaviorManager(this.application.session());
+//        behavior.startBehavior("nlib_01-d7acab/behavior_1");
+//    }
+
 }
