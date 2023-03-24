@@ -45,6 +45,7 @@ public class Nao {
     public void postureInput(String postureName, float maxSpeedFraction) throws Exception {
         posture.postureInput(postureName, maxSpeedFraction);
     }
+// Hoofdbewegen
     public void bepaalMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
         motion.bepaalMotion(names, angleLists, timeLists, isAbsolute);
     }
