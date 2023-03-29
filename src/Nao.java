@@ -45,11 +45,9 @@ public class Nao {
         motion.bepaalMotion(names, angleLists, timeLists, isAbsolute);
     }
 
-
-//    naoTyrone.behaviorTest();
-//    public void behaviorTest() throws Exception {
-//        ALBehaviorManager behavior = new ALBehaviorManager(this.application.session());
-//        behavior.startBehavior("nlib_01-d7acab/behavior_1");
-//    }
+    public void behaviorTest() throws Exception {
+        ALBehaviorManager behavior = new ALBehaviorManager(this.application.session());
+        behavior.startBehavior("insert ID/insert name");
+    }
 
 }
