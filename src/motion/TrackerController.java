@@ -18,6 +18,4 @@ public class TrackerController {
         alTracker.track(pTarget); // bv RedBall; laat de doelwit getrackd worden en begin met tracken; doelwit moet eerst geregistreerd worden
         alTracker.setEffector(pEffector); // bv "Arms, "LArm", "RArm", "None"; bepaal "end-effector"; bepaal hoe de robot gaat tracken
     }
-
-
 }

@@ -70,6 +70,11 @@ public class Nao {
     public void track(String pMode, Float pMaxDistance, String pTarget, Object pParams, String pEffector) throws CallError, InterruptedException {
         redBallTracker.track(pMode, pMaxDistance, pTarget, pParams, pEffector);
     }
+    public void stopTracker() throws CallError, InterruptedException {
+        alTracker.stopTracker();
+    }
+
+
     /*public void roodHerkennen() throws Exception {
         // Create an instance of ALMemory and subscribe to the "redBallDetected" event
         redBallDetection.subscribeToEvent("redBallDetected",new EventCallback<ArrayList>() ){
