@@ -68,10 +68,11 @@ public class Nao {
 
 // rode bal tracken (bekijk de TrackerController voor comments)
     public void track(String pMode, Float pMaxDistance, String pTarget, Object pParams, String pEffector) throws CallError, InterruptedException {
-        redBallTracker.track(pMode, pMaxDistance, pTarget, pParams, pEffector);
+        redBallTracker.startTracker(pMode, pMaxDistance, pTarget, pParams, pEffector);
     }
+// niets meer tracken
     public void stopTracker() throws CallError, InterruptedException {
-        alTracker.stopTracker();
+        redBallTracker.stopTracker();
     }
 
 

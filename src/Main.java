@@ -1,7 +1,5 @@
 package src;
 
-import com.aldebaran.qi.Session;
-
 public class Main {
     public static void main(String[] args) throws Exception {
         Nao naoTyrone = new Nao();
