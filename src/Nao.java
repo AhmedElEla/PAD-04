@@ -83,7 +83,7 @@ public class Nao {
     public void stopTracker() throws CallError, InterruptedException {
         redBallTracker.stopTracker();
     }
-// loop om tijdelijk events te controllen
+// do while loop om tijdelijk events te controllen
     public void doWhile(int millis, int time) throws InterruptedException {
         int counter = 0;
         do {
