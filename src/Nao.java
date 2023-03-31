@@ -1,3 +1,8 @@
+// Dit is een project gemaakt door: Steven van den Nieuwenhoff, Cas Sombroek, Ahmed El Ela en Valentijn Bruggeman
+// Dit project heeft als eind doel om een NAO-robot te laten bewegen, dansen en muziek af te laten spelen. Daarnaast controleert de NAO of zijn bewegingen correct nagedaan worden
+// Project groep naam: PAD-04
+// Klas: IT101
+
 package src;
 
 import com.aldebaran.qi.Application;
@@ -24,7 +29,6 @@ public class Nao {
     // can be used in later code maybe??
     private long redBallid;
 	private BehaviourController behaviour;
-
 // Verbind met robot
     public void verbind() throws Exception {
         String robotUrl = "tcp://" + ConfigureNao.HOSTNAME + ":" + ConfigureNao.PORT;
@@ -39,9 +43,8 @@ public class Nao {
         motion = new MotionController(application.session());
         redBallDetection = new RedBallDetection(application.session());
         redballmemory = new Memory(application.session());
-        redBalltracker = new TrackerController(application.session());
+        redBallTracker = new TrackerController(application.session());
 		behaviour = new BehaviourController(application.session());
-
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -65,7 +68,6 @@ public class Nao {
         redballmemory.subscribeToEvent("redBallDetected", data ->
                 System.out.println("Red ball detected"));
     }
-
 // rode bal tracken (bekijk de TrackerController voor comments)
     public void track(String pMode, Float pMaxDistance, String pTarget, Object pParams, String pEffector) throws CallError, InterruptedException {
         redBallTracker.startTracker(pMode, pMaxDistance, pTarget, pParams, pEffector);
@@ -85,8 +87,4 @@ public class Nao {
 	public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
         behaviour.bepaalBehaviour(behavior);
     }
-    public void behaviorTest() throws Exception {
-        ALBehaviorManager behavior = new ALBehaviorManager(this.application.session());
-        behavior.startBehavior("pad4-4efa3c/dans");
-	}
 }

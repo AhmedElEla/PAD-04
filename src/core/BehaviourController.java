@@ -6,7 +6,6 @@ import com.aldebaran.qi.helper.proxies.ALBehaviorManager;
 
 public class BehaviourController {
     private ALBehaviorManager robotBehaviour;
-
     public BehaviourController(Session session) throws Exception {
         robotBehaviour = new ALBehaviorManager(session);
     }

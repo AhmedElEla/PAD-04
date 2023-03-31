@@ -6,7 +6,6 @@ import com.aldebaran.qi.helper.proxies.ALTracker;
 
 public class TrackerController {
     private ALTracker alTracker;
-
     public TrackerController(Session session) throws Exception {
         alTracker = new ALTracker(session);
     }

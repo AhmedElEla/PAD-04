@@ -5,7 +5,6 @@ import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
 public class TextToSpeech {
     private ALTextToSpeech tts;
-
     public TextToSpeech(Session session) throws Exception {
         this.tts = new ALTextToSpeech(session);
     }
