@@ -20,6 +20,8 @@ public class Main {
         naoTyrone.doWhile(1000,10);
 // behaviour uitvoeren
 		naoTyrone.bepaalBehaviour("pad4-4efa3c/dans");
+        naoTyrone.postureInput("StandInit", 0.8f);
     }
+
 
 }
