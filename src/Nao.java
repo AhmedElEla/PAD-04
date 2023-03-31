@@ -2,12 +2,14 @@ package src;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
-import com.aldebaran.qi.helper.proxies.*;
 import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
 import src.leds.OogController;
+import src.memory.Memory;
 import src.motion.MotionController;
 import src.motion.PostureController;
+import src.motion.TrackerController;
+import src.vision.RedBallDetection;
 import src.speech.TextToSpeech;
 
 public class Nao {
@@ -16,7 +18,12 @@ public class Nao {
     private OogController ogen;
     private PostureController posture;
     private MotionController motion;
-    private BehaviourController behaviour;
+    private RedBallDetection redBallDetection;
+    private Memory redballmemory;
+    private TrackerController redBallTracker;
+    // can be used in later code maybe??
+    private long redBallid;
+	private BehaviourController behaviour;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -30,7 +37,11 @@ public class Nao {
         ogen = new OogController(application.session());
         posture = new PostureController(application.session());
         motion = new MotionController(application.session());
-        behaviour = new BehaviourController(application.session());
+        redBallDetection = new RedBallDetection(application.session());
+        redballmemory = new Memory(application.session());
+        redBalltracker = new TrackerController(application.session());
+		behaviour = new BehaviourController(application.session());
+
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -48,11 +59,34 @@ public class Nao {
     public void bepaalMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
         motion.bepaalMotion(names, angleLists, timeLists, isAbsolute);
     }
-    public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
+// rood herkennen (is nog niet helemaal netjes)
+    public void detectRedBall() throws Exception {
+        redBallDetection.subscribe();
+        redballmemory.subscribeToEvent("redBallDetected", data ->
+                System.out.println("Red ball detected"));
+    }
+
+// rode bal tracken (bekijk de TrackerController voor comments)
+    public void track(String pMode, Float pMaxDistance, String pTarget, Object pParams, String pEffector) throws CallError, InterruptedException {
+        redBallTracker.startTracker(pMode, pMaxDistance, pTarget, pParams, pEffector);
+    }
+// niets meer tracken
+    public void stopTracker() throws CallError, InterruptedException {
+        redBallTracker.stopTracker();
+    }
+// loop om tijdelijk events te controllen
+    public void doWhile(int millis, int time) throws InterruptedException {
+        int counter = 0;
+        do {
+            Thread.sleep(millis);
+            counter++;
+        } while (counter<time);
+    }
+	public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
         behaviour.bepaalBehaviour(behavior);
     }
     public void behaviorTest() throws Exception {
         ALBehaviorManager behavior = new ALBehaviorManager(this.application.session());
         behavior.startBehavior("pad4-4efa3c/dans");
-    }
+	}
 }
