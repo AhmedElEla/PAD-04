@@ -74,23 +74,7 @@ public class Nao {
     public void stopTracker() throws CallError, InterruptedException {
         redBallTracker.stopTracker();
     }
-
-
-    /*public void roodHerkennen() throws Exception {
-        // Create an instance of ALMemory and subscribe to the "redBallDetected" event
-        redBallDetection.subscribeToEvent("redBallDetected",new EventCallback<ArrayList>() ){
-            @Override
-            public void onEvent(ArrayList o) throws InterruptedException, CallError {
-                System.out.println(memory.getEventList());
-                for (Object redData : o) {
-                    System.out.println(redData);
-                }
-            }
-        };
-    }*/
-        });
-    }
-	 public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
+	public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
         behaviour.bepaalBehaviour(behavior);
     }
     public void behaviorTest() throws Exception {
