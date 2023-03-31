@@ -7,14 +7,12 @@ public class Main {
         naoTyrone.praten("Halloo!");
 //        naoTyrone.bepaalOogKleur("green", 0.1f);
         naoTyrone.postureInput("Crouch", 0.8f);
-//        naoTyrone.postureInput("StandInit", 0.8f);
-//        naoTyrone.postureInput("Crouch", 0.8f);
-//        naoTyrone.bepaalMotion("HeadPitch", Math.PI / 4, 2.0f, true);
+
 
         // rode bal herkennen en tracken met keuze uit hoofd, arm(en)
         naoTyrone.track("Head", 100f, "RedBall", 0.6,"LArm");
         int counter=0;
-        naoTyrone.doWhile(1000, 40);
+        naoTyrone.doWhile(1000, 20);
         naoTyrone.stopTracker();
 
         // rode bal herkennen en printen als die herkent is
