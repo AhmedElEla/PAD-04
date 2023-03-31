@@ -1,8 +1,10 @@
 package src;
 
 import com.aldebaran.qi.Application;
+import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.helper.proxies.*;
 import src.configuration.ConfigureNao;
+import src.core.BehaviourController;
 import src.leds.OogController;
 import src.motion.MotionController;
 import src.motion.PostureController;
@@ -14,6 +16,7 @@ public class Nao {
     private OogController ogen;
     private PostureController posture;
     private MotionController motion;
+    private BehaviourController behaviour;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -27,6 +30,7 @@ public class Nao {
         ogen = new OogController(application.session());
         posture = new PostureController(application.session());
         motion = new MotionController(application.session());
+        behaviour = new BehaviourController(application.session());
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -44,10 +48,11 @@ public class Nao {
     public void bepaalMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
         motion.bepaalMotion(names, angleLists, timeLists, isAbsolute);
     }
-
+    public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
+        behaviour.bepaalBehaviour(behavior);
+    }
     public void behaviorTest() throws Exception {
         ALBehaviorManager behavior = new ALBehaviorManager(this.application.session());
-        behavior.startBehavior("insert ID/insert name");
+        behavior.startBehavior("pad4-4efa3c/dans");
     }
-
 }
