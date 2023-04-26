@@ -4,6 +4,8 @@ import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.Session;
 import com.aldebaran.qi.helper.proxies.ALTracker;
 
+import java.util.List;
+
 public class TrackerController {
     private ALTracker alTracker;
     public TrackerController(Session session) throws Exception {
@@ -18,5 +20,12 @@ public class TrackerController {
     }
     public void stopTracker() throws CallError, InterruptedException {
         alTracker.stopTracker();
+    }
+    public static float[] getPosition(ALTracker alTracker, int index) throws CallError, InterruptedException {
+        List<Float> getPosition = alTracker.getTargetPosition(index);
+        float x = getPosition.get(0);
+        float y = getPosition.get(1);
+        float z = getPosition.get(2);
+        return new float[]{x, y, z};
     }
 }
