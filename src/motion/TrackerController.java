@@ -21,7 +21,7 @@ public class TrackerController {
     public void stopTracker() throws CallError, InterruptedException {
         alTracker.stopTracker();
     }
-    public static float[] getPosition(ALTracker alTracker, int index) throws CallError, InterruptedException {
+    public float[] getPosition(int index) throws CallError, InterruptedException {
         List<Float> getPosition = alTracker.getTargetPosition(index);
         float x = getPosition.get(0);
         float y = getPosition.get(1);
