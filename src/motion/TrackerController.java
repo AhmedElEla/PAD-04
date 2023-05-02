@@ -27,39 +27,6 @@ public class TrackerController {
         float y = getPosition.get(1);
         float z = getPosition.get(2);
 
-
         return new float[]{x, y, z};
-
-        // bovenkant camera
-        // maximum
-        if x >= -640 && x <= 640;
-        if y >=240 && y >=480;
-        // minimum
-        if x >= -640 && x <= 640;
-        if y >=240 && y >=480;
-
-        // linker helft camera
-        // maximum
-        if x >= -640 && x <= 0;
-        if y <= 240 y >= -240;
-        // minimum
-        if x >= -640 && x <= 0;
-        if y >= -240 y <= 240;
-
-        // rechter helft
-        // maximum
-        if x >= 640 && x <= 0;
-        if y <= 240 y >= -240
-        // minimum
-        if x >= 640 && x <= 0;
-        if y <= 240 y >= -240;
-
-        // onderkant
-        // maximum
-        if x >= -640 && x <= 640;
-        if y <=-480 y >=-240;;
-        // minimum
-        if x >= -640 && x <= 640;
-        if y <=-480 y >=-240;;
     }
 }
