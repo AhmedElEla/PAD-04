@@ -29,21 +29,4 @@ public class TrackerController {
 
         return new float[]{x, y, z};
     }
-    public void checkRedballPosition(int index) throws CallError, InterruptedException {
-        float[] position = getPosition(index);
-
-        float x = position[0];
-        float y = position[1];
-        float z = position[2];   // hoe werkt de z axis, wat zijn de limieten? is die uberhaupt nodig?
-
-
-        if (x >= -640 && x <= 640 && y >= 240 && y <= 480)
-            System.out.println("top");
-        else if (x >= -640 && x <= 0 && y <= 240 && y >= -240)
-            System.out.println("left");
-        else if (x <= 640 && x <= 0 && y <= 240 && y >= -240)
-            System.out.println("right");
-        else if (x >= -640 && x <= 640 && y <= -240 && y >= -480)
-            System.out.println("bottom");
-    }
 }

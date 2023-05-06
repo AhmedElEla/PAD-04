@@ -102,6 +102,8 @@ public class Nao {
     public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
         ALbackgroundmovement.moveInBackground(enabled);
     }
+    public void checkBallonLinks() throws Exception {
+        float[] position = returnPosition(0);
 
     public void touchButton(String sensorName, EventCallback touchEventCallback) throws Exception {
         switch (sensorName) {
