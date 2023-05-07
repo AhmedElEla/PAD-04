@@ -5,26 +5,29 @@ public class TestMain {
         Nao naoTyrone = new Nao();
         naoTyrone.verbind();
 
+        // handen open en naar elkaar richten
+        naoTyrone.ballonVastHouden();
+
         // beweeg ballon naar boven
-        // hier komt de beweging van armen omhoog
+        naoTyrone.armenOmhoog();
         Thread.sleep(2000);
         naoTyrone.returnPosition(0);
         naoTyrone.checkBallonBoven();
 
         // beweeg ballon naar links
-        // hier komt de beweging van armen naar links
+        naoTyrone.armenLinks();
         Thread.sleep(2000);
         naoTyrone.returnPosition(0);
         naoTyrone.checkBallonLinks();
 
         // beweeg ballon naar rechts
-        // hier komt de beweging van armen naar rechts
+        naoTyrone.armenRechts();
         Thread.sleep(2000);
         naoTyrone.returnPosition(0);
         naoTyrone.checkBallonRechts();
 
         // beweeg ballon naar beneden
-        // hier komt de beweging van armen naar beneden
+        naoTyrone.armenOnder();
         Thread.sleep(2000);
         naoTyrone.returnPosition(0);
         naoTyrone.checkBallonLaag();
