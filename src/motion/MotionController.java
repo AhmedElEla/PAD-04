@@ -19,8 +19,8 @@ public class MotionController {
         this.robotMotion.angleInterpolation(names, angleLists, timeLists, isAbsolute);
     }
     public void shoulderPitchControl(double RPitchAngleLists, double LPitchAngleLists) throws Exception {
-        bepaalMotion("RShoulderPitch", RPitchAngleLists, 2f, true);
-        bepaalMotion("LShoulderPitch", LPitchAngleLists, 2f, true);
+        bepaalMotion("RShoulderPitch", RPitchAngleLists, 1f, true);
+        bepaalMotion("LShoulderPitch", LPitchAngleLists, 1f, true);
     }
     public void fingerControl() throws CallError, InterruptedException {
         this.robotMotion.openHand("RHand");
@@ -31,7 +31,7 @@ public class MotionController {
         bepaalMotion("LWristYaw", LWristAngleLists, 1f,true);
     }
     public void shoulderRollControl(double RRollAngleLists, double LRollAngleLists) throws Exception {
-        bepaalMotion("RShoulderRoll", RRollAngleLists, 2f, true);
-        bepaalMotion("LShoulderRoll", LRollAngleLists, 2f, true);
+        bepaalMotion("RShoulderRoll", RRollAngleLists, 1f, true);
+        bepaalMotion("LShoulderRoll", LRollAngleLists, 1f, true);
     }
 }

@@ -28,6 +28,11 @@ public class TrackerController {
     }
     public float[] getPosition(int index) throws CallError, InterruptedException {
         List<Float> getPosition = alTracker.getTargetPosition(index);
+        int expectedSize = 3;
+        while (getPosition.size() < expectedSize) {
+            Thread.sleep(100);
+            getPosition = alTracker.getTargetPosition(index);
+        }
         float x = getPosition.get(0);
         float y = getPosition.get(1);
         float z = getPosition.get(2);

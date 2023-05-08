@@ -125,4 +125,41 @@ public class Nao {
     }
 
 
+        while (ballonRechts == false)
+            bepaalOogKleur("Red", 1);
+        bepaalOogKleur("Green", 1);
+    }
+    public void checkBallonLaag() throws Exception {
+        float[] position = returnPosition(0);
+
+        float x = position[0];
+        float y = position[1];
+        float z = position[2];   // hoe werkt de z axis, wat zijn de limieten? is die uberhaupt nodig?
+
+        boolean ballonLaag = x >= -640 && x <= 640 && y <= -240 && y >= -480;
+
+        while (ballonLaag == false)
+            bepaalOogKleur("Red", 1);
+        bepaalOogKleur("Green", 1);
+    }
+    public void ballonVastHouden() throws CallError, InterruptedException {
+        motion.fingerControl();
+    }
+    public void armenOmhoog() throws Exception {
+        motion.shoulderRollControl(0.0872665, -0.0872665);
+        motion.shoulderPitchControl(-1.5708, -1.5708);
+    }
+    // armen links en rechts moet veranderd worden zodat de elleboog een beetje gebogen
+    public void armenLinks() throws Exception {
+        motion.shoulderPitchControl(0, 0);
+        motion.shoulderRollControl(0.314159, 0.314159); // if LRoll is too short try a higher digit max 76
+    }
+    // armen links en rechts moet veranderd worden zodat de elleboog een beetje gebogen
+    public void armenRechts() throws Exception {
+        motion.shoulderRollControl(-0.314159, -0.314159);
+    }
+    public void armenOnder() throws Exception {
+        motion.shoulderRollControl(0.0872665, -0.0872665);
+        motion.shoulderPitchControl(1.09956, 1.09956);
+    }
 }

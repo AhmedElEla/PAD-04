@@ -5,6 +5,7 @@ public class TestMain {
         Nao naoTyrone = new Nao();
         naoTyrone.verbind();
         naoTyrone.praten("Verbonden");
+        naoTyrone.postureInput("StandInit", 1f);
 
         // handen open en naar elkaar richten
         naoTyrone.ballonVastHouden();
