@@ -4,6 +4,7 @@ public class TestMain {
     public static void main(String[] args) throws Exception {
         Nao naoTyrone = new Nao();
         naoTyrone.verbind();
+        naoTyrone.praten("Verbonden");
 
         // handen open en naar elkaar richten
         naoTyrone.ballonVastHouden();
