@@ -7,8 +7,6 @@ package src;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
-import com.aldebaran.qi.helper.EventCallback;
-import com.aldebaran.qi.helper.proxies.ALAutonomousBlinking;
 import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
 import src.leds.OogController;
@@ -22,6 +20,8 @@ import src.motion.*;
 import src.vision.RedBallDetection;
 import src.speech.TextToSpeech;
 
+import java.util.List;
+
 public class Nao {
     private Application application;
     private TextToSpeech tts;
@@ -30,8 +30,7 @@ public class Nao {
     private MotionController motion;
     private RedBallDetection redBallDetection;
     private Memory memory;
-    private TrackerController redBallTracker;
-
+    private static TrackerController redBallTracker;
     // can be used in later code maybe??
     private long redBallid;
 	private BehaviourController behaviour;
@@ -99,13 +98,46 @@ public class Nao {
 	public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
         behaviour.bepaalBehaviour(behavior);
     }
-    public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
+	public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
         ALbackgroundmovement.moveInBackground(enabled);
+	}
+    public float[] returnPosition(int index) throws CallError, InterruptedException {
+
+        return redBallTracker.getPosition(1);
     }
     public void checkBallonLinks() throws Exception {
+    public void printPosition() throws Exception {
+        int x = 1;
+        do {
+            returnPosition(1);
+            float[] position = returnPosition(1);
+            System.out.println("_______");
+            for (float i : position) {
+                System.out.println(i);
+            }
+            Thread.sleep(1000);
+            x++;
+        } while (x < 50);
+    }
+    public void checkBallonBoven() throws Exception {
         float[] position = returnPosition(0);
 
-    public void touchButton(String sensorName, EventCallback touchEventCallback) throws Exception {
+        float x = position[0];   // diepte
+        float y = position[1];   // links en rechts
+        float z = position[2];   // hoogte
+
+        boolean ballonBoven = z >= 0.65 && z <= 2; // && y >= 240 && y <= 480;
+
+        while (ballonBoven == false)
+            bepaalOogKleur("red", 1);
+            System.out.println("_______");
+            for (float i : position) {
+                System.out.println(i);
+            }
+            praten("Beweeg nu je armen omhoog!");
+        bepaalOogKleur("green", 1);
+    }
+	public void touchButton(String sensorName, EventCallback touchEventCallback) throws Exception {
         switch (sensorName) {
             case "Front":
                 memory.subscribeToEvent("FrontTactilTouched", touchEventCallback);
@@ -123,43 +155,105 @@ public class Nao {
                 throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
         }
     }
+    public void checkBallonLinks() throws Exception {
+        float[] position = returnPosition(1);
 
+        float x = position[0];   // diepte
+        float y = position[1];   // links en rechts
+        float z = position[2];   // hoogte
+
+        boolean ballonLinks = z <= 0.65 && z >= 0.3 && y < 0;
+
+        while (ballonLinks == false)
+            bepaalOogKleur("red", 1);
+            System.out.println("_______");
+            for (float i : position) {
+                System.out.println(i);
+            }
+            praten("Beweeg nu je armen naar links!");
+        bepaalOogKleur("green", 1);
+    }
+    public void checkBallonRechts() throws Exception {
+        float[] position = returnPosition(1);
+
+        float x = position[0];   // diepte
+        float y = position[1];   // links en rechts
+        float z = position[2];   // hoogte
+
+        boolean ballonRechts = z <= 0.65 && z >= 0.3 && y > 0;
 
         while (ballonRechts == false)
-            bepaalOogKleur("Red", 1);
-        bepaalOogKleur("Green", 1);
+            bepaalOogKleur("red", 1);
+            System.out.println("_______");
+            for (float i : position) {
+                System.out.println(i);
+            }
+            praten("Beweeg nu je armen naar rechts!");
+        bepaalOogKleur("green", 1);
     }
     public void checkBallonLaag() throws Exception {
-        float[] position = returnPosition(0);
+        float[] position = returnPosition(1);
 
-        float x = position[0];
-        float y = position[1];
-        float z = position[2];   // hoe werkt de z axis, wat zijn de limieten? is die uberhaupt nodig?
+        float x = position[0];   // diepte
+        float y = position[1];   // links en rechts
+        float z = position[2];   // hoogte
 
-        boolean ballonLaag = x >= -640 && x <= 640 && y <= -240 && y >= -480;
+        boolean ballonLaag = z <= 0.3;
 
         while (ballonLaag == false)
-            bepaalOogKleur("Red", 1);
-        bepaalOogKleur("Green", 1);
+            bepaalOogKleur("red", 1);
+            System.out.println("_______");
+            for (float i : position) {
+                System.out.println(i);
+            }
+            praten("Beweeg nu je armen naar benenden!");
+        bepaalOogKleur("green", 1);
     }
-    public void ballonVastHouden() throws CallError, InterruptedException {
+    public void ballonVastHouden() throws Exception {
         motion.fingerControl();
+        motion.wristControl(0.8, -0.8);
     }
     public void armenOmhoog() throws Exception {
         motion.shoulderRollControl(0.0872665, -0.0872665);
-        motion.shoulderPitchControl(-1.5708, -1.5708);
+        motion.shoulderPitchControl(-1.2, -1.2);
     }
-    // armen links en rechts moet veranderd worden zodat de elleboog een beetje gebogen
+    // armen links en rechts moet veranderd worden zodat de elleboog een beetje gebogen is
     public void armenLinks() throws Exception {
         motion.shoulderPitchControl(0, 0);
         motion.shoulderRollControl(0.314159, 0.314159); // if LRoll is too short try a higher digit max 76
     }
-    // armen links en rechts moet veranderd worden zodat de elleboog een beetje gebogen
+    // armen links en rechts moet veranderd worden zodat de elleboog een beetje gebogen is
     public void armenRechts() throws Exception {
         motion.shoulderRollControl(-0.314159, -0.314159);
     }
     public void armenOnder() throws Exception {
         motion.shoulderRollControl(0.0872665, -0.0872665);
         motion.shoulderPitchControl(1.09956, 1.09956);
+    }
+
+
+    //     Print redball position with ALMemory from ALRedballdetected
+    public float[] ALRedBallDetectedMemory() throws CallError, InterruptedException {
+        memory.getRedBallData();
+        return null;
+    }
+
+    public void checkBallonBovenMetMemory() throws Exception {
+        float[] positions = ALRedBallDetectedMemory();
+
+        float x = positions[0];   // diepte
+        float y = positions[1];   // links en rechts
+        float z = positions[2];   // hoogte
+
+        boolean ballonBoven = z >= 0.65 && z <= 2; // && y >= 240 && y <= 480;
+
+        while (ballonBoven == false)
+            bepaalOogKleur("red", 1);
+            System.out.println("_______");
+            for (float i : positions) {
+                System.out.println(i);
+            }
+            praten("Beweeg nu je armen omhoog!");
+        bepaalOogKleur("green", 1);
     }
 }
