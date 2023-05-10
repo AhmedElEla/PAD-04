@@ -9,6 +9,7 @@ import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
+import src.leds.AutonomousBlinking;
 import src.leds.OogController;
 import src.memory.Memory;
 import src.motion.BackgroundMovement;
@@ -33,6 +34,8 @@ public class Nao {
 
     private BackgroundMovement ALbackgroundmovement;
 
+    private AutonomousBlinking autonomousBlinking;
+
 // Verbind met robot
     public void verbind() throws Exception {
         String robotUrl = "tcp://" + ConfigureNao.HOSTNAME + ":" + ConfigureNao.PORT;
@@ -50,7 +53,7 @@ public class Nao {
         redBallTracker = new TrackerController(application.session());
 		behaviour = new BehaviourController(application.session());
         ALbackgroundmovement = new BackgroundMovement(application.session());
-
+        autonomousBlinking = new AutonomousBlinking(application.session());
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -96,5 +99,9 @@ public class Nao {
 
     public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
         ALbackgroundmovement.moveInBackground(enabled);
+    }
+
+    public void setAutonomousBlinking(boolean enabled)throws CallError, InterruptedException{
+        autonomousBlinking.blinkAutonomously(enabled);
     }
 }

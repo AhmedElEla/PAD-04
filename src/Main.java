@@ -12,6 +12,7 @@ public class Main {
         naoTyrone.praten("Halloo!");
 
         naoTyrone.setBackgroundmovement(true);
+        naoTyrone.setAutonomousBlinking(true);
 
         while (true) {
         // moves
