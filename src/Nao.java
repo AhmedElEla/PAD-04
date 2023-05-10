@@ -1,4 +1,4 @@
-// Dit is een project gemaakt door: Ahmed El Ela en Valentijn Bruggeman
+// Dit is een project gemaakt door: Steven van den Nieuwenhoff, Cas Sombroek, Ahmed El Ela en Valentijn Bruggeman
 // Dit project heeft als eind doel om een NAO-robot te laten bewegen, dansen en muziek af te laten spelen. Daarnaast controleert de NAO of zijn bewegingen correct nagedaan worden
 // Project groep naam: PAD-04
 // Klas: IT101
@@ -33,7 +33,6 @@ public class Nao {
     // can be used in later code maybe??
     private long redBallid;
 	private BehaviourController behaviour;
-
     private BackgroundMovement ALbackgroundmovement;
 
 
@@ -54,7 +53,6 @@ public class Nao {
         redBallTracker = new TrackerController(application.session());
 		behaviour = new BehaviourController(application.session());
         ALbackgroundmovement = new BackgroundMovement(application.session());
-
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -97,7 +95,6 @@ public class Nao {
 	public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
         behaviour.bepaalBehaviour(behavior);
     }
-
     public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
         ALbackgroundmovement.moveInBackground(enabled);
     }
