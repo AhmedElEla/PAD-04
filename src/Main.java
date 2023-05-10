@@ -11,6 +11,8 @@ import com.aldebaran.qi.helper.EventCallback;
 public class Main {
     public static void main(String[] args) throws Exception {
         Nao naoTyrone = new Nao();
+
+
         naoTyrone.verbind();
 
         // Define a single event callback for all buttons

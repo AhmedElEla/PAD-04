@@ -13,10 +13,7 @@ import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
 import src.leds.OogController;
 import src.memory.Memory;
-import src.motion.BackgroundMovement;
-import src.motion.MotionController;
-import src.motion.PostureController;
-import src.motion.TrackerController;
+import src.motion.*;
 import src.vision.RedBallDetection;
 import src.speech.TextToSpeech;
 
@@ -53,6 +50,8 @@ public class Nao {
         redBallTracker = new TrackerController(application.session());
 		behaviour = new BehaviourController(application.session());
         ALbackgroundmovement = new BackgroundMovement(application.session());
+        autonomousLife = new ALAutonomousLife(application.session());
+
     }
 // Praten
     public void praten(String tekst) throws Exception {
