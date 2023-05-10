@@ -5,16 +5,75 @@
 
 package src;
 
+import com.aldebaran.qi.CallError;
+import com.aldebaran.qi.helper.EventCallback;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         Nao naoTyrone = new Nao();
         naoTyrone.verbind();
-        naoTyrone.praten("Halloo!");
 
-        naoTyrone.setBackgroundmovement(true);
+        // Define a single event callback for all buttons
+
+        EventCallback frontTouchEventCallback = o -> {
+            float touch = (float)o;
+            float touchThreshold = 0.5f;
+            if (touch >= touchThreshold) {
+                System.out.println("Front button pressed");
+                try {
+                    // Do something when front button is pressed
+                    naoTyrone.praten("voorste knop ingedrukt");
+                    Thread.sleep(500);
+                    naoTyrone.postureInput("StandInit", 0.5f);
+                } catch (Exception e) {
+                    System.out.println(e);
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+        EventCallback middleTouchEventCallback = o -> {
+            float touch = (float)o;
+            float touchThreshold = 0.5f;
+            if (touch >= touchThreshold) {
+                System.out.println("Middle button pressed");
+                try {
+                    // Do something when middle button is pressed
+                    naoTyrone.praten("Middelste knop ingedrukt");
+                    Thread.sleep(500);
+                    naoTyrone.postureInput("Crouch", 0.5f);
+                } catch (Exception e) {
+                    System.out.println(e);
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+        EventCallback rearTouchEventCallback = o -> {
+            float touch = (float)o;
+            float touchThreshold = 0.5f;
+            if (touch >= touchThreshold) {
+                System.out.println("Middle button pressed");
+                try {
+                    // Do something when middle button is pressed
+                    naoTyrone.praten("Achterste knop ingedrukt");
+                    Thread.sleep(500);
+                    naoTyrone.postureInput("StandInit", 0.5f);
+                } catch (Exception e) {
+                    System.out.println(e);
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+        // Subscribe to all three touch events
+        naoTyrone.touchButton("Front", frontTouchEventCallback);
+        naoTyrone.touchButton("Middle", middleTouchEventCallback);
+        naoTyrone.touchButton("Rear", rearTouchEventCallback);
+
 
         while (true) {
-        // moves
+            naoTyrone.setBackgroundmovement(true);
         }
     }
 }

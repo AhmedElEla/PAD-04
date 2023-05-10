@@ -7,6 +7,8 @@ package src;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
+import com.aldebaran.qi.helper.EventCallback;
+import com.aldebaran.qi.helper.proxies.ALAutonomousBlinking;
 import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
 import src.leds.OogController;
@@ -25,13 +27,15 @@ public class Nao {
     private PostureController posture;
     private MotionController motion;
     private RedBallDetection redBallDetection;
-    private Memory redballmemory;
+    private Memory memory;
     private TrackerController redBallTracker;
+
     // can be used in later code maybe??
     private long redBallid;
 	private BehaviourController behaviour;
 
     private BackgroundMovement ALbackgroundmovement;
+
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -46,7 +50,7 @@ public class Nao {
         posture = new PostureController(application.session());
         motion = new MotionController(application.session());
         redBallDetection = new RedBallDetection(application.session());
-        redballmemory = new Memory(application.session());
+        memory = new Memory(application.session());
         redBallTracker = new TrackerController(application.session());
 		behaviour = new BehaviourController(application.session());
         ALbackgroundmovement = new BackgroundMovement(application.session());
@@ -71,7 +75,7 @@ public class Nao {
 // rood herkennen (is nog niet helemaal netjes)
     public void detectRedBall() throws Exception {
         redBallDetection.subscribe();
-        redballmemory.subscribeToEvent("redBallDetected", data ->
+        memory.subscribeToEvent("redBallDetected", data ->
                 System.out.println("Red ball detected"));
     }
 // rode bal tracken (bekijk de TrackerController voor comments)
@@ -97,4 +101,25 @@ public class Nao {
     public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
         ALbackgroundmovement.moveInBackground(enabled);
     }
+
+    public void touchButton(String sensorName, EventCallback touchEventCallback) throws Exception {
+        switch (sensorName) {
+            case "Front":
+                memory.subscribeToEvent("FrontTactilTouched", touchEventCallback);
+                break;
+
+            case "Middle":
+                memory.subscribeToEvent("MiddleTactilTouched", touchEventCallback);
+                break;
+
+            case "Rear":
+                memory.subscribeToEvent("RearTactilTouched", touchEventCallback);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
+        }
+    }
+
+
 }
