@@ -19,16 +19,16 @@ public class MotionController {
         this.robotMotion.angleInterpolation(names, angleLists, timeLists, isAbsolute);
     }
     public void shoulderPitchControl(double RPitchAngleLists, double LPitchAngleLists) throws Exception {
-        bepaalMotion("RShoulderPitch", RPitchAngleLists, 1f, true);
-        bepaalMotion("LShoulderPitch", LPitchAngleLists, 1f, true);
+        bepaalMotion("RShoulderPitch", RPitchAngleLists, 2f, true);
+        bepaalMotion("LShoulderPitch", LPitchAngleLists, 2f, true);
     }
     public void fingerControl() throws CallError, InterruptedException {
         this.robotMotion.openHand("RHand");
         this.robotMotion.openHand("LHand");
     }
     public void wristControl(double RWristAngleLists, double LWristAngleLists) throws Exception {
-        bepaalMotion("RWristYaw", RWristAngleLists, 1f,true);
-        bepaalMotion("LWristYaw", LWristAngleLists, 1f,true);
+        bepaalMotion("RWristYaw", RWristAngleLists, 0.5f,true);
+        bepaalMotion("LWristYaw", LWristAngleLists, 0.5f,true);
     }
     public void shoulderRollControl(double RRollAngleLists, double LRollAngleLists) throws Exception {
         bepaalMotion("RShoulderRoll", RRollAngleLists, 1f, true);
