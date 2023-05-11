@@ -10,13 +10,7 @@ public class TestMain {
             public void run() {
                 do {
                     Nao naoTyrone = null;
-                    try {
-                        naoTyrone = new Nao();
-                    } catch (CallError e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                    naoTyrone = new Nao();
                     try {
                         naoTyrone.returnPosition(1);
                     } catch (CallError e) {

@@ -7,6 +7,8 @@ package src;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
+import com.aldebaran.qi.helper.EventCallback;
+import com.aldebaran.qi.helper.proxies.ALMemory;
 import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
 import src.leds.OogController;
@@ -20,7 +22,9 @@ import src.motion.*;
 import src.vision.RedBallDetection;
 import src.speech.TextToSpeech;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Nao {
     private Application application;
@@ -30,12 +34,14 @@ public class Nao {
     private MotionController motion;
     private RedBallDetection redBallDetection;
     private Memory memory;
+    private ALMemory newALMemory;
     private static TrackerController redBallTracker;
     // can be used in later code maybe??
     private long redBallid;
 	private BehaviourController behaviour;
-    private BackgroundMovement ALbackgroundmovement;
-
+    public static float x;
+    public static float y;
+	private BackgroundMovement ALbackgroundmovement;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -53,8 +59,10 @@ public class Nao {
         memory = new Memory(application.session());
         redBallTracker = new TrackerController(application.session());
 		behaviour = new BehaviourController(application.session());
-        ALbackgroundmovement = new BackgroundMovement(application.session());
+		newALMemory = new ALMemory(application.session());
+		ALbackgroundmovement = new BackgroundMovement(application.session());
         autonomousLife = new ALAutonomousLife(application.session());
+
 
     }
 // Praten
@@ -76,8 +84,14 @@ public class Nao {
 // rood herkennen (is nog niet helemaal netjes)
     public void detectRedBall() throws Exception {
         redBallDetection.subscribe();
-        memory.subscribeToEvent("redBallDetected", data ->
-                System.out.println("Red ball detected"));
+        memory.subscribeToEvent("redBallDetected", o -> {
+            System.out.println("red ball detected");
+            List<Object> data = (List<Object>) o;
+            List<Float> BallInfo = (List<Float>) data.get(1);
+            x = BallInfo.get(0);
+            y = BallInfo.get(1);
+            System.out.println("Red ball position: x=" + x + ", y=" + y);
+        });
     }
 // rode bal tracken (bekijk de TrackerController voor comments)
     public void track(String pMode, Float pMaxDistance, String pTarget, Object pParams, String pEffector) throws CallError, InterruptedException {
@@ -105,37 +119,19 @@ public class Nao {
 
         return redBallTracker.getPosition(1);
     }
-    public void checkBallonLinks() throws Exception {
-    public void printPosition() throws Exception {
-        int x = 1;
-        do {
-            returnPosition(1);
-            float[] position = returnPosition(1);
-            System.out.println("_______");
-            for (float i : position) {
-                System.out.println(i);
-            }
-            Thread.sleep(1000);
-            x++;
-        } while (x < 50);
-    }
     public void checkBallonBoven() throws Exception {
-        float[] position = returnPosition(0);
+        System.out.println("ik check de ballon hoogte");
 
-        float x = position[0];   // diepte
-        float y = position[1];   // links en rechts
-        float z = position[2];   // hoogte
-
-        boolean ballonBoven = z >= 0.65 && z <= 2; // && y >= 240 && y <= 480;
-
-        while (ballonBoven == false)
-            bepaalOogKleur("red", 1);
-            System.out.println("_______");
-            for (float i : position) {
-                System.out.println(i);
+        while (true) {
+            if (x >= -2 && x <= 2 && y >= -2 && y <= -0.2) {
+                bepaalOogKleur("green", 1);
+                praten("Goed gedaan");
+                break;
+            } else {
+                bepaalOogKleur("red", 1);
+                praten("Beweeg nu je armen omhoog!");
             }
-            praten("Beweeg nu je armen omhoog!");
-        bepaalOogKleur("green", 1);
+        }
     }
 	public void touchButton(String sensorName, EventCallback touchEventCallback) throws Exception {
         switch (sensorName) {
@@ -156,58 +152,46 @@ public class Nao {
         }
     }
     public void checkBallonLinks() throws Exception {
-        float[] position = returnPosition(1);
+        System.out.println("ik check de ballon hoogte");
 
-        float x = position[0];   // diepte
-        float y = position[1];   // links en rechts
-        float z = position[2];   // hoogte
-
-        boolean ballonLinks = z <= 0.65 && z >= 0.3 && y < 0;
-
-        while (ballonLinks == false)
-            bepaalOogKleur("red", 1);
-            System.out.println("_______");
-            for (float i : position) {
-                System.out.println(i);
+        while (true) {
+            if (x >= -2 && x <= 0 && y >= -0.2 && y <= 0.2) {
+                bepaalOogKleur("green", 1);
+                praten("Goed gedaan");
+                break;
+            } else {
+                bepaalOogKleur("red", 1);
+                praten("Beweeg nu je armen naar links!");
             }
-            praten("Beweeg nu je armen naar links!");
-        bepaalOogKleur("green", 1);
+        }
     }
     public void checkBallonRechts() throws Exception {
-        float[] position = returnPosition(1);
+        System.out.println("ik check de ballon hoogte");
 
-        float x = position[0];   // diepte
-        float y = position[1];   // links en rechts
-        float z = position[2];   // hoogte
-
-        boolean ballonRechts = z <= 0.65 && z >= 0.3 && y > 0;
-
-        while (ballonRechts == false)
-            bepaalOogKleur("red", 1);
-            System.out.println("_______");
-            for (float i : position) {
-                System.out.println(i);
+        while (true) {
+            if (x >= 0 && x <= 2 && y >= -0.2 && y <= 0.2) {
+                bepaalOogKleur("green", 1);
+                praten("Goed gedaan");
+                break;
+            } else {
+                bepaalOogKleur("red", 1);
+                praten("Beweeg nu je armen naar rechts!");
             }
-            praten("Beweeg nu je armen naar rechts!");
-        bepaalOogKleur("green", 1);
+        }
     }
     public void checkBallonLaag() throws Exception {
-        float[] position = returnPosition(1);
+        System.out.println("ik check de ballon hoogte");
 
-        float x = position[0];   // diepte
-        float y = position[1];   // links en rechts
-        float z = position[2];   // hoogte
-
-        boolean ballonLaag = z <= 0.3;
-
-        while (ballonLaag == false)
-            bepaalOogKleur("red", 1);
-            System.out.println("_______");
-            for (float i : position) {
-                System.out.println(i);
+        while (true) {
+            if (x >= -2 && x <= 2 && y >= 0.1 && y <= 2) {
+                bepaalOogKleur("green", 1);
+                praten("Goed gedaan");
+                break;
+            } else {
+                bepaalOogKleur("red", 1);
+                praten("Beweeg nu je armen naar beneden!");
             }
-            praten("Beweeg nu je armen naar benenden!");
-        bepaalOogKleur("green", 1);
+        }
     }
     public void ballonVastHouden() throws Exception {
         motion.fingerControl();
@@ -215,45 +199,19 @@ public class Nao {
     }
     public void armenOmhoog() throws Exception {
         motion.shoulderRollControl(0.0872665, -0.0872665);
-        motion.shoulderPitchControl(-1.2, -1.2);
+        motion.shoulderPitchControl(-1.5, -1.5);
     }
     // armen links en rechts moet veranderd worden zodat de elleboog een beetje gebogen is
-    public void armenLinks() throws Exception {
+    public void armenRechts() throws Exception {
         motion.shoulderPitchControl(0, 0);
         motion.shoulderRollControl(0.314159, 0.314159); // if LRoll is too short try a higher digit max 76
     }
     // armen links en rechts moet veranderd worden zodat de elleboog een beetje gebogen is
-    public void armenRechts() throws Exception {
+    public void armenLinks() throws Exception {
         motion.shoulderRollControl(-0.314159, -0.314159);
     }
     public void armenOnder() throws Exception {
         motion.shoulderRollControl(0.0872665, -0.0872665);
         motion.shoulderPitchControl(1.09956, 1.09956);
-    }
-
-
-    //     Print redball position with ALMemory from ALRedballdetected
-    public float[] ALRedBallDetectedMemory() throws CallError, InterruptedException {
-        memory.getRedBallData();
-        return null;
-    }
-
-    public void checkBallonBovenMetMemory() throws Exception {
-        float[] positions = ALRedBallDetectedMemory();
-
-        float x = positions[0];   // diepte
-        float y = positions[1];   // links en rechts
-        float z = positions[2];   // hoogte
-
-        boolean ballonBoven = z >= 0.65 && z <= 2; // && y >= 240 && y <= 480;
-
-        while (ballonBoven == false)
-            bepaalOogKleur("red", 1);
-            System.out.println("_______");
-            for (float i : positions) {
-                System.out.println(i);
-            }
-            praten("Beweeg nu je armen omhoog!");
-        bepaalOogKleur("green", 1);
     }
 }
