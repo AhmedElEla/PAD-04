@@ -1,8 +1,15 @@
+// Dit is een project gemaakt door: Ahmed El Ela en Valentijn Bruggeman
+// Dit project heeft als eind doel om een NAO-robot te laten bewegen, dansen en muziek af te laten spelen. Daarnaast controleert de NAO of zijn bewegingen correct nagedaan worden
+// Project groep naam: PAD-04
+// Klas: IT101
+
 package src.motion;
 
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.Session;
 import com.aldebaran.qi.helper.proxies.ALTracker;
+
+import java.util.List;
 
 public class TrackerController {
     private ALTracker alTracker;
@@ -18,5 +25,16 @@ public class TrackerController {
     }
     public void stopTracker() throws CallError, InterruptedException {
         alTracker.stopTracker();
+    }
+    public float[] getPosition(int index) throws CallError, InterruptedException {
+        List<Float> getPosition = alTracker.getTargetPosition(1);
+
+        float x = getPosition.get(0);
+        float y = getPosition.get(1);
+        float z = getPosition.get(2);
+
+        float[] positions = {x, y, z};
+
+        return positions;
     }
 }
