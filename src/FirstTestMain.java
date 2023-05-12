@@ -5,13 +5,22 @@ public class FirstTestMain {
         Nao naoTyrone = new Nao();
         naoTyrone.verbind();
         naoTyrone.praten("Verbonden");
+        naoTyrone.postureInput("StandInit", 0.5f);
 
-       // naoTyrone.postureInput("StandInit", 2f);
-
-        naoTyrone.track("Head", 20f, "RedBall", 0.6, "None");
-        //naoTyrone.returnPosition(0);
-        //naoTyrone.doWhile(500, 15);
-        naoTyrone.stopTracker();
+        naoTyrone.praten("Armen omhoog");
+        naoTyrone.bepaalBehaviour("movement/ArmenOmhoog");
+        Thread.sleep(500);
+        naoTyrone.postureInput("StandInit", 0.3f);
+        naoTyrone.praten("Armen omlaag");
+        naoTyrone.bepaalBehaviour("movement/ArmenOmlaag");
+        Thread.sleep(500);
+        naoTyrone.postureInput("StandInit", 0.3f);
+        naoTyrone.praten("Armen links");
+        naoTyrone.bepaalBehaviour("movement/ArmenLinks");
+        Thread.sleep(500);
+        naoTyrone.postureInput("StandInit", 0.3f);
+        naoTyrone.praten("Armen rechts");
+        naoTyrone.bepaalBehaviour("movement/ArmenRechts");
 
     }
 }

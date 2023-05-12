@@ -61,7 +61,7 @@ public class Nao {
 		behaviour = new BehaviourController(application.session());
 		newALMemory = new ALMemory(application.session());
 		ALbackgroundmovement = new BackgroundMovement(application.session());
-        autonomousLife = new ALAutonomousLife(application.session());
+
 
 
     }
