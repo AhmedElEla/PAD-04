@@ -1,4 +1,4 @@
-// Dit is een project gemaakt door: Steven van den Nieuwenhoff, Cas Sombroek, Ahmed El Ela en Valentijn Bruggeman
+// Dit is een project gemaakt door: Ahmed El Ela en Valentijn Bruggeman
 // Dit project heeft als eind doel om een NAO-robot te laten bewegen, dansen en muziek af te laten spelen. Daarnaast controleert de NAO of zijn bewegingen correct nagedaan worden
 // Project groep naam: PAD-04
 // Klas: IT101
@@ -21,12 +21,12 @@ public class Main {
             float touch = (float)o;
             float touchThreshold = 0.5f;
             if (touch >= touchThreshold) {
-                System.out.println("Front button pressed");
+                System.out.println("Front knop pressed");
                 try {
                     // Do something when front button is pressed
-                    naoTyrone.praten("voorste knop ingedrukt");
-                    Thread.sleep(500);
                     naoTyrone.postureInput("StandInit", 0.5f);
+                    naoTyrone.animateSpeech("Hallo, ^startTag(Hey_1) ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Tyrone. Ik ben gemaakt om jullie te helpen bewegen! Ik heb 1 stand zodat jullie mij na kunnen doen. Klik de knop op het midden van mijn hoofd om te beginnen!");
+                    Thread.sleep(500);
                 } catch (Exception e) {
                     System.out.println(e);
                     throw new RuntimeException(e);
@@ -38,11 +38,12 @@ public class Main {
             float touch = (float)o;
             float touchThreshold = 0.5f;
             if (touch >= touchThreshold) {
-                System.out.println("Middle button pressed");
+                System.out.println("Middle knop pressed");
                 try {
                     // Do something when middle button is pressed
-                    naoTyrone.praten("Middelste knop ingedrukt");
+                    naoTyrone.praten("Ik leg nu uit hoe het spel werkt, ^start(animations/Stand/Gestures/YouKnowWhat_1) Dit spel heet simon says! Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen");
                     Thread.sleep(500);
+                    naoTyrone.simonSays();
                     naoTyrone.postureInput("Crouch", 0.5f);
                 } catch (Exception e) {
                     System.out.println(e);
@@ -55,7 +56,7 @@ public class Main {
             float touch = (float)o;
             float touchThreshold = 0.5f;
             if (touch >= touchThreshold) {
-                System.out.println("Middle button pressed");
+                System.out.println("AChterste knop pressed");
                 try {
                     // Do something when middle button is pressed
                     naoTyrone.praten("Achterste knop ingedrukt");
@@ -72,7 +73,6 @@ public class Main {
         naoTyrone.touchButton("Front", frontTouchEventCallback);
         naoTyrone.touchButton("Middle", middleTouchEventCallback);
         naoTyrone.touchButton("Rear", rearTouchEventCallback);
-
 
         while (true) {
             naoTyrone.setBackgroundmovement(true);
