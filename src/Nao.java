@@ -11,6 +11,7 @@ import com.aldebaran.qi.helper.EventCallback;
 import com.aldebaran.qi.helper.proxies.ALAutonomousLife;
 import com.aldebaran.qi.helper.proxies.ALMemory;
 import src.configuration.ConfigureNao;
+import src.configuration.Setup;
 import src.core.BehaviourController;
 import src.leds.OogController;
 import src.motion.MotionController;
@@ -45,7 +46,7 @@ public class Nao {
     public static float y;
 	private BackgroundMovement ALbackgroundmovement;
     private AnimatedSpeech animatedSpeech;
-    private ConfigureNao systeem;
+    private Setup systeem;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -66,7 +67,7 @@ public class Nao {
 		newALMemory = new ALMemory(application.session());
 		ALbackgroundmovement = new BackgroundMovement(application.session());
         animatedSpeech = new AnimatedSpeech(application.session());
-        systeem = new ConfigureNao(application.session());
+        systeem = new Setup(application.session());
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -122,20 +123,6 @@ public class Nao {
 
         return redBallTracker.getPosition(1);
     }
-    public void checkBallonBoven() throws Exception {
-        System.out.println("ik check de ballon hoogte");
-
-        while (true) {
-            if (x >= -2 && x <= 2 && y >= -2 && y <= -0.2) {
-                bepaalOogKleur("green", 1);
-                praten("Goed gedaan");
-                break;
-            } else {
-                bepaalOogKleur("red", 1);
-                praten("Beweeg nu je armen omhoog!");
-            }
-        }
-    }
 	public void touchButton(String sensorName, EventCallback touchEventCallback) throws Exception {
         switch (sensorName) {
             case "Front":
@@ -152,6 +139,20 @@ public class Nao {
 
             default:
                 throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
+        }
+    }
+    public void checkBallonBoven() throws Exception {
+        System.out.println("ik check de ballon hoogte");
+
+        while (true) {
+            if (x >= -2 && x <= 2 && y >= -2 && y <= -0.2) {
+                bepaalOogKleur("green", 1);
+                praten("Goed gedaan");
+                break;
+            } else {
+                bepaalOogKleur("red", 1);
+                praten("Beweeg nu je armen omhoog!");
+            }
         }
     }
     public void checkBallonLinks() throws Exception {
@@ -218,13 +219,21 @@ public class Nao {
         motion.shoulderPitchControl(1.09956, 1.09956);
     }
     public void simonSays() throws Exception {
-        armenOmhoog();
+        postureInput("StandInit", 0.3f);
+        bepaalBehaviour("movement/ArmenOmhoog");
+        Thread.sleep(900);
         checkBallonBoven();
-        armenLinks();
+        postureInput("StandInit", 0.3f);
+        bepaalBehaviour("movement/ArmenLinks");
+        Thread.sleep(500);
         checkBallonLinks();
-        armenRechts();
+        postureInput("StandInit", 0.3f);
+        bepaalBehaviour("movement/ArmenRechts");
+        Thread.sleep(500);
         checkBallonRechts();
-        armenOnder();
+        postureInput("StandInit", 0.3f);
+        bepaalBehaviour("movement/ArmenOmlaag");
+        Thread.sleep(500);
         checkBallonLaag();
     }
     public void animateSpeech(String text) throws CallError, InterruptedException {

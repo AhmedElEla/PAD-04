@@ -11,17 +11,15 @@ import com.aldebaran.qi.helper.EventCallback;
 public class Main {
     public static void main(String[] args) throws Exception {
         Nao naoTyrone = new Nao();
-
-
         naoTyrone.verbind();
 
-        // Define a single event callback for all buttons
+        //naoTyrone.naoRobotNaam("Tyrone");
 
         EventCallback frontTouchEventCallback = o -> {
             float touch = (float)o;
             float touchThreshold = 0.5f;
             if (touch >= touchThreshold) {
-                System.out.println("Front knop pressed");
+                System.out.println("Voor knop gedrukt");
                 try {
                     // Do something when front button is pressed
                     naoTyrone.postureInput("StandInit", 0.5f);
@@ -38,7 +36,7 @@ public class Main {
             float touch = (float)o;
             float touchThreshold = 0.5f;
             if (touch >= touchThreshold) {
-                System.out.println("Middle knop pressed");
+                System.out.println("Midden knop gedrukt");
                 try {
                     // Do something when middle button is pressed
                     naoTyrone.praten("Ik leg nu uit hoe het spel werkt, ^start(animations/Stand/Gestures/YouKnowWhat_1) Dit spel heet simon says! Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen");
@@ -56,12 +54,11 @@ public class Main {
             float touch = (float)o;
             float touchThreshold = 0.5f;
             if (touch >= touchThreshold) {
-                System.out.println("AChterste knop pressed");
+                System.out.println("Achterste knop gedrukt");
                 try {
-                    // Do something when middle button is pressed
-                    naoTyrone.praten("Achterste knop ingedrukt");
-                    Thread.sleep(500);
                     naoTyrone.postureInput("StandInit", 0.5f);
+                    naoTyrone.animateSpeech(" ^start(animations/Stand/Gestures/Enthusiastic_4) U heeft de laatste knop ingedrukt!! ^wait(animations/Stand/Gestures/Enthusiastic_4) ^start(animations/Stand/BodyTalk/BodyTalk_10) Hier komt de show en dans van kinderen voor kinderen! In de laatste sprint zien jullie het resultaat");
+                    Thread.sleep(500);
                 } catch (Exception e) {
                     System.out.println(e);
                     throw new RuntimeException(e);
