@@ -8,6 +8,7 @@ package src;
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.helper.EventCallback;
+import com.aldebaran.qi.helper.proxies.ALAutonomousLife;
 import com.aldebaran.qi.helper.proxies.ALMemory;
 import src.configuration.ConfigureNao;
 import src.core.BehaviourController;
@@ -19,6 +20,7 @@ import src.memory.Memory;
 import com.aldebaran.qi.helper.EventCallback;
 import com.aldebaran.qi.helper.proxies.ALAutonomousBlinking;
 import src.motion.*;
+import src.speech.AnimatedSpeech;
 import src.vision.RedBallDetection;
 import src.speech.TextToSpeech;
 
@@ -42,6 +44,8 @@ public class Nao {
     public static float x;
     public static float y;
 	private BackgroundMovement ALbackgroundmovement;
+    private AnimatedSpeech animatedSpeech;
+    private ConfigureNao systeem;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -61,9 +65,8 @@ public class Nao {
 		behaviour = new BehaviourController(application.session());
 		newALMemory = new ALMemory(application.session());
 		ALbackgroundmovement = new BackgroundMovement(application.session());
-
-
-
+        animatedSpeech = new AnimatedSpeech(application.session());
+        systeem = new ConfigureNao(application.session());
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -213,5 +216,21 @@ public class Nao {
     public void armenOnder() throws Exception {
         motion.shoulderRollControl(0.0872665, -0.0872665);
         motion.shoulderPitchControl(1.09956, 1.09956);
+    }
+    public void simonSays() throws Exception {
+        armenOmhoog();
+        checkBallonBoven();
+        armenLinks();
+        checkBallonLinks();
+        armenRechts();
+        checkBallonRechts();
+        armenOnder();
+        checkBallonLaag();
+    }
+    public void animateSpeech(String text) throws CallError, InterruptedException {
+        animatedSpeech.animateText(text);
+    }
+    public void naoRobotNaam(String name) throws CallError, InterruptedException {
+        systeem.changeName(name);
     }
 }
