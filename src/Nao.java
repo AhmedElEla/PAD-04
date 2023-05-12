@@ -89,12 +89,12 @@ public class Nao {
     public void detectRedBall() throws Exception {
         redBallDetection.subscribe();
         memory.subscribeToEvent("redBallDetected", o -> {
-            System.out.println("red ball detected");
+            //System.out.println("red ball detected");
             List<Object> data = (List<Object>) o;
             List<Float> BallInfo = (List<Float>) data.get(1);
             x = BallInfo.get(0);
             y = BallInfo.get(1);
-            System.out.println("Red ball position: x=" + x + ", y=" + y);
+            //System.out.println("Red ball position: x=" + x + ", y=" + y);
         });
     }
 // rode bal tracken (bekijk de TrackerController voor comments)
@@ -142,64 +142,68 @@ public class Nao {
         }
     }
     public void checkBallonBoven() throws Exception {
-        System.out.println("ik check de ballon hoogte");
+        bepaalOogKleur("white", 0);
+        //System.out.println("ik check de ballon hoogte");
 
         while (true) {
             if (x >= -2 && x <= 2 && y >= -2 && y <= -0.2) {
-                bepaalOogKleur("green", 1);
+                bepaalOogKleur("green", 0);
                 praten("Goed gedaan");
                 break;
             } else {
-                bepaalOogKleur("red", 1);
                 praten("Beweeg nu je armen omhoog!");
+                bepaalOogKleur("red", 0);
             }
+            Thread.sleep(3000);
         }
     }
     public void checkBallonLinks() throws Exception {
-        System.out.println("ik check de ballon hoogte");
+        bepaalOogKleur("white", 0);
+        //System.out.println("ik check de ballon hoogte");
 
         while (true) {
             if (x >= -2 && x <= 0 && y >= -0.2 && y <= 0.2) {
-                bepaalOogKleur("green", 1);
+                bepaalOogKleur("green", 0);
                 praten("Goed gedaan");
                 break;
             } else {
-                bepaalOogKleur("red", 1);
                 praten("Beweeg nu je armen naar links!");
+                bepaalOogKleur("red", 0);
             }
+            Thread.sleep(3000);
         }
     }
     public void checkBallonRechts() throws Exception {
-        System.out.println("ik check de ballon hoogte");
+        bepaalOogKleur("white", 0);
+        //System.out.println("ik check de ballon hoogte");
 
         while (true) {
             if (x >= 0 && x <= 2 && y >= -0.2 && y <= 0.2) {
-                bepaalOogKleur("green", 1);
+                bepaalOogKleur("green", 0);
                 praten("Goed gedaan");
                 break;
             } else {
-                bepaalOogKleur("red", 1);
                 praten("Beweeg nu je armen naar rechts!");
+                bepaalOogKleur("red", 0);
             }
+            Thread.sleep(3000);
         }
     }
     public void checkBallonLaag() throws Exception {
-        System.out.println("ik check de ballon hoogte");
+        bepaalOogKleur("white", 0);
+        //System.out.println("ik check de ballon hoogte");
 
         while (true) {
             if (x >= -2 && x <= 2 && y >= 0.1 && y <= 2) {
-                bepaalOogKleur("green", 1);
+                bepaalOogKleur("green", 0);
                 praten("Goed gedaan");
                 break;
             } else {
-                bepaalOogKleur("red", 1);
                 praten("Beweeg nu je armen naar beneden!");
+                bepaalOogKleur("red", 0);
             }
+            Thread.sleep(3000);
         }
-    }
-    public void ballonVastHouden() throws Exception {
-        motion.fingerControl();
-        motion.wristControl(0.8, -0.8);
     }
     public void armenOmhoog() throws Exception {
         motion.shoulderRollControl(0.0872665, -0.0872665);
@@ -235,6 +239,27 @@ public class Nao {
         bepaalBehaviour("movement/ArmenOmlaag");
         Thread.sleep(500);
         checkBallonLaag();
+        postureInput("StandInit", 0.3f);
+        bepaalBehaviour("movement/ArmenLinks");
+        Thread.sleep(500);
+        checkBallonLinks();
+        postureInput("StandInit", 0.3f);
+        bepaalBehaviour("movement/ArmenOmlaag");
+        Thread.sleep(500);
+        checkBallonLaag();
+        postureInput("StandInit", 0.3f);
+        bepaalBehaviour("movement/ArmenOmhoog");
+        Thread.sleep(900);
+        checkBallonBoven();
+        postureInput("StandInit", 0.3f);
+        bepaalBehaviour("movement/ArmenRechts");
+        Thread.sleep(500);
+        checkBallonRechts();
+        postureInput("StandInit", 0.3f);
+        bepaalBehaviour("movement/ArmenOmhoog");
+        Thread.sleep(900);
+        checkBallonBoven();
+
     }
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
