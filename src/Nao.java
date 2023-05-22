@@ -8,7 +8,6 @@ package src;
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.helper.EventCallback;
-import com.aldebaran.qi.helper.proxies.ALAutonomousLife;
 import com.aldebaran.qi.helper.proxies.ALMemory;
 import src.configuration.ConfigureNao;
 import src.configuration.Setup;
@@ -18,16 +17,12 @@ import src.motion.MotionController;
 import src.motion.PostureController;
 import src.motion.TrackerController;
 import src.memory.Memory;
-import com.aldebaran.qi.helper.EventCallback;
-import com.aldebaran.qi.helper.proxies.ALAutonomousBlinking;
 import src.motion.*;
 import src.speech.AnimatedSpeech;
 import src.vision.RedBallDetection;
 import src.speech.TextToSpeech;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Nao {
     private Application application;
@@ -47,6 +42,8 @@ public class Nao {
 	private BackgroundMovement ALbackgroundmovement;
     private AnimatedSpeech animatedSpeech;
     private Setup systeem;
+    private ArrayList<Point> pointsList;
+    private Point point;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -68,6 +65,8 @@ public class Nao {
 		ALbackgroundmovement = new BackgroundMovement(application.session());
         animatedSpeech = new AnimatedSpeech(application.session());
         systeem = new Setup(application.session());
+        pointsList = new ArrayList<>();
+        point = new Point(x, y);
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -89,12 +88,19 @@ public class Nao {
     public void detectRedBall() throws Exception {
         redBallDetection.subscribe();
         memory.subscribeToEvent("redBallDetected", o -> {
-            //System.out.println("red ball detected");
             List<Object> data = (List<Object>) o;
             List<Float> BallInfo = (List<Float>) data.get(1);
             x = BallInfo.get(0);
             y = BallInfo.get(1);
-            //System.out.println("Red ball position: x=" + x + ", y=" + y);
+
+            this.x = x;
+            this.y = y;
+
+            pointsList.add(new Point(x, y));
+
+            if (pointsList.size() == 10) {
+                processPointsList();
+            }
         });
     }
 // rode bal tracken (bekijk de TrackerController voor comments)
@@ -266,5 +272,14 @@ public class Nao {
     }
     public void naoRobotNaam(String name) throws CallError, InterruptedException {
         systeem.changeName(name);
+    }
+    private void processPointsList() {
+        for (Point point : pointsList) {
+            float x = point.getX();
+            float y = point.getY();
+            System.out.println("X = " + x + " Y = " + y);
+
+        }
+        pointsList.clear();
     }
 }
