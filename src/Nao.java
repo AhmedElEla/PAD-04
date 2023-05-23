@@ -25,6 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Nao {
+    enum positions {
+        BOVEN,
+        LINKS,
+        RECHTS,
+        ONDER
+    }
+
     private Application application;
     private TextToSpeech tts;
     private OogController ogen;
@@ -44,6 +51,7 @@ public class Nao {
     private Setup systeem;
     private ArrayList<Point> pointsList;
     private Point point;
+    private positions ballPosition;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -96,8 +104,32 @@ public class Nao {
             this.x = x;
             this.y = y;
 
+            // Boven
+            if(x >= -2 && x <= 2 && y >= -2 && y <= -0.2) {
+                this.ballPosition = positions.BOVEN;
+            }
+            //Links
+            else if (x >= -2 && x <= 0 && y >= -0.2 && y <= 0.2) {
+                this.ballPosition = positions.LINKS;
+            }
+            // Rechts
+            else if (x >= 0 && x <= 2 && y >= -0.2 && y <= 0.2) {
+                this.ballPosition = positions.RECHTS;
+            }
+            // Onder
+            else if (x >= -2 && x <= 2 && y >= 0.1 && y <= 2) {
+                this.ballPosition = positions.ONDER;
+            }
+
             pointsList.add(new Point(x, y));
 
+            if (pointsList.size() == 10) {
+                try {
+                    processPointsList();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
         });
     }
 // rode bal tracken (bekijk de TrackerController voor comments)
@@ -144,7 +176,7 @@ public class Nao {
                 throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
         }
     }
-    public void checkBallonBoven() throws Exception {
+    /*public void checkBallonBoven() throws Exception {
         bepaalOogKleur("white", 0);
         //System.out.println("ik check de ballon hoogte");
 
@@ -207,7 +239,7 @@ public class Nao {
             }
             Thread.sleep(3000);
         }
-    }
+    }*/
     public void armenOmhoog() throws Exception {
         motion.shoulderRollControl(0.0872665, -0.0872665);
         motion.shoulderPitchControl(-1.5, -1.5);
@@ -225,44 +257,63 @@ public class Nao {
         motion.shoulderRollControl(0.0872665, -0.0872665);
         motion.shoulderPitchControl(1.09956, 1.09956);
     }
+    public void boven() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen omhoog");
+        bepaalBehaviour("movement/ArmenOmhoog");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.BOVEN) {
+            praten("Probeer je armen iets meer naar boven te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goedzo");
+        Thread.sleep(500);
+    }
+    public void links() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen naar links");
+        bepaalBehaviour("movement/ArmenLinks");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.LINKS) {
+            praten("Probeer je armen iets meer naar links te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goedzo");
+        Thread.sleep(500);
+    }
+    public void rechts() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen naar rechts");
+        bepaalBehaviour("movement/ArmenRechts");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.RECHTS) {
+            praten("Probeer je armen iets meer naar rechts te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goedzo");
+        Thread.sleep(500);
+    }
+    public void onder() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen omlaag");
+        bepaalBehaviour("movement/ArmenOmlaag");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.ONDER) {
+            praten("Probeer je armen iets meer naar onder te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goedzo");
+        Thread.sleep(500);
+    }
     public void simonSays() throws Exception {
-        postureInput("StandInit", 0.3f);
-        bepaalBehaviour("movement/ArmenOmhoog");
-        Thread.sleep(900);
-        checkBallonBoven();
-        postureInput("StandInit", 0.3f);
-        bepaalBehaviour("movement/ArmenLinks");
-        Thread.sleep(500);
-        checkBallonLinks();
-        postureInput("StandInit", 0.3f);
-        bepaalBehaviour("movement/ArmenRechts");
-        Thread.sleep(500);
-        checkBallonRechts();
-        postureInput("StandInit", 0.3f);
-        bepaalBehaviour("movement/ArmenOmlaag");
-        Thread.sleep(500);
-        checkBallonLaag();
-        postureInput("StandInit", 0.3f);
-        bepaalBehaviour("movement/ArmenLinks");
-        Thread.sleep(500);
-        checkBallonLinks();
-        postureInput("StandInit", 0.3f);
-        bepaalBehaviour("movement/ArmenOmlaag");
-        Thread.sleep(500);
-        checkBallonLaag();
-        postureInput("StandInit", 0.3f);
-        bepaalBehaviour("movement/ArmenOmhoog");
-        Thread.sleep(900);
-        checkBallonBoven();
-        postureInput("StandInit", 0.3f);
-        bepaalBehaviour("movement/ArmenRechts");
-        Thread.sleep(500);
-        checkBallonRechts();
-        postureInput("StandInit", 0.3f);
-        bepaalBehaviour("movement/ArmenOmhoog");
-        Thread.sleep(900);
-        checkBallonBoven();
-
+        boven();
+        links();
+        rechts();
+        onder();
     }
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
@@ -272,12 +323,25 @@ public class Nao {
     }
     public void processPointsList() throws Exception {
         for (Point point : pointsList) {
-            float x = point.getX();
-            float y = point.getY();
+            x = point.getX();
+            y = point.getY();
             System.out.println("X = " + x + " Y = " + y);
-
-            simonSays();
         }
         pointsList.clear();
+    }
+    static class checkPoints implements Runnable {
+        private Nao tyrone2;
+        public checkPoints (Nao tyrone2) {
+            this.tyrone2 = tyrone2;
+        }
+        @Override
+        public void run() {
+            try {
+                this.tyrone2.detectRedBall();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
