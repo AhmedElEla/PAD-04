@@ -98,9 +98,6 @@ public class Nao {
 
             pointsList.add(new Point(x, y));
 
-            if (pointsList.size() == 10) {
-                processPointsList();
-            }
         });
     }
 // rode bal tracken (bekijk de TrackerController voor comments)
@@ -273,12 +270,13 @@ public class Nao {
     public void naoRobotNaam(String name) throws CallError, InterruptedException {
         systeem.changeName(name);
     }
-    private void processPointsList() {
+    public void processPointsList() throws Exception {
         for (Point point : pointsList) {
             float x = point.getX();
             float y = point.getY();
             System.out.println("X = " + x + " Y = " + y);
 
+            simonSays();
         }
         pointsList.clear();
     }
