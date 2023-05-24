@@ -6,11 +6,9 @@ import com.aldebaran.qi.helper.proxies.ALMemory;
 
 public class Memory {
     private ALMemory memory;
-
     public Memory(Session session) throws Exception {
         memory = new ALMemory(session);
     }
-
     public void subscribeToEvent(String event, EventCallback callback) throws Exception {
         memory.subscribeToEvent(event, callback);
     }
