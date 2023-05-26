@@ -7,7 +7,6 @@ package src;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
-import com.aldebaran.qi.helper.EventCallback;
 import com.aldebaran.qi.helper.proxies.ALMemory;
 import src.configuration.ConfigureNao;
 import src.configuration.Setup;
@@ -26,10 +25,13 @@ import java.util.List;
 
 public class Nao {
     enum positions {
-        BOVEN,
-        LINKS,
-        RECHTS,
-        ONDER
+        LINKSBOVEN,
+        MIDDENBOVEN,
+        RECHTSBOVEN,
+        MIDDEN,
+        LINKSONDER,
+        MIDDENONDER,
+        RECHTSONDER,
     }
     private Application application;
     private TextToSpeech tts;
@@ -97,21 +99,35 @@ public class Nao {
             this.X = X;
             this.Y = Y;
 
-            // Boven
-            if(X >= -2 && X <= 2 && Y >= -2 && Y <= -0.2) {
-                this.ballPosition = positions.BOVEN;
+            System.out.println("X: " + X + " Y: " + Y);
+
+            // LinksBoven
+            if(X <= -0.13 && Y <= -0.10) {
+                this.ballPosition = positions.LINKSBOVEN;
             }
-            //Links
-            else if (X >= -2 && X <= 0 && Y >= -0.2 && Y <= 0.2) {
-                this.ballPosition = positions.LINKS;
+            // MiddenBoven
+            else if (X >= -0.12 && X <= 0.12 && Y <= 0.10) {
+                this.ballPosition = positions.MIDDENBOVEN;
             }
-            // Rechts
-            else if (X >= 0 && X <= 2 && Y >= -0.2 && Y <= 0.2) {
-                this.ballPosition = positions.RECHTS;
+            // RechtsBoven
+            else if (X >= 0.13 && X <= 2 && Y <= 0.10) {
+                this.ballPosition = positions.RECHTSBOVEN;
             }
-            // Onder
-            else if (X >= -2 && X <= 2 && Y >= 0.1 && Y <= 2) {
-                this.ballPosition = positions.ONDER;
+            // Midden
+            else if (Y >= -0.09 && Y <= 0.09) {
+                this.ballPosition = positions.MIDDEN;
+            }
+            // LinksOnder
+            else if (X <= -0.13 && Y >= 0.1) {
+                this.ballPosition = positions.LINKSONDER;
+            }
+            // MiddenOnder
+            else if (X >= -0.12 && X <= 0.12 && Y >= 0.1) {
+                this.ballPosition = positions.MIDDENONDER;
+            }
+            // RechtsOnder
+            else if (X >= 0.10 && X <= 2 && Y >= 0.1) {
+                this.ballPosition = positions.RECHTSONDER;
             }
 
             pointsList.add(new Point(X, Y));
@@ -188,7 +204,8 @@ public class Nao {
                         setBackgroundmovement(false);
                         try {
                             postureInput("StandInit", 0.5f);
-                            animateSpeech("  ^start(animations/Stand/Gestures/Enthusiastic_4) U heeft de laatste knop ingedrukt!! ^wait(animations/Stand/Gestures/Enthusiastic_4) ^start(animations/Stand/BodyTalk/BodyTalk_10) Hier komt de show en dans van kinderen voor kinderen! In de laatste sprint zien jullie het resultaat");
+                            // animateSpeech("  ^start(animations/Stand/Gestures/Enthusiastic_4) U heeft de laatste knop ingedrukt!! ^wait(animations/Stand/Gestures/Enthusiastic_4) ^start(animations/Stand/BodyTalk/BodyTalk_10) Hier komt de show en dans van kinderen voor kinderen! In de laatste sprint zien jullie het resultaat");
+                            bepaalBehaviour("movement/Dance 1");
                             Thread.sleep(500);
                         } catch (Exception e) {
                             System.out.println(e);
@@ -202,52 +219,91 @@ public class Nao {
                 throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
         }
     }
-    public void boven() throws Exception {
+    public void linksBoven() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen omhoog");
+        praten("Cijmon zegt armen links boven");
+        bepaalBehaviour("movement/ArmenLinksBoven");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.LINKSBOVEN) {
+            praten("Probeer uw armen iets meer naar linksboven te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void middenBoven() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen boven uw hoofd");
         bepaalBehaviour("movement/ArmenOmhoog");
         Thread.sleep(2000);
-        while(this.ballPosition != positions.BOVEN) {
-            praten("Probeer je armen iets meer naar boven te bewegen!");
+        while(this.ballPosition != positions.MIDDENBOVEN) {
+            praten("Probeer uw armen iets meer boven uw hoofd te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
         praten("Goed zo");
         Thread.sleep(500);
     }
-    public void links() throws Exception {
+    public void rechtsBoven() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen naar links");
-        bepaalBehaviour("movement/ArmenLinks");
+        praten("Cijmon zegt armen rechtsboven");
+        bepaalBehaviour("movement/ArmenRechtsBoven");
         Thread.sleep(2000);
-        while(this.ballPosition != positions.LINKS) {
-            praten("Probeer je armen iets meer naar links te bewegen!");
+        while(this.ballPosition != positions.RECHTSBOVEN) {
+            praten("Probeer uw armen iets meer naar rechtsboven te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
         praten("Goed zo");
         Thread.sleep(500);
     }
-    public void rechts() throws Exception {
+    public void midden() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen naar rechts");
-        bepaalBehaviour("movement/ArmenRechts");
+        praten("Cijmon zegt armen in het midden");
+        bepaalBehaviour("movement/ArmenMidden");
         Thread.sleep(2000);
-        while(this.ballPosition != positions.RECHTS) {
-            praten("Probeer je armen iets meer naar rechts te bewegen!");
+        while(this.ballPosition != positions.MIDDEN) {
+            praten("Probeer uw armen iets meer naar het midden te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
         praten("Goed zo");
         Thread.sleep(500);
     }
-    public void onder() throws Exception {
+    public void linksOnder() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen omlaag");
+        praten("Cijmon zegt armen linksonder");
+        bepaalBehaviour("movement/ArmenLinksOnder");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.LINKSONDER) {
+            praten("Probeer uw armen iets meer naar linksonder te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void middenOnder() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen onder uw navel");
         bepaalBehaviour("movement/ArmenOmlaag");
         Thread.sleep(2000);
-        while(this.ballPosition != positions.ONDER) {
-            praten("Probeer je armen iets meer naar onder te bewegen!");
+        while(this.ballPosition != positions.MIDDENONDER) {
+            praten("Probeer uw armen iets meer onder uw navel te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void rechtsOnder() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen rechtsonder");
+        bepaalBehaviour("movement/ArmenRechtsOnder");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.RECHTSONDER) {
+            praten("Probeer uw armen iets meer naar rechtsonder te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
@@ -255,10 +311,13 @@ public class Nao {
         Thread.sleep(500);
     }
     public void simonSays() throws Exception {
-        boven();
-        links();
-        rechts();
-        onder();
+        /*linksBoven();
+        middenBoven();
+        rechtsBoven();*/
+        midden();
+        linksOnder();
+        middenOnder();
+        rechtsOnder();
     }
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
@@ -270,7 +329,7 @@ public class Nao {
         for (Point point : pointsList) {
             X = point.getX();
             Y = point.getY();
-            System.out.println("X = " + X + " Y = " + Y);
+            // System.out.println("X = " + X + " Y = " + Y);
         }
         pointsList.clear();
     }
