@@ -1,5 +1,6 @@
 package src.vision;
 
+import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.Session;
 import com.aldebaran.qi.helper.proxies.ALRedBallDetection;
 
@@ -10,5 +11,8 @@ public class RedBallDetection {
     }
     public void subscribe() throws Exception {
         redBallDetection.subscribe("redBallDetected");
+    }
+    public void unsubscribe() throws CallError, InterruptedException {
+        redBallDetection.unsubscribe("redBallDetected");
     }
 }
