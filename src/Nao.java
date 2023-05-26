@@ -8,6 +8,7 @@ package src;
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.helper.proxies.ALMemory;
+import src.audio.AudioPlayer;
 import src.configuration.ConfigureNao;
 import src.configuration.Setup;
 import src.core.BehaviourController;
@@ -23,6 +24,9 @@ import src.speech.TextToSpeech;
 import java.util.ArrayList;
 import java.util.List;
 
+import static src.Nao.knoppen.MIDDLE;
+import static src.Nao.knoppen.REAR;
+
 public class Nao {
     enum positions {
         LINKSBOVEN,
@@ -32,6 +36,10 @@ public class Nao {
         LINKSONDER,
         MIDDENONDER,
         RECHTSONDER,
+    }
+    enum knoppen {
+        MIDDLE,
+        REAR,
     }
     private Application application;
     private TextToSpeech tts;
@@ -50,6 +58,8 @@ public class Nao {
     private Setup systeem;
     private ArrayList<Point> pointsList;
     private positions ballPosition;
+    private knoppen gedrukteKnop;
+    private AudioPlayer audioPlayer;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -73,6 +83,7 @@ public class Nao {
         systeem = new Setup(application.session());
         pointsList = new ArrayList<>();
         Point point = new Point(X, Y);
+        audioPlayer = new AudioPlayer(application.session());
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -82,6 +93,14 @@ public class Nao {
     public void bepaalOogKleur(String color, float duration) throws Exception {
         ogen.bepaalOogKleur(color, duration);
     }
+    public void randomEyeControl(float duration) throws CallError, InterruptedException {
+        ogen.randomEyes(duration);
+    }
+
+// Audio player voor SFX in behaviours
+    public void play(String filename) throws CallError, InterruptedException {
+        audioPlayer.playSFX(filename);
+    }
 // Armen bewegen
     // Posture (stand, crouch & sit)
     public void postureInput(String postureName, float maxSpeedFraction) throws Exception {
@@ -89,6 +108,7 @@ public class Nao {
     }
 // rood herkennen (is nog niet helemaal netjes)
     public void detectRedBall() throws Exception {
+        System.out.println("Startg");
         redBallDetection.subscribe();
         memory.subscribeToEvent("redBallDetected", o -> {
             List<Object> data = (List<Object>) o;
@@ -104,30 +124,37 @@ public class Nao {
             // LinksBoven
             if(X <= -0.13 && Y <= -0.10) {
                 this.ballPosition = positions.LINKSBOVEN;
+                System.out.println("LINKSBOVEN");
             }
             // MiddenBoven
-            else if (X >= -0.12 && X <= 0.12 && Y <= 0.10) {
+            else if (X >= -0.12 && X <= 0.12 && Y <= -0.10) {
                 this.ballPosition = positions.MIDDENBOVEN;
+                System.out.println("MIDDENBOVEN");
             }
             // RechtsBoven
             else if (X >= 0.13 && X <= 2 && Y <= 0.10) {
                 this.ballPosition = positions.RECHTSBOVEN;
+                System.out.println("RECHTSBOVEN");
             }
             // Midden
-            else if (Y >= -0.09 && Y <= 0.09) {
+            else if (Y >= -0.09f && Y <= 0.09f) {
                 this.ballPosition = positions.MIDDEN;
+                System.out.println("MIDDEN");
             }
             // LinksOnder
             else if (X <= -0.13 && Y >= 0.1) {
                 this.ballPosition = positions.LINKSONDER;
+                System.out.println("LINKSONDER");
             }
             // MiddenOnder
             else if (X >= -0.12 && X <= 0.12 && Y >= 0.1) {
                 this.ballPosition = positions.MIDDENONDER;
+                System.out.println("MIDDENONDER");
             }
             // RechtsOnder
             else if (X >= 0.10 && X <= 2 && Y >= 0.1) {
                 this.ballPosition = positions.RECHTSONDER;
+                System.out.println("RECHTSONDER");
             }
 
             pointsList.add(new Point(X, Y));
@@ -177,6 +204,7 @@ public class Nao {
                 break;
 
             case "Middle":
+                this.gedrukteKnop = knoppen.MIDDLE;
                 memory.subscribeToEvent("MiddleTactilTouched", o -> {
                     float touch = (float)o;
                     float touchThreshold = 0.5f;
@@ -187,6 +215,7 @@ public class Nao {
                             animateSpeech("Ik leg nu uit hoe het spel werkt. ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen");
                             Thread.sleep(500);
                             simonSays();
+                            redBallDetection.unsubscribe();
                             postureInput("Crouch", 0.5f);
                         } catch (Exception e) {
                             System.out.println(e);
@@ -205,6 +234,7 @@ public class Nao {
                         try {
                             postureInput("StandInit", 0.5f);
                             // animateSpeech("  ^start(animations/Stand/Gestures/Enthusiastic_4) U heeft de laatste knop ingedrukt!! ^wait(animations/Stand/Gestures/Enthusiastic_4) ^start(animations/Stand/BodyTalk/BodyTalk_10) Hier komt de show en dans van kinderen voor kinderen! In de laatste sprint zien jullie het resultaat");
+                            this.gedrukteKnop = knoppen.REAR;
                             bepaalBehaviour("movement/Dance 1");
                             Thread.sleep(500);
                         } catch (Exception e) {
@@ -311,9 +341,9 @@ public class Nao {
         Thread.sleep(500);
     }
     public void simonSays() throws Exception {
-        /*linksBoven();
+        linksBoven();
         middenBoven();
-        rechtsBoven();*/
+        rechtsBoven();
         midden();
         linksOnder();
         middenOnder();
@@ -333,6 +363,8 @@ public class Nao {
         }
         pointsList.clear();
     }
+
+    // Deze thread moet nog aangepast worden zodat hij wel aangaat als de middenknop gedrukt wordt
     static class checkPoints implements Runnable {
         private Nao tyrone2;
         public checkPoints (Nao tyrone2) {
@@ -340,11 +372,31 @@ public class Nao {
         }
         @Override
         public void run() {
-            try {
-                this.tyrone2.detectRedBall();
+            while (tyrone2.gedrukteKnop == MIDDLE) {
+                try {
+                    System.out.println("Thread checkpoints");
+                    this.tyrone2.detectRedBall();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
-            catch (Exception e) {
-                e.printStackTrace();
+        }
+    }
+    static class randomEyes implements Runnable {
+        private Nao tyrone3;
+        public randomEyes (Nao tyrone3) {
+            this.tyrone3 = tyrone3;
+        }
+        @Override
+        public void run() {
+            while (tyrone3.gedrukteKnop == REAR) {
+                try {
+                    this.tyrone3.randomEyeControl(60f);
+                } catch (CallError e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
