@@ -193,7 +193,7 @@ public class Nao {
                         try {
                             // Do something when front button is pressed
                             postureInput("StandInit", 0.5f);
-                            animateSpeech("^startTag(Hey_1) Hallo, ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Cijmon. Ik ben gemaakt om jullie te helpen bewegen! 1 van mijn spel modes is gemaakt zodat jullie mij na kunnen doen. Klik de knop op het midden van mijn hoofd om te beginnen!");
+                            animateSpeech("^startTag(Hey_1) Hallo, ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Cijmon. Ik ben gemaakt om jullie te helpen bewegen! Ik heb twee spel modes! 1 is gemaakt om mij na te doen en de andere is voor uw amusement! Klik de knop op het midden van mijn hoofd om mij na te doen of klik de achterste knop om vermaakt te worden!");
                             Thread.sleep(500);
                         } catch (Exception e) {
                             System.out.println(e);
@@ -212,7 +212,8 @@ public class Nao {
                         setBackgroundmovement(false);
                         try {
                             // Do something when middle button is pressed
-                            animateSpeech("Ik leg nu uit hoe het spel werkt. ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen");
+                            postureInput("StandInit", 0.5f);
+                            animateSpeech(" ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Het werkt als volgt: Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen!");
                             Thread.sleep(500);
                             simonSays();
                             redBallDetection.unsubscribe();
@@ -233,7 +234,7 @@ public class Nao {
                         setBackgroundmovement(false);
                         try {
                             postureInput("StandInit", 0.5f);
-                            // animateSpeech("  ^start(animations/Stand/Gestures/Enthusiastic_4) U heeft de laatste knop ingedrukt!! ^wait(animations/Stand/Gestures/Enthusiastic_4) ^start(animations/Stand/BodyTalk/BodyTalk_10) Hier komt de show en dans van kinderen voor kinderen! In de laatste sprint zien jullie het resultaat");
+                            animateSpeech(" ^start(animations/Stand/BodyTalk/BodyTalk_10) Bent u klaar om te zien hoe de dans van kinderen voor kinderen eruit ziet? Geniet ervan!");
                             this.gedrukteKnop = knoppen.REAR;
                             bepaalBehaviour("movement/Dance 1");
                             Thread.sleep(500);
@@ -348,6 +349,7 @@ public class Nao {
         linksOnder();
         middenOnder();
         rechtsOnder();
+        animateSpeech(" animations/Stand/Gestures/Enthusiastic_5 Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
