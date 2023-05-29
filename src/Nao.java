@@ -8,7 +8,7 @@ package src;
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.helper.proxies.ALMemory;
-import src.audio.AudioPlayer;
+import src.audio.AudioController;
 import src.configuration.ConfigureNao;
 import src.configuration.Setup;
 import src.core.BehaviourController;
@@ -59,7 +59,8 @@ public class Nao {
     private ArrayList<Point> pointsList;
     private positions ballPosition;
     private knoppen gedrukteKnop;
-    private AudioPlayer audioPlayer;
+    private AudioController audioPlayer;
+    private AudioController audioDevice;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -83,7 +84,8 @@ public class Nao {
         systeem = new Setup(application.session());
         pointsList = new ArrayList<>();
         Point point = new Point(X, Y);
-        audioPlayer = new AudioPlayer(application.session());
+        audioPlayer = new AudioController(application.session());
+        audioDevice = new AudioController(application.session());
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -101,6 +103,11 @@ public class Nao {
     public void play(String filename) throws CallError, InterruptedException {
         audioPlayer.playSFX(filename);
     }
+
+    public void volume(int volume) throws Exception {
+        audioDevice.setOutputVolume(volume);
+    }
+
 // Armen bewegen
     // Posture (stand, crouch & sit)
     public void postureInput(String postureName, float maxSpeedFraction) throws Exception {
