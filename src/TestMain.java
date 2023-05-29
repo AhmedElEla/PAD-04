@@ -6,6 +6,7 @@ public class TestMain {
         naoTyrone.verbind();
         naoTyrone.praten("Verbonden");
         naoTyrone.naoRobotNaam("Simon");
+        naoTyrone.volume(25);
         naoTyrone.postureInput("Standinit", 1f);
 
         // naoTyrone.detectRedBall();
