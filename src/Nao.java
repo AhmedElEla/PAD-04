@@ -7,8 +7,8 @@ package src;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
-import com.aldebaran.qi.helper.EventCallback;
 import com.aldebaran.qi.helper.proxies.ALMemory;
+import src.audio.AudioPlayer;
 import src.configuration.ConfigureNao;
 import src.configuration.Setup;
 import src.core.BehaviourController;
@@ -24,12 +24,22 @@ import src.speech.TextToSpeech;
 import java.util.ArrayList;
 import java.util.List;
 
+import static src.Nao.knoppen.MIDDLE;
+import static src.Nao.knoppen.REAR;
+
 public class Nao {
     enum positions {
-        BOVEN,
-        LINKS,
-        RECHTS,
-        ONDER
+        LINKSBOVEN,
+        MIDDENBOVEN,
+        RECHTSBOVEN,
+        MIDDEN,
+        LINKSONDER,
+        MIDDENONDER,
+        RECHTSONDER,
+    }
+    enum knoppen {
+        MIDDLE,
+        REAR,
     }
     private Application application;
     private TextToSpeech tts;
@@ -48,6 +58,8 @@ public class Nao {
     private Setup systeem;
     private ArrayList<Point> pointsList;
     private positions ballPosition;
+    private knoppen gedrukteKnop;
+    private AudioPlayer audioPlayer;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -71,6 +83,7 @@ public class Nao {
         systeem = new Setup(application.session());
         pointsList = new ArrayList<>();
         Point point = new Point(X, Y);
+        audioPlayer = new AudioPlayer(application.session());
     }
 // Praten
     public void praten(String tekst) throws Exception {
@@ -80,6 +93,14 @@ public class Nao {
     public void bepaalOogKleur(String color, float duration) throws Exception {
         ogen.bepaalOogKleur(color, duration);
     }
+    public void randomEyeControl(float duration) throws CallError, InterruptedException {
+        ogen.randomEyes(duration);
+    }
+
+// Audio player voor SFX in behaviours
+    public void play(String filename) throws CallError, InterruptedException {
+        audioPlayer.playSFX(filename);
+    }
 // Armen bewegen
     // Posture (stand, crouch & sit)
     public void postureInput(String postureName, float maxSpeedFraction) throws Exception {
@@ -87,6 +108,7 @@ public class Nao {
     }
 // rood herkennen (is nog niet helemaal netjes)
     public void detectRedBall() throws Exception {
+        System.out.println("Startg");
         redBallDetection.subscribe();
         memory.subscribeToEvent("redBallDetected", o -> {
             List<Object> data = (List<Object>) o;
@@ -97,21 +119,42 @@ public class Nao {
             this.X = X;
             this.Y = Y;
 
-            // Boven
-            if(X >= -2 && X <= 2 && Y >= -2 && Y <= -0.2) {
-                this.ballPosition = positions.BOVEN;
+            System.out.println("X: " + X + " Y: " + Y);
+
+            // LinksBoven
+            if(X <= -0.13 && Y <= -0.10) {
+                this.ballPosition = positions.LINKSBOVEN;
+                System.out.println("LINKSBOVEN");
             }
-            //Links
-            else if (X >= -2 && X <= 0 && Y >= -0.2 && Y <= 0.2) {
-                this.ballPosition = positions.LINKS;
+            // MiddenBoven
+            else if (X >= -0.12 && X <= 0.12 && Y <= -0.10) {
+                this.ballPosition = positions.MIDDENBOVEN;
+                System.out.println("MIDDENBOVEN");
             }
-            // Rechts
-            else if (X >= 0 && X <= 2 && Y >= -0.2 && Y <= 0.2) {
-                this.ballPosition = positions.RECHTS;
+            // RechtsBoven
+            else if (X >= 0.13 && X <= 2 && Y <= 0.10) {
+                this.ballPosition = positions.RECHTSBOVEN;
+                System.out.println("RECHTSBOVEN");
             }
-            // Onder
-            else if (X >= -2 && X <= 2 && Y >= 0.1 && Y <= 2) {
-                this.ballPosition = positions.ONDER;
+            // Midden
+            else if (Y >= -0.09f && Y <= 0.09f) {
+                this.ballPosition = positions.MIDDEN;
+                System.out.println("MIDDEN");
+            }
+            // LinksOnder
+            else if (X <= -0.13 && Y >= 0.1) {
+                this.ballPosition = positions.LINKSONDER;
+                System.out.println("LINKSONDER");
+            }
+            // MiddenOnder
+            else if (X >= -0.12 && X <= 0.12 && Y >= 0.1) {
+                this.ballPosition = positions.MIDDENONDER;
+                System.out.println("MIDDENONDER");
+            }
+            // RechtsOnder
+            else if (X >= 0.10 && X <= 2 && Y >= 0.1) {
+                this.ballPosition = positions.RECHTSONDER;
+                System.out.println("RECHTSONDER");
             }
 
             pointsList.add(new Point(X, Y));
@@ -150,7 +193,7 @@ public class Nao {
                         try {
                             // Do something when front button is pressed
                             postureInput("StandInit", 0.5f);
-                            animateSpeech("^startTag(Hey_1) Hallo, ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Cijmon. Ik ben gemaakt om jullie te helpen bewegen! 1 van mijn spel modes is gemaakt zodat jullie mij na kunnen doen. Klik de knop op het midden van mijn hoofd om te beginnen!");
+                            animateSpeech("^startTag(Hey_1) Hallo, ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Cijmon. Ik ben gemaakt om jullie te helpen bewegen! Ik heb twee spel modes! 1 is gemaakt om mij na te doen en de andere is voor uw amusement! Klik de knop op het midden van mijn hoofd om mij na te doen of klik de achterste knop om vermaakt te worden!");
                             Thread.sleep(500);
                         } catch (Exception e) {
                             System.out.println(e);
@@ -161,6 +204,7 @@ public class Nao {
                 break;
 
             case "Middle":
+                this.gedrukteKnop = knoppen.MIDDLE;
                 memory.subscribeToEvent("MiddleTactilTouched", o -> {
                     float touch = (float)o;
                     float touchThreshold = 0.5f;
@@ -168,9 +212,11 @@ public class Nao {
                         setBackgroundmovement(false);
                         try {
                             // Do something when middle button is pressed
-                            animateSpeech("Ik leg nu uit hoe het spel werkt. ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen");
+                            postureInput("StandInit", 0.5f);
+                            animateSpeech(" ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Het werkt als volgt: Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen!");
                             Thread.sleep(500);
                             simonSays();
+                            redBallDetection.unsubscribe();
                             postureInput("Crouch", 0.5f);
                         } catch (Exception e) {
                             System.out.println(e);
@@ -188,7 +234,9 @@ public class Nao {
                         setBackgroundmovement(false);
                         try {
                             postureInput("StandInit", 0.5f);
-                            animateSpeech("  ^start(animations/Stand/Gestures/Enthusiastic_4) U heeft de laatste knop ingedrukt!! ^wait(animations/Stand/Gestures/Enthusiastic_4) ^start(animations/Stand/BodyTalk/BodyTalk_10) Hier komt de show en dans van kinderen voor kinderen! In de laatste sprint zien jullie het resultaat");
+                            animateSpeech(" ^start(animations/Stand/BodyTalk/BodyTalk_10) Bent u klaar om te zien hoe de dans van kinderen voor kinderen eruit ziet? Geniet ervan!");
+                            this.gedrukteKnop = knoppen.REAR;
+                            bepaalBehaviour("movement/Dance 1");
                             Thread.sleep(500);
                         } catch (Exception e) {
                             System.out.println(e);
@@ -202,52 +250,91 @@ public class Nao {
                 throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
         }
     }
-    public void boven() throws Exception {
+    public void linksBoven() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen omhoog");
+        praten("Cijmon zegt armen links boven");
+        bepaalBehaviour("movement/ArmenLinksBoven");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.LINKSBOVEN) {
+            praten("Probeer uw armen iets meer naar linksboven te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void middenBoven() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen boven uw hoofd");
         bepaalBehaviour("movement/ArmenOmhoog");
         Thread.sleep(2000);
-        while(this.ballPosition != positions.BOVEN) {
-            praten("Probeer je armen iets meer naar boven te bewegen!");
+        while(this.ballPosition != positions.MIDDENBOVEN) {
+            praten("Probeer uw armen iets meer boven uw hoofd te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
         praten("Goed zo");
         Thread.sleep(500);
     }
-    public void links() throws Exception {
+    public void rechtsBoven() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen naar links");
-        bepaalBehaviour("movement/ArmenLinks");
+        praten("Cijmon zegt armen rechtsboven");
+        bepaalBehaviour("movement/ArmenRechtsBoven");
         Thread.sleep(2000);
-        while(this.ballPosition != positions.LINKS) {
-            praten("Probeer je armen iets meer naar links te bewegen!");
+        while(this.ballPosition != positions.RECHTSBOVEN) {
+            praten("Probeer uw armen iets meer naar rechtsboven te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
         praten("Goed zo");
         Thread.sleep(500);
     }
-    public void rechts() throws Exception {
+    public void midden() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen naar rechts");
-        bepaalBehaviour("movement/ArmenRechts");
+        praten("Cijmon zegt armen in het midden");
+        bepaalBehaviour("movement/ArmenMidden");
         Thread.sleep(2000);
-        while(this.ballPosition != positions.RECHTS) {
-            praten("Probeer je armen iets meer naar rechts te bewegen!");
+        while(this.ballPosition != positions.MIDDEN) {
+            praten("Probeer uw armen iets meer naar het midden te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
         praten("Goed zo");
         Thread.sleep(500);
     }
-    public void onder() throws Exception {
+    public void linksOnder() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen omlaag");
+        praten("Cijmon zegt armen linksonder");
+        bepaalBehaviour("movement/ArmenLinksOnder");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.LINKSONDER) {
+            praten("Probeer uw armen iets meer naar linksonder te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void middenOnder() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen onder uw navel");
         bepaalBehaviour("movement/ArmenOmlaag");
         Thread.sleep(2000);
-        while(this.ballPosition != positions.ONDER) {
-            praten("Probeer je armen iets meer naar onder te bewegen!");
+        while(this.ballPosition != positions.MIDDENONDER) {
+            praten("Probeer uw armen iets meer onder uw navel te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void rechtsOnder() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen rechtsonder");
+        bepaalBehaviour("movement/ArmenRechtsOnder");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.RECHTSONDER) {
+            praten("Probeer uw armen iets meer naar rechtsonder te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
@@ -255,10 +342,14 @@ public class Nao {
         Thread.sleep(500);
     }
     public void simonSays() throws Exception {
-        boven();
-        links();
-        rechts();
-        onder();
+        linksBoven();
+        middenBoven();
+        rechtsBoven();
+        midden();
+        linksOnder();
+        middenOnder();
+        rechtsOnder();
+        animateSpeech(" animations/Stand/Gestures/Enthusiastic_5 Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
@@ -270,10 +361,12 @@ public class Nao {
         for (Point point : pointsList) {
             X = point.getX();
             Y = point.getY();
-            System.out.println("X = " + X + " Y = " + Y);
+            // System.out.println("X = " + X + " Y = " + Y);
         }
         pointsList.clear();
     }
+
+    // Deze thread moet nog aangepast worden zodat hij wel aangaat als de middenknop gedrukt wordt
     static class checkPoints implements Runnable {
         private Nao tyrone2;
         public checkPoints (Nao tyrone2) {
@@ -281,11 +374,31 @@ public class Nao {
         }
         @Override
         public void run() {
-            try {
-                this.tyrone2.detectRedBall();
+            while (tyrone2.gedrukteKnop == MIDDLE) {
+                try {
+                    System.out.println("Thread checkpoints");
+                    this.tyrone2.detectRedBall();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
-            catch (Exception e) {
-                e.printStackTrace();
+        }
+    }
+    static class randomEyes implements Runnable {
+        private Nao tyrone3;
+        public randomEyes (Nao tyrone3) {
+            this.tyrone3 = tyrone3;
+        }
+        @Override
+        public void run() {
+            while (tyrone3.gedrukteKnop == REAR) {
+                try {
+                    this.tyrone3.randomEyeControl(60f);
+                } catch (CallError e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

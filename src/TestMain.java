@@ -1,16 +1,19 @@
 package src;
 
-import com.aldebaran.qi.helper.EventCallback;
-
 public class TestMain {
     public static void main(String[] args) throws Exception {
         Nao naoTyrone = new Nao();
         naoTyrone.verbind();
         naoTyrone.praten("Verbonden");
+        naoTyrone.naoRobotNaam("Simon");
+        naoTyrone.postureInput("Standinit", 1f);
+
+        // naoTyrone.detectRedBall();
 
         naoTyrone.setBackgroundmovement(true);
 
         new Thread(new Nao.checkPoints(naoTyrone)).start();
+        new Thread(new Nao.randomEyes(naoTyrone)).start();
 
         naoTyrone.touchButton("Front");
         naoTyrone.touchButton("Middle");
