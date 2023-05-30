@@ -13,6 +13,8 @@ public class TestMain {
         new Thread(new Nao.checkPoints(naoTyrone)).start();
         new Thread(new Nao.randomEyes(naoTyrone)).start();
 
+
+
         naoTyrone.touchButton("Front");
         naoTyrone.touchButton("Middle");
         naoTyrone.touchButton("Rear");

@@ -7,6 +7,8 @@ package src;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
+import com.aldebaran.qi.helper.EventCallback;
+import com.aldebaran.qi.helper.proxies.ALBasicAwareness;
 import com.aldebaran.qi.helper.proxies.ALMemory;
 import src.audio.AudioController;
 import src.configuration.ConfigureNao;
@@ -19,6 +21,7 @@ import src.motion.TrackerController;
 import src.memory.Memory;
 import src.motion.*;
 import src.speech.AnimatedSpeech;
+import src.vision.BasicAwareness;
 import src.vision.RedBallDetection;
 import src.speech.TextToSpeech;
 import java.util.ArrayList;
@@ -62,6 +65,8 @@ public class Nao {
     private knoppen gedrukteKnop;
     private AudioController audioPlayer;
     private AudioController audioDevice;
+    private BasicAwareness ALbasicawareness;
+    private AutonomousLife ALautonomouslife;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -87,6 +92,8 @@ public class Nao {
         Point point = new Point(X, Y);
         audioPlayer = new AudioController(application.session());
         audioDevice = new AudioController(application.session());
+        ALbasicawareness = new BasicAwareness(application.session());
+        ALautonomouslife = new AutonomousLife(application.session());
     }
 
 // Praten
@@ -122,8 +129,30 @@ public class Nao {
 	public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
         ALbackgroundmovement.moveInBackground(enabled);
 	}
+    public void setEngagementMode (String modename) throws CallError, InterruptedException {
+        ALbasicawareness.engagementMode(modename);
+    }
+    public void setHeadTracker (String trackingmode) throws CallError, InterruptedException {
+        ALbasicawareness.headTracker(trackingmode);
+    }
+    public void stimulusDetection (String stimtype, boolean enable) throws CallError, InterruptedException {
+        ALbasicawareness.stimulusMode(stimtype, enable);
+    }
+    public void autonomousState (String state) throws CallError, InterruptedException {
+        ALautonomouslife.autonomousState(state);
+    }
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
+    }
+    public void waitForPeople() throws Exception {
+        autonomousState("solitary");
+        setEngagementMode("SemiEngaged");
+        setHeadTracker("Head");
+        memory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
+            if (id > 0){
+                animateSpeech("^start (movements1/wave) Welkom! klik op het eerste knop op mijn hoofd om de intro te beginnen ^wait (movements1/wave)");
+            }
+        });
     }
     public void naoRobotNaam(String name) throws CallError, InterruptedException {
         systeem.changeName(name);
