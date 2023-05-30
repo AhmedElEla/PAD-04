@@ -88,10 +88,12 @@ public class Nao {
         audioPlayer = new AudioController(application.session());
         audioDevice = new AudioController(application.session());
     }
+
 // Praten
     public void praten(String tekst) throws Exception {
         this.tts.praten(tekst);
     }
+
 // Oog leds bedienen
     public void bepaalOogKleur(String color, float duration) throws Exception {
         ogen.bepaalOogKleur(color, duration);
@@ -114,7 +116,29 @@ public class Nao {
     public void postureInput(String postureName, float maxSpeedFraction) throws Exception {
         posture.postureInput(postureName, maxSpeedFraction);
     }
-// rood herkennen (is nog niet helemaal netjes)
+	public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
+        behaviour.bepaalBehaviour(behavior);
+    }
+	public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
+        ALbackgroundmovement.moveInBackground(enabled);
+	}
+    public void animateSpeech(String text) throws CallError, InterruptedException {
+        animatedSpeech.animateText(text);
+    }
+    public void naoRobotNaam(String name) throws CallError, InterruptedException {
+        systeem.changeName(name);
+    }
+
+//  do while loop om tijdelijk events te controllen
+    public void doWhile(int millis, int time) throws Exception {
+        int counter = 0;
+        do {
+            Thread.sleep(millis);
+            counter++;
+        } while (counter < time);
+    }
+
+//  rood herkennen methode met enum definitie per "locatie"
     public void detectRedBall() throws Exception {
         System.out.println("Startg");
         redBallDetection.subscribe();
@@ -176,87 +200,14 @@ public class Nao {
             }
         });
     }
-// do while loop om tijdelijk events te controllen
-    public void doWhile(int millis, int time) throws InterruptedException {
-        int counter = 0;
-        do {
-            Thread.sleep(millis);
-            counter++;
-        } while (counter<time);
-    }
-	public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
-        behaviour.bepaalBehaviour(behavior);
-    }
-	public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
-        ALbackgroundmovement.moveInBackground(enabled);
-	}
-	public void touchButton(String sensorName) throws Exception {
-        switch (sensorName) {
-            case "Front":
-                memory.subscribeToEvent("FrontTactilTouched", o -> {
-                    float touch = (float)o;
-                    float touchThreshold = 0.5f;
-                    if (touch >= touchThreshold) {
-                        setBackgroundmovement(false);
-                        try {
-                            // Do something when front button is pressed
-                            postureInput("StandInit", 0.5f);
-                            animateSpeech("^startTag(Hey_1) Hallo, ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Cijmon. Ik ben gemaakt om jullie te helpen bewegen! Ik heb twee spel modes! 1 is gemaakt om mij na te doen en de andere is voor uw amusement! Klik de knop op het midden van mijn hoofd om mij na te doen of klik de achterste knop om vermaakt te worden!");
-                            Thread.sleep(500);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
-                break;
 
-            case "Middle":
-                this.gedrukteKnop = knoppen.MIDDLE;
-                memory.subscribeToEvent("MiddleTactilTouched", o -> {
-                    float touch = (float)o;
-                    float touchThreshold = 0.5f;
-                    if (touch >= touchThreshold) {
-                        setBackgroundmovement(false);
-                        try {
-                            // Do something when middle button is pressed
-                            postureInput("StandInit", 0.5f);
-                            animateSpeech(" ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Het werkt als volgt: Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen!");
-                            Thread.sleep(500);
-                            simonSays();
-                            redBallDetection.unsubscribe();
-                            postureInput("Crouch", 0.5f);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
-                break;
-
-            case "Rear":
-                memory.subscribeToEvent("RearTactilTouched", o -> {
-                    float touch = (float)o;
-                    float touchThreshold = 0.5f;
-                    if (touch >= touchThreshold) {
-                        setBackgroundmovement(false);
-                        try {
-                            postureInput("StandInit", 0.5f);
-                            animateSpeech(" ^start(animations/Stand/BodyTalk/BodyTalk_10) Bent u klaar om te zien hoe de dans van kinderen voor kinderen eruit ziet? Geniet ervan!");
-                            this.gedrukteKnop = knoppen.REAR;
-                            bepaalBehaviour("movement/Dance 1");
-                            Thread.sleep(500);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
-                break;
-
-            default:
-                throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
+    public void processPointsList() throws Exception {
+        for (Point point : pointsList) {
+            X = point.getX();
+            Y = point.getY();
+            // System.out.println("X = " + X + " Y = " + Y);
         }
+        pointsList.clear();
     }
     public void linksBoven() throws Exception {
         postureInput("StandInit", 0.3f);
@@ -392,22 +343,81 @@ public class Nao {
         }
         animateSpeech(" ^start animations/Stand/Gestures/Enthusiastic_5 Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
-    public void animateSpeech(String text) throws CallError, InterruptedException {
-        animatedSpeech.animateText(text);
-    }
-    public void naoRobotNaam(String name) throws CallError, InterruptedException {
-        systeem.changeName(name);
-    }
-    public void processPointsList() throws Exception {
-        for (Point point : pointsList) {
-            X = point.getX();
-            Y = point.getY();
-            // System.out.println("X = " + X + " Y = " + Y);
+
+//  Hoofd knoppen besturing
+	public void touchButton(String sensorName) throws Exception {
+        switch (sensorName) {
+            case "Front":
+                memory.subscribeToEvent("FrontTactilTouched", o -> {
+                    float touch = (float)o;
+                    float touchThreshold = 0.5f;
+                    if (touch >= touchThreshold) {
+                        setBackgroundmovement(false);
+                        try {
+                            // Do something when front button is pressed
+                            postureInput("StandInit", 0.5f);
+                            animateSpeech("^startTag(Hey_1) Hallo, ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Cijmon. Ik ben gemaakt om jullie te helpen bewegen! Ik heb twee spel modes! 1 is gemaakt om mij na te doen en de andere is voor uw amusement! Klik de knop op het midden van mijn hoofd om mij na te doen of klik de achterste knop om vermaakt te worden!");
+                            Thread.sleep(500);
+                        } catch (Exception e) {
+                            System.out.println(e);
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+                break;
+
+            case "Middle":
+                memory.subscribeToEvent("MiddleTactilTouched", o -> {
+                    float touch = (float)o;
+                    float touchThreshold = 0.5f;
+                    if (touch >= touchThreshold) {
+                        setBackgroundmovement(false);
+                        try {
+                            // Do something when middle button is pressed
+                            postureInput("StandInit", 0.5f);
+                            animateSpeech(" ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Het werkt als volgt: Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen!");
+                            Thread.sleep(500);
+                            //detectRedBall();
+                            this.gedrukteKnop = knoppen.MIDDLE;
+                            simonSays();
+                            bepaalOogKleur("green", 0f);
+                            redBallDetection.unsubscribe();
+                            postureInput("Crouch", 0.5f);
+                        } catch (Exception e) {
+                            System.out.println(e);
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+                break;
+
+            case "Rear":
+                memory.subscribeToEvent("RearTactilTouched", o -> {
+                    float touch = (float)o;
+                    float touchThreshold = 0.5f;
+                    if (touch >= touchThreshold) {
+                        setBackgroundmovement(false);
+                        try {
+                            postureInput("StandInit", 0.5f);
+                            animateSpeech(" ^start(animations/Stand/BodyTalk/BodyTalk_10) Bent u klaar om te zien hoe de dans van kinderen voor kinderen eruit ziet? Geniet ervan!");
+                            this.gedrukteKnop = knoppen.REAR;
+                            bepaalBehaviour("movement/Dance 1");
+                            Thread.sleep(500);
+                            bepaalOogKleur("green", 0f);
+                        } catch (Exception e) {
+                            System.out.println(e);
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
         }
-        pointsList.clear();
     }
 
-    // Deze thread moet nog aangepast worden zodat hij wel aangaat als de middenknop gedrukt wordt
+//  Threads om tegelijkertijd functies uit te voeren
     static class checkPoints implements Runnable {
         private Nao tyrone2;
         public checkPoints (Nao tyrone2) {
@@ -415,12 +425,19 @@ public class Nao {
         }
         @Override
         public void run() {
-            while (tyrone2.gedrukteKnop == MIDDLE) {
+            while (true) {
                 try {
-                    System.out.println("Thread checkpoints");
-                    this.tyrone2.detectRedBall();
-                } catch (Exception e) {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
                     throw new RuntimeException(e);
+                }
+                if (this.tyrone2.gedrukteKnop == knoppen.MIDDLE) {
+                    System.out.println("detecting redball");
+                    try {
+                        this.tyrone2.detectRedBall();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
@@ -432,13 +449,21 @@ public class Nao {
         }
         @Override
         public void run() {
-            while (tyrone3.gedrukteKnop == REAR) {
+            while (true) {
                 try {
-                    this.tyrone3.randomEyeControl(60f);
-                } catch (CallError e) {
-                    throw new RuntimeException(e);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
+                }
+                if (this.tyrone3.gedrukteKnop == knoppen.REAR) {
+                    System.out.println("thread random eyes");
+                    try {
+                        this.tyrone3.randomEyeControl(1f);
+                    } catch (CallError e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
