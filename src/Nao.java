@@ -258,103 +258,103 @@ public class Nao {
                 throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
         }
     }
-//    public void linksBoven() throws Exception {
-//        postureInput("StandInit", 0.3f);
-//        praten("Cijmon zegt armen links boven");
-//        bepaalBehaviour("movement/ArmenLinksBoven");
-//        Thread.sleep(2000);
-//        while(this.ballPosition != positions.LINKSBOVEN) {
-//            praten("Probeer uw armen iets meer naar linksboven te bewegen!");
-//            bepaalOogKleur("red", 0);
-//        }
-//        bepaalOogKleur("green", 0);
-//        praten("Goed zo");
-//        Thread.sleep(500);
-//    }
-//    public void middenBoven() throws Exception {
-//        postureInput("StandInit", 0.3f);
-//        praten("Cijmon zegt armen boven uw hoofd");
-//        bepaalBehaviour("movement/ArmenOmhoog");
-//        Thread.sleep(2000);
-//        while(this.ballPosition != positions.MIDDENBOVEN) {
-//            praten("Probeer uw armen iets meer boven uw hoofd te bewegen!");
-//            bepaalOogKleur("red", 0);
-//        }
-//        bepaalOogKleur("green", 0);
-//        praten("Goed zo");
-//        Thread.sleep(500);
-//    }
-//    public void rechtsBoven() throws Exception {
-//        postureInput("StandInit", 0.3f);
-//        praten("Cijmon zegt armen rechtsboven");
-//        bepaalBehaviour("movement/ArmenRechtsBoven");
-//        Thread.sleep(2000);
-//        while(this.ballPosition != positions.RECHTSBOVEN) {
-//            praten("Probeer uw armen iets meer naar rechtsboven te bewegen!");
-//            bepaalOogKleur("red", 0);
-//        }
-//        bepaalOogKleur("green", 0);
-//        praten("Goed zo");
-//        Thread.sleep(500);
-//    }
-//    public void midden() throws Exception {
-//        postureInput("StandInit", 0.3f);
-//        praten("Cijmon zegt armen in het midden");
-//        bepaalBehaviour("movement/ArmenMidden");
-//        Thread.sleep(2000);
-//        while(this.ballPosition != positions.MIDDEN) {
-//            praten("Probeer uw armen iets meer naar het midden te bewegen!");
-//            bepaalOogKleur("red", 0);
-//        }
-//        bepaalOogKleur("green", 0);
-//        praten("Goed zo");
-//        Thread.sleep(500);
-//    }
-//    public void linksOnder() throws Exception {
-//        postureInput("StandInit", 0.3f);
-//        praten("Cijmon zegt armen linksonder");
-//        bepaalBehaviour("movement/ArmenLinksOnder");
-//        Thread.sleep(2000);
-//        while(this.ballPosition != positions.LINKSONDER) {
-//            praten("Probeer uw armen iets meer naar linksonder te bewegen!");
-//            bepaalOogKleur("red", 0);
-//        }
-//        bepaalOogKleur("green", 0);
-//        praten("Goed zo");
-//        Thread.sleep(500);
-//    }
-//    public void middenOnder() throws Exception {
-//        postureInput("StandInit", 0.3f);
-//        praten("Cijmon zegt armen onder uw navel");
-//        bepaalBehaviour("movement/ArmenOmlaag");
-//        Thread.sleep(2000);
-//        while(this.ballPosition != positions.MIDDENONDER) {
-//            praten("Probeer uw armen iets meer onder uw navel te bewegen!");
-//            bepaalOogKleur("red", 0);
-//        }
-//        bepaalOogKleur("green", 0);
-//        praten("Goed zo");
-//        Thread.sleep(500);
-//    }
-//    public void rechtsOnder() throws Exception {
-//        postureInput("StandInit", 0.3f);
-//        praten("Cijmon zegt armen rechtsonder");
-//        bepaalBehaviour("movement/ArmenRechtsOnder");
-//        Thread.sleep(2000);
-//        while(this.ballPosition != positions.RECHTSONDER) {
-//            praten("Probeer uw armen iets meer naar rechtsonder te bewegen!");
-//            bepaalOogKleur("red", 0);
-//        }
-//        bepaalOogKleur("green", 0);
-//        praten("Goed zo");
-//        Thread.sleep(500);
-//    }
+    public void linksBoven() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen links boven");
+        bepaalBehaviour("movement/ArmenLinksBoven");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.LINKSBOVEN) {
+            praten("Probeer uw armen iets meer naar linksboven te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void middenBoven() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen boven uw hoofd");
+        bepaalBehaviour("movement/ArmenOmhoog");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.MIDDENBOVEN) {
+            praten("Probeer uw armen iets meer boven uw hoofd te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void rechtsBoven() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen rechtsboven");
+        bepaalBehaviour("movement/ArmenRechtsBoven");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.RECHTSBOVEN) {
+            praten("Probeer uw armen iets meer naar rechtsboven te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void midden() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen in het midden");
+        bepaalBehaviour("movement/ArmenMidden");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.MIDDEN) {
+            praten("Probeer uw armen iets meer naar het midden te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void linksOnder() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen linksonder");
+        bepaalBehaviour("movement/ArmenLinksOnder");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.LINKSONDER) {
+            praten("Probeer uw armen iets meer naar linksonder te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void middenOnder() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen onder uw navel");
+        bepaalBehaviour("movement/ArmenOmlaag");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.MIDDENONDER) {
+            praten("Probeer uw armen iets meer onder uw navel te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
+    public void rechtsOnder() throws Exception {
+        postureInput("StandInit", 0.3f);
+        praten("Cijmon zegt armen rechtsonder");
+        bepaalBehaviour("movement/ArmenRechtsOnder");
+        Thread.sleep(2000);
+        while(this.ballPosition != positions.RECHTSONDER) {
+            praten("Probeer uw armen iets meer naar rechtsonder te bewegen!");
+            bepaalOogKleur("red", 0);
+        }
+        bepaalOogKleur("green", 0);
+        praten("Goed zo");
+        Thread.sleep(500);
+    }
     public void simonSays() throws Exception {
         List<positions> movesList = new ArrayList<>();
         Random random = new Random();
 
         // Generate 20 random moves
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 6; i++) {
             positions move;
             int lastMove = movesList.size() - 1;
 
@@ -368,99 +368,29 @@ public class Nao {
             // Switch case method for each move
             switch (move) {
                 case LINKSBOVEN:
-                    postureInput("StandInit", 0.3f);
-                    praten("Cijmon zegt armen links boven");
-                    bepaalBehaviour("movement/ArmenLinksBoven");
-                    Thread.sleep(2000);
-                    while (this.ballPosition != positions.LINKSBOVEN) {
-                        praten("Probeer uw armen iets meer naar linksboven te bewegen!");
-                        bepaalOogKleur("red", 0);
-                    }
-                    bepaalOogKleur("green", 0);
-                    praten("Goed zo");
-                    Thread.sleep(500);
+                    linksBoven();
                     break;
                 case MIDDENBOVEN:
-                    postureInput("StandInit", 0.3f);
-                    praten("Cijmon zegt armen boven uw hoofd");
-                    bepaalBehaviour("movement/ArmenOmhoog");
-                    Thread.sleep(2000);
-                    while(this.ballPosition != positions.MIDDENBOVEN) {
-                        praten("Probeer uw armen iets meer boven uw hoofd te bewegen!");
-                        bepaalOogKleur("red", 0);
-                    }
-                    bepaalOogKleur("green", 0);
-                    praten("Goed zo");
-                    Thread.sleep(500);
+                    middenBoven();
                     break;
                 case RECHTSBOVEN:
-                    postureInput("StandInit", 0.3f);
-                    praten("Cijmon zegt armen rechtsboven");
-                    bepaalBehaviour("movement/ArmenRechtsBoven");
-                    Thread.sleep(2000);
-                    while(this.ballPosition != positions.RECHTSBOVEN) {
-                        praten("Probeer uw armen iets meer naar rechtsboven te bewegen!");
-                        bepaalOogKleur("red", 0);
-                    }
-                    bepaalOogKleur("green", 0);
-                    praten("Goed zo");
-                    Thread.sleep(500);
+                    rechtsBoven();
                     break;
                 case MIDDEN:
-                    postureInput("StandInit", 0.3f);
-                    praten("Cijmon zegt armen in het midden");
-                    bepaalBehaviour("movement/ArmenMidden");
-                    Thread.sleep(2000);
-                    while(this.ballPosition != positions.MIDDEN) {
-                        praten("Probeer uw armen iets meer naar het midden te bewegen!");
-                        bepaalOogKleur("red", 0);
-                    }
-                    bepaalOogKleur("green", 0);
-                    praten("Goed zo");
-                    Thread.sleep(500);
+                    midden();
                     break;
                 case LINKSONDER:
-                    postureInput("StandInit", 0.3f);
-                    praten("Cijmon zegt armen linksonder");
-                    bepaalBehaviour("movement/ArmenLinksOnder");
-                    Thread.sleep(2000);
-                    while(this.ballPosition != positions.LINKSONDER) {
-                        praten("Probeer uw armen iets meer naar linksonder te bewegen!");
-                        bepaalOogKleur("red", 0);
-                    }
-                    bepaalOogKleur("green", 0);
-                    praten("Goed zo");
-                    Thread.sleep(500);
+                    linksOnder();
                     break;
                 case MIDDENONDER:
-                    postureInput("StandInit", 0.3f);
-                    praten("Cijmon zegt armen onder uw navel");
-                    bepaalBehaviour("movement/ArmenOmlaag");
-                    Thread.sleep(2000);
-                    while(this.ballPosition != positions.MIDDENONDER) {
-                        praten("Probeer uw armen iets meer onder uw navel te bewegen!");
-                        bepaalOogKleur("red", 0);
-                    }
-                    bepaalOogKleur("green", 0);
-                    praten("Goed zo");
-                    Thread.sleep(500);
+                    middenOnder();
                     break;
                 case RECHTSONDER:
-                    postureInput("StandInit", 0.3f);
-                    praten("Cijmon zegt armen rechtsonder");
-                    bepaalBehaviour("movement/ArmenRechtsOnder");
-                    Thread.sleep(2000);
-                    while(this.ballPosition != positions.RECHTSONDER) {
-                        praten("Probeer uw armen iets meer naar rechtsonder te bewegen!");
-                        bepaalOogKleur("red", 0);
-                    }
-                    bepaalOogKleur("green", 0);
-                    praten("Goed zo");
-                    Thread.sleep(500);
+                    rechtsOnder();
                     break;
             }
         }
-        animateSpeech(" animations/Stand/Gestures/Enthusiastic_5 Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
+        animateSpeech(" ^start animations/Stand/Gestures/Enthusiastic_5 Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
