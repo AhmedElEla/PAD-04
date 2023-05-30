@@ -5,11 +5,10 @@ public class TestMain {
         Nao naoTyrone = new Nao();
         naoTyrone.verbind();
         naoTyrone.praten("Verbonden");
-        naoTyrone.naoRobotNaam("Simon");
-        naoTyrone.volume(25);
+        naoTyrone.volume(50);
         naoTyrone.postureInput("Standinit", 1f);
 
-        // naoTyrone.detectRedBall();
+        naoTyrone.detectRedBall();
 
         naoTyrone.setBackgroundmovement(true);
 

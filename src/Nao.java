@@ -23,6 +23,7 @@ import src.vision.RedBallDetection;
 import src.speech.TextToSpeech;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static src.Nao.knoppen.MIDDLE;
 import static src.Nao.knoppen.REAR;
@@ -349,14 +350,47 @@ public class Nao {
         Thread.sleep(500);
     }
     public void simonSays() throws Exception {
-        linksBoven();
-        middenBoven();
-        rechtsBoven();
-        midden();
-        linksOnder();
-        middenOnder();
-        rechtsOnder();
-        animateSpeech(" animations/Stand/Gestures/Enthusiastic_5 Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
+        List<positions> movesList = new ArrayList<>();
+        Random random = new Random();
+
+        // Generate 20 random moves
+        for (int i = 0; i < 6; i++) {
+            positions move;
+            int lastMove = movesList.size() - 1;
+
+            // Generate a random move that is not the same as the previous move
+            do {
+                move = positions.values()[random.nextInt(positions.values().length)];
+            } while (lastMove >= 0 && move == movesList.get(lastMove));
+
+            movesList.add(move);
+
+            // Switch case method for each move
+            switch (move) {
+                case LINKSBOVEN:
+                    linksBoven();
+                    break;
+                case MIDDENBOVEN:
+                    middenBoven();
+                    break;
+                case RECHTSBOVEN:
+                    rechtsBoven();
+                    break;
+                case MIDDEN:
+                    midden();
+                    break;
+                case LINKSONDER:
+                    linksOnder();
+                    break;
+                case MIDDENONDER:
+                    middenOnder();
+                    break;
+                case RECHTSONDER:
+                    rechtsOnder();
+                    break;
+            }
+        }
+        animateSpeech(" ^start animations/Stand/Gestures/Enthusiastic_5 Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
@@ -410,10 +444,6 @@ public class Nao {
         }
     }
 }
-
-
-
-
 
 
 
