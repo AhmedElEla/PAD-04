@@ -3,13 +3,11 @@ package src;
 public class TestMain {
     public static void main(String[] args) throws Exception {
         Nao naoTyrone = new Nao();
+
         naoTyrone.verbind();
         naoTyrone.praten("Verbonden");
         naoTyrone.volume(50);
         naoTyrone.postureInput("Standinit", 1f);
-
-        naoTyrone.detectRedBall();
-
         naoTyrone.setBackgroundmovement(true);
 
         new Thread(new Nao.checkPoints(naoTyrone)).start();
