@@ -12,7 +12,4 @@ public class Memory {
     public void subscribeToEvent(String event, EventCallback callback) throws Exception {
         memory.subscribeToEvent(event, callback);
     }
-    public void unsubscribeAllEvent() throws Exception {
-        memory.unsubscribeAllEvents();
-    }
 }

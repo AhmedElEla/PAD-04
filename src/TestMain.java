@@ -5,15 +5,14 @@ public class TestMain {
         Nao naoTyrone = new Nao();
 
         naoTyrone.verbind();
-        naoTyrone.praten("Verbonden");
+        naoTyrone.talking("Verbonden");
         naoTyrone.volume(50);
-        naoTyrone.postureInput("Standinit", 1f);
-        naoTyrone.setBackgroundmovement(true);
+        naoTyrone.setLanguage("Dutch");
+        Thread.sleep(2000);
+        naoTyrone.waitForPeople();
 
         new Thread(new Nao.checkPoints(naoTyrone)).start();
         new Thread(new Nao.randomEyes(naoTyrone)).start();
-
-
 
         naoTyrone.touchButton("Front");
         naoTyrone.touchButton("Middle");
