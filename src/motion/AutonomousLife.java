@@ -11,8 +11,10 @@ public class AutonomousLife {
     public AutonomousLife (Session session) throws Exception{
         autonomousLife = new ALAutonomousLife(session);
     }
-
     public void autonomousState (String state) throws CallError, InterruptedException {
         autonomousLife.setState(state);
+    }
+    public void stopAll() throws CallError, InterruptedException {
+        autonomousLife.stopAll();
     }
 }

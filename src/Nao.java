@@ -8,7 +8,6 @@ package src;
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.helper.EventCallback;
-import com.aldebaran.qi.helper.proxies.ALBasicAwareness;
 import com.aldebaran.qi.helper.proxies.ALMemory;
 import src.audio.AudioController;
 import src.configuration.ConfigureNao;
@@ -27,9 +26,6 @@ import src.speech.TextToSpeech;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static src.Nao.knoppen.MIDDLE;
-import static src.Nao.knoppen.REAR;
 
 public class Nao {
     enum positions {
@@ -94,11 +90,30 @@ public class Nao {
         audioDevice = new AudioController(application.session());
         ALbasicawareness = new BasicAwareness(application.session());
         ALautonomouslife = new AutonomousLife(application.session());
-    }
 
+        memory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
+            if(waitForPeople) {
+                if (id > 0) {
+
+                    System.out.println("print 1 wait for peeople");
+                    animateSpeech("^start (movements1/wave) Welkom! klik op het eerste knop op mijn hoofd om de intro te beginnen ^wait (movements1/wave)");
+                    autonomousState("disabled");
+                    waitForPeople = false;
+
+                }
+            }
+        });
+    }
+// robot instelling
+    public void naoRobotNaam(String name) throws CallError, InterruptedException {
+        systeem.changeName(name);
+    }
 // Praten
-    public void praten(String tekst) throws Exception {
-        this.tts.praten(tekst);
+    public void talking(String tekst) throws Exception {
+        this.tts.talk(tekst);
+    }
+    public void setLanguage(String language) throws CallError, InterruptedException {
+        this.tts.Language(language);
     }
 
 // Oog leds bedienen
@@ -129,6 +144,8 @@ public class Nao {
 	public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
         ALbackgroundmovement.moveInBackground(enabled);
 	}
+
+// Autonomous life
     public void setEngagementMode (String modename) throws CallError, InterruptedException {
         ALbasicawareness.engagementMode(modename);
     }
@@ -144,18 +161,15 @@ public class Nao {
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
     }
+    boolean waitForPeople = false;
+
     public void waitForPeople() throws Exception {
         autonomousState("solitary");
+        stimulusDetection("Movement", false);
+        stimulusDetection("People", true);
         setEngagementMode("SemiEngaged");
         setHeadTracker("Head");
-        memory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
-            if (id > 0){
-                animateSpeech("^start (movements1/wave) Welkom! klik op het eerste knop op mijn hoofd om de intro te beginnen ^wait (movements1/wave)");
-            }
-        });
-    }
-    public void naoRobotNaam(String name) throws CallError, InterruptedException {
-        systeem.changeName(name);
+        waitForPeople = true;
     }
 
 //  do while loop om tijdelijk events te controllen
@@ -240,93 +254,107 @@ public class Nao {
     }
     public void linksBoven() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen links boven");
+        talking("Cijmon zegt armen links boven");
         bepaalBehaviour("movement/ArmenLinksBoven");
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         while(this.ballPosition != positions.LINKSBOVEN) {
-            praten("Probeer uw armen iets meer naar linksboven te bewegen!");
+            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+            talking("Probeer uw armen iets meer naar linksboven te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
-        praten("Goed zo");
+        play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
+        talking("Goed zo");
         Thread.sleep(500);
     }
     public void middenBoven() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen boven uw hoofd");
+        talking("Cijmon zegt armen boven uw hoofd");
         bepaalBehaviour("movement/ArmenOmhoog");
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         while(this.ballPosition != positions.MIDDENBOVEN) {
-            praten("Probeer uw armen iets meer boven uw hoofd te bewegen!");
+            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+            talking("Probeer uw armen iets meer boven uw hoofd te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
-        praten("Goed zo");
+        play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
+        talking("Lekker bezig");
         Thread.sleep(500);
     }
     public void rechtsBoven() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen rechtsboven");
+        talking("Cijmon zegt armen rechtsboven");
         bepaalBehaviour("movement/ArmenRechtsBoven");
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         while(this.ballPosition != positions.RECHTSBOVEN) {
-            praten("Probeer uw armen iets meer naar rechtsboven te bewegen!");
+            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+            talking("Probeer uw armen iets meer naar rechtsboven te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
-        praten("Goed zo");
+        play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
+        talking("U doet het prachtig");
         Thread.sleep(500);
     }
     public void midden() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen in het midden");
+        talking("Cijmon zegt armen in het midden");
         bepaalBehaviour("movement/ArmenMidden");
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         while(this.ballPosition != positions.MIDDEN) {
-            praten("Probeer uw armen iets meer naar het midden te bewegen!");
+            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+            talking("Probeer uw armen iets meer naar het midden te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
-        praten("Goed zo");
+        play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
+        talking("Wauw perfect");
         Thread.sleep(500);
     }
     public void linksOnder() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen linksonder");
+        talking("Cijmon zegt armen linksonder");
         bepaalBehaviour("movement/ArmenLinksOnder");
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         while(this.ballPosition != positions.LINKSONDER) {
-            praten("Probeer uw armen iets meer naar linksonder te bewegen!");
+            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+            talking("Probeer uw armen iets meer naar linksonder te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
-        praten("Goed zo");
+        play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
+        talking("Goedgedaan");
         Thread.sleep(500);
     }
     public void middenOnder() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen onder uw navel");
+        talking("Cijmon zegt armen onder uw navel");
         bepaalBehaviour("movement/ArmenOmlaag");
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         while(this.ballPosition != positions.MIDDENONDER) {
-            praten("Probeer uw armen iets meer onder uw navel te bewegen!");
+            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+            talking("Probeer uw armen iets meer onder uw navel te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
-        praten("Goed zo");
+        play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
+        talking("Fantastisch");
         Thread.sleep(500);
     }
     public void rechtsOnder() throws Exception {
         postureInput("StandInit", 0.3f);
-        praten("Cijmon zegt armen rechtsonder");
+        talking("Cijmon zegt armen rechtsonder");
         bepaalBehaviour("movement/ArmenRechtsOnder");
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         while(this.ballPosition != positions.RECHTSONDER) {
-            praten("Probeer uw armen iets meer naar rechtsonder te bewegen!");
+            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+            talking("Probeer uw armen iets meer naar rechtsonder te bewegen!");
             bepaalOogKleur("red", 0);
         }
         bepaalOogKleur("green", 0);
-        praten("Goed zo");
+        play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
+        talking("U bent de beste!");
         Thread.sleep(500);
     }
     public void simonSays() throws Exception {
@@ -370,7 +398,7 @@ public class Nao {
                     break;
             }
         }
-        animateSpeech(" ^start animations/Stand/Gestures/Enthusiastic_5 Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
+        animateSpeech(" ^start (animations/Stand/Gestures/Enthusiastic_5) Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
 
 //  Hoofd knoppen besturing
@@ -465,8 +493,11 @@ public class Nao {
                     try {
                         this.tyrone2.detectRedBall();
                     } catch (Exception e) {
+                        System.err.println("Error occurred while interacting with ALRedBallDetection: " + e.getMessage());
+                        e.printStackTrace();
                         throw new RuntimeException(e);
                     }
+                    this.tyrone2.gedrukteKnop = null;
                 }
             }
         }

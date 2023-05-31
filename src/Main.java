@@ -5,14 +5,11 @@
 
 package src;
 
-import com.aldebaran.qi.CallError;
-import com.aldebaran.qi.helper.EventCallback;
-
 public class Main {
     public static void main(String[] args) throws Exception {
         Nao naoTyrone = new Nao();
         naoTyrone.verbind();
-        naoTyrone.praten("Verbonden");
+        naoTyrone.talking("Verbonden");
         naoTyrone.postureInput("Standinit", 1f);
 
         naoTyrone.detectRedBall();
