@@ -45,11 +45,8 @@ public class Nao {
     private TextToSpeech tts;
     private OogController ogen;
     private PostureController posture;
-    private MotionController motion;
     private RedBallDetection redBallDetection;
     private Memory memory;
-    private ALMemory newALMemory;
-    private static TrackerController redBallTracker;
 	private BehaviourController behaviour;
     public static float X;
     public static float Y;
@@ -63,6 +60,9 @@ public class Nao {
     private AudioController audioDevice;
     private BasicAwareness ALbasicawareness;
     private AutonomousLife ALautonomouslife;
+    private MotionController motion;
+    private ALMemory newALMemory;
+    private static TrackerController redBallTracker;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -85,24 +85,12 @@ public class Nao {
         animatedSpeech = new AnimatedSpeech(application.session());
         systeem = new Setup(application.session());
         pointsList = new ArrayList<>();
-        Point point = new Point(X, Y);
         audioPlayer = new AudioController(application.session());
         audioDevice = new AudioController(application.session());
         ALbasicawareness = new BasicAwareness(application.session());
         ALautonomouslife = new AutonomousLife(application.session());
+        Point point = new Point(X, Y);
 
-//        memory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
-//            if(waitForPeople) {
-//                if (id > 0) {
-//
-//                    System.out.println("print 1 wait for peeople");
-//                    animateSpeech("^start (movements1/wave) Welkom! klik op het eerste knop op mijn hoofd om de intro te beginnen ^wait (movements1/wave)");
-//                    autonomousState("disabled");
-//                    waitForPeople = false;
-//
-//                }
-//            }
-//        });
     }
 // robot instelling
     public void naoRobotNaam(String name) throws CallError, InterruptedException {
@@ -161,16 +149,6 @@ public class Nao {
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
     }
-//    boolean waitForPeople = false;
-//
-//    public void waitForPeople() throws Exception {
-//        autonomousState("solitary");
-//        stimulusDetection("Movement", false);
-//        stimulusDetection("People", true);
-//        setEngagementMode("SemiEngaged");
-//        setHeadTracker("Head");
-//        waitForPeople = true;
-//    }
 
 //  do while loop om tijdelijk events te controllen
     public void doWhile(int millis, int time) throws Exception {
@@ -258,7 +236,6 @@ public class Nao {
         bepaalBehaviour("movement/ArmenLinksBoven");
         Thread.sleep(4000);
         while(this.ballPosition != positions.LINKSBOVEN) {
-//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar linksboven te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -273,7 +250,6 @@ public class Nao {
         bepaalBehaviour("movement/ArmenOmhoog");
         Thread.sleep(4000);
         while(this.ballPosition != positions.MIDDENBOVEN) {
-//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer boven uw hoofd te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -288,7 +264,6 @@ public class Nao {
         bepaalBehaviour("movement/ArmenRechtsBoven");
         Thread.sleep(4000);
         while(this.ballPosition != positions.RECHTSBOVEN) {
-//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar rechtsboven te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -303,7 +278,6 @@ public class Nao {
         bepaalBehaviour("movement/ArmenMidden");
         Thread.sleep(4000);
         while(this.ballPosition != positions.MIDDEN) {
-//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar het midden te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -318,7 +292,6 @@ public class Nao {
         bepaalBehaviour("movement/ArmenLinksOnder");
         Thread.sleep(4000);
         while(this.ballPosition != positions.LINKSONDER) {
-//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar linksonder te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -333,7 +306,6 @@ public class Nao {
         bepaalBehaviour("movement/ArmenOmlaag");
         Thread.sleep(4000);
         while(this.ballPosition != positions.MIDDENONDER) {
-//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer onder uw navel te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -400,7 +372,6 @@ public class Nao {
         }
         animateSpeech(" ^start (animations/Stand/Gestures/Enthusiastic_5) Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
-
 //  Hoofd knoppen besturing
 	public void touchButton(String sensorName) throws Exception {
         switch (sensorName) {
@@ -476,7 +447,6 @@ public class Nao {
                 throw new IllegalArgumentException("Invalid sensor name: " + sensorName);
         }
     }
-
 //  Threads om tegelijkertijd functies uit te voeren
     static class checkPoints implements Runnable {
         private Nao tyrone2;
