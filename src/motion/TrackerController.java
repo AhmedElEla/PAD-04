@@ -12,10 +12,13 @@ import com.aldebaran.qi.helper.proxies.ALTracker;
 import java.util.List;
 
 public class TrackerController {
+    // Acces modifier ALTracker
     private ALTracker alTracker;
+    // Constructor that initializes ALTracker
     public TrackerController(Session session) throws Exception {
         alTracker = new ALTracker(session);
     }
+    // Method that starts the tracker
     public void startTracker(String pMode, Float pMaxDistance, String pTarget, Object pParams, String pEffector) throws CallError, InterruptedException {
         alTracker.setMode(pMode); // welke onderdelen van robot bewegen mee bv: Head, WholeBody, Move
         alTracker.setMaximumDistanceDetection(pMaxDistance); // bv 2f; max afstand om te tracken in meters
@@ -23,9 +26,11 @@ public class TrackerController {
         alTracker.track(pTarget); // bv RedBall; laat de doelwit getrackd worden en begin met tracken; doelwit moet eerst geregistreerd worden
         alTracker.setEffector(pEffector); // bv "Arms, "LArm", "RArm", "None"; bepaal "end-effector"; bepaal hoe de robot gaat tracken
     }
+    // Method that stopts the tracker
     public void stopTracker() throws CallError, InterruptedException {
         alTracker.stopTracker();
     }
+    // Array list that stores the position given by the tracker
     public float[] getPosition(int index) throws CallError, InterruptedException {
         List<Float> getPosition = alTracker.getTargetPosition(1);
 

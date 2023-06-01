@@ -1,10 +1,13 @@
-// Dit is een project gemaakt door: Ahmed El Ela en Valentijn Bruggeman
-// Dit project heeft als eind doel om een NAO-robot te laten bewegen, dansen en muziek af te laten spelen. Daarnaast controleert de NAO of zijn bewegingen correct nagedaan worden
-// Project groep naam: PAD-04
-// Klas: IT101
+/**
+ * The goal of this project is to make the NAO robot play a simon says game with elderly people And perform a small
+ * concert so the elderly people can enjoy their time and dance alongside the NAO
+ * Project group : PAD-04
+ * @authors Ahmed El Ela and Valentijn Bruggeman
+ */
 
 package src;
 
+// NAOQI aldebaran imports
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.helper.EventCallback;
@@ -19,6 +22,8 @@ import src.motion.MotionController;
 import src.motion.PostureController;
 import src.motion.TrackerController;
 import src.memory.Memory;
+import src.motion.*;
+import src.point.Point;
 import src.speech.AnimatedSpeech;
 import src.interaction_engine.BasicAwareness;
 import src.vision.RedBallDetection;
@@ -28,6 +33,8 @@ import java.util.List;
 import java.util.Random;
 
 public class NAO {
+
+    // enums
     enum Positions {
         TOPLEFT,
         TOPCENTER,
@@ -41,6 +48,8 @@ public class NAO {
         MIDDLE,
         REAR,
     }
+
+    // Acces modifiers
     final static int EEN = 1;
     final static int NULL = 0;
     final static float NULLF = 0;
@@ -67,7 +76,7 @@ public class NAO {
     private static TrackerController ALTracker;
     private MotionController ALMotion;
 
-// Verbind met robot
+// Connect with robot
     public void connect() throws Exception {
         String robotUrl = "tcp://" + ConfigureNao.HOSTNAME + ":" + ConfigureNao.PORT;
         // Create a new application
@@ -75,6 +84,7 @@ public class NAO {
         // Start your application
         application.start();
 
+        // Using constructors to initalize objects
         ALTextToSpeech = new TextToSpeech(application.session());
         ALLeds = new EyeController(application.session());
         ALRobotPosture = new PostureController(application.session());
@@ -92,6 +102,12 @@ public class NAO {
         ALAutonomousLife = new AutonomousLife(application.session());
         Point point = new Point(X, Y);
 
+        /**
+         * This is a event that checks when a person enters the desired zone, the robot will wave and give a small
+         * introduction on what the robot is programmed to do and what his functions are
+         * @author Valentijn Bruggeman
+         * Inspiration: Levi Notoporu
+         */
         ALMemory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
             if(humanDetection) {
                 if (id > 0) {
@@ -105,43 +121,81 @@ public class NAO {
             }
         });
     }
-// robot instelling
+
+    /**
+     * This method is made so you can change the NAO's name to the desired name
+     * @param name
+     * @throws CallError
+     * @throws InterruptedException
+     */
     public void naoRobotName(String name) throws CallError, InterruptedException {
         ALSystem.changeName(name);
     }
-// Praten
+
+    /**
+     * The next 3 methods are made so the NAO says something u want him to say and to change the robot language to the
+     * desired language.
+     * @author Valentijn Bruggeman
+     */
     public void talking(String tekst) throws Exception {
         this.ALTextToSpeech.talk(tekst);
     }
     public void setLanguage(String language) throws CallError, InterruptedException {
         this.ALTextToSpeech.Language(language);
     }
-// Oog leds bedienen
-    public void EyeColour(String color, float duration) throws Exception {
+    public void animatedSpeech(String text) throws CallError, InterruptedException {
+        ALAnimatedSpeech.animatedText(text);
+    }
+
+    /**
+     * The next 2 methods are made so you can control the eye colour of the NAO robot
+     * @author Valentijn Bruggeman
+     */
+    public void eyeColour(String color, float duration) throws Exception {
         ALLeds.determineEyeColour(color, duration);
     }
     public void randomEyeControl(float duration) throws CallError, InterruptedException {
         ALLeds.randomEyes(duration);
     }
-// Audio player voor SFX in behaviours
+
+    /**
+     * The next 2 methods are used to play sound effects and to adjust the volume of the NAO
+     * @authors Ahmed El Ela and Valentijn Bruggeman
+     */
     public void play(String filename) throws CallError, InterruptedException {
         ALAudioPlayer.playSFX(filename);
     }
     public void volume(int volume) throws Exception {
 		ALAudioPlayer.setOutputVolume(volume);
     }
-// Armen bewegen
-    // Posture (stand, crouch & sit)
+
+    /**
+     * Changing the postue (stand, crouch & sit)of the NAO and determining which behaviour we want to import from Choreograph
+     * @autors Ahmed El Ela and Valentijn Bruggeman
+     */
     public void postureInput(String postureName, float maxSpeedFraction) throws Exception {
         ALRobotPosture.postureInput(postureName, maxSpeedFraction);
     }
 	public void determineBehaviour(String behavior) throws CallError, InterruptedException{
         ALBehaviourManager.behaviour(behavior);
     }
+
+    /**
+     * Making the NAO look move in the background so it looks like he is alive, or that he looks alive by autonomouslife
+     * @authors Ahmed El Ela and valentijn Bruggeman.
+     */
 	public void setBackgroundMovement(boolean enabled) throws CallError, InterruptedException {
         ALbackgroundMovement.moveInBackground(enabled);
 	}
-// Autonomous life
+    public void setAutonomousState(String state) throws CallError, InterruptedException {
+        ALAutonomousLife.autonomousState(state);
+    }
+
+    /**
+     * Added 3 methods that use the ALBasicAwareness API. to put the NAO in an engagement mode and to make him detect
+     * people
+     * @author Ahmed El Ela
+     */
     public void setEngagementMode (String modename) throws CallError, InterruptedException {
         ALBasicAwareness.engagementMode(modename);
     }
@@ -151,12 +205,13 @@ public class NAO {
     public void setStimulusDetection(String stimtype, boolean enable) throws CallError, InterruptedException {
         ALBasicAwareness.stimulusMode(stimtype, enable);
     }
-    public void setAutonomousState(String state) throws CallError, InterruptedException {
-        ALAutonomousLife.autonomousState(state);
-    }
-    public void animatedSpeech(String text) throws CallError, InterruptedException {
-        ALAnimatedSpeech.animatedText(text);
-    }
+
+    /**
+     * A method for human detection that uses the basicawareness methods and autonomouslife
+     * @author Ahmed El Ela
+     * @inspiredby Levi Notopuro
+     * @adjustedby Valentijn Bruggeman
+     */
     public void humanDetection() throws Exception {
         setAutonomousState("solitary");
         setStimulusDetection("Movement", false);
@@ -165,7 +220,11 @@ public class NAO {
         setHeadTracker("Head");
         humanDetection = true;
     }
-//  Do while loop om tijdelijk events te controllen
+
+    /**
+     * Do while loop to control the events
+     * @author Valentijn Bruggeman
+     */
     public void doWhile(int millis, int time) throws Exception {
         int counter = 0;
         do {
@@ -174,15 +233,20 @@ public class NAO {
         } while (counter < time);
     }
 
-//  Rood herkennen methode met enum definitie per "locatie"
+    /**
+     * Made a method that uses the ALRedBallDetection API to detect the redball being used in our simon says function
+     * the code has a values set up for the NAO camera. The enums are used to identify the places we want the NAO to
+     * detect and that gets stored a arraylist.
+     * @author Valentijn Bruggeman
+     */
     public void detectRedBall() throws Exception {
         System.out.println("Startg");
         ALRedBallDetection.subscribe();
         ALMemory.subscribeToEvent("redBallDetected", o -> {
             List<Object> data = (List<Object>) o;
-            List<Float> BallInfo = (List<Float>) data.get(1);
-            X = BallInfo.get(0);
-            Y = BallInfo.get(1);
+            List<Float> BallInfo = (List<Float>) data.get(EEN);
+            X = BallInfo.get(NULL);
+            Y = BallInfo.get(EEN);
 
             this.X = X;
             this.Y = Y;
@@ -237,14 +301,24 @@ public class NAO {
         });
     }
 
+    /**
+     * A method that identifies the arraylist
+     * @author Valentijn Bruggeman
+     */
     public void processPointsList() throws Exception {
         for (Point point : pointsList) {
             X = point.getX();
             Y = point.getY();
-            // System.out.println("X = " + X + " Y = " + Y);
         }
         pointsList.clear();
     }
+
+    /**
+     *  The next 7 methods are made for the positions we identified earlier. When the NAO detects ur ball in the correct
+     *  place he moves on to give a compliment if its not in the correct place he tells u how u can adjust the ball to
+     *  the correct place. We also added SFX when he detects the correct and the incorrect place.
+     * @authors Ahmed El Ela and Valentijn Bruggeman
+     */
     public void topLeft() throws Exception {
         postureInput("StandInit", 0.3f);
         talking("Cijmon zegt armen links boven");
@@ -253,9 +327,9 @@ public class NAO {
         while(this.ballPosition != Positions.TOPLEFT) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar linksboven te bewegen!");
-            EyeColour("red", NULLF);
+            eyeColour("red", NULLF);
         }
-        EyeColour("green", NULLF);
+        eyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Goed zo");
         Thread.sleep(500);
@@ -268,9 +342,9 @@ public class NAO {
         while(this.ballPosition != Positions.TOPCENTER) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer boven uw hoofd te bewegen!");
-            EyeColour("red", NULLF);
+            eyeColour("red", NULLF);
         }
-        EyeColour("green", NULLF);
+        eyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Lekker bezig");
         Thread.sleep(500);
@@ -283,9 +357,9 @@ public class NAO {
         while(this.ballPosition != Positions.TOPRIGHT) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar rechtsboven te bewegen!");
-            EyeColour("red", NULLF);
+            eyeColour("red", NULLF);
         }
-        EyeColour("green", NULLF);
+        eyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("U doet het prachtig");
         Thread.sleep(500);
@@ -298,9 +372,9 @@ public class NAO {
         while(this.ballPosition != Positions.MIDDLE) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar het midden te bewegen!");
-            EyeColour("red", NULLF);
+            eyeColour("red", NULLF);
         }
-        EyeColour("green", NULLF);
+        eyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Wauw perfect");
         Thread.sleep(500);
@@ -313,9 +387,9 @@ public class NAO {
         while(this.ballPosition != Positions.BOTTOMLEFT) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar linksonder te bewegen!");
-            EyeColour("red", NULLF);
+            eyeColour("red", NULLF);
         }
-        EyeColour("green", NULLF);
+        eyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Goedgedaan");
         Thread.sleep(500);
@@ -328,9 +402,9 @@ public class NAO {
         while(this.ballPosition != Positions.BOTTOMCENTER) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer onder uw navel te bewegen!");
-            EyeColour("red", NULLF);
+            eyeColour("red", NULLF);
         }
-        EyeColour("green", NULLF);
+        eyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Fantastisch");
         Thread.sleep(500);
@@ -343,18 +417,24 @@ public class NAO {
         while(this.ballPosition != Positions.BOTTOMRIGHT) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar rechtsonder te bewegen!");
-            EyeColour("red", NULLF);
+            eyeColour("red", NULLF);
         }
-        EyeColour("green", NULLF);
+        eyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("U bent de beste!");
         Thread.sleep(500);
     }
+
+    /**
+     * This method is uses the moves we identified and throws them in a random generator. The move generator checks
+     * the loop for the last used move so it doesnt repeat the move back to back. The moves are stored in an arraylist.
+     * @authors Ahmed El Ela and Valentijn Bruggeman
+     */
     public void simonSays() throws Exception {
         List<Positions> movesList = new ArrayList<>();
         Random random = new Random();
 
-        // Generate 20 random moves
+        // Generate amount of random moves
         for (int i = NULL; i < 6; i++) {
             Positions move;
             int lastMove = movesList.size() - EEN;
@@ -394,7 +474,14 @@ public class NAO {
         animatedSpeech(" ^start (animations/Stand/Gestures/Enthusiastic_5) Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
 
-//  Hoofd knoppen besturing
+    /**
+     * Made 3 events for each button that the NAO has on his head. In the event there is an if loop that checks if the
+     * button has had a threshold for 0.5 secs, if so the robot stands still and starts the desired function. Each
+     * button has the same SFX. The "Front" button is a small intro, the "Middle" button is our simon says and the
+     * "Rear" button is for our small concert.
+     * @author Ahmed El Ela
+     * @adjustedby Valentijn Bruggeman
+     */
 	public void touchButton(String sensorName) throws Exception {
         switch (sensorName) {
             case "Front":
@@ -432,7 +519,7 @@ public class NAO {
                             //detectRedBall();
                             this.pressedButton = Buttons.MIDDLE;
                             simonSays();
-                            EyeColour("green", NULLF);
+                            eyeColour("green", NULLF);
                             ALRedBallDetection.unsubscribe();
                             postureInput("Crouch", 0.5f);
                         } catch (Exception e) {
@@ -456,7 +543,7 @@ public class NAO {
                             this.pressedButton = Buttons.REAR;
                             determineBehaviour("movement/Dance 1");
                             Thread.sleep(500);
-                            EyeColour("green", NULLF);
+                            eyeColour("green", NULLF);
                         } catch (Exception e) {
                             System.out.println(e);
                             throw new RuntimeException(e);
@@ -470,7 +557,11 @@ public class NAO {
         }
     }
 
-//  Threads om tegelijkertijd functies uit te voeren
+    /**
+     * made 2 threads so the function stays running. One thread is for the DetectRedBall and the other is for the
+     * disco eyes during our small concert.
+     * @author Valentijn Bruggeman
+     */
     static class checkPoints implements Runnable {
         private NAO tyrone2;
         public checkPoints (NAO tyrone2) {
