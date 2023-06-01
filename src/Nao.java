@@ -411,6 +411,7 @@ public class Nao {
                     if (touch >= touchThreshold) {
                         setBackgroundmovement(false);
                         try {
+                            play("/opt/aldebaran/var/www/apps/movement/bell.wav");
                             // Do something when front button is pressed
                             postureInput("StandInit", 0.5f);
                             animateSpeech("^startTag(Hey_1) Hallo, ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Cijmon. Ik ben gemaakt om jullie te helpen bewegen! Ik heb twee spel modes! 1 is gemaakt om mij na te doen en de andere is voor uw amusement! Klik de knop op het midden van mijn hoofd om mij na te doen of klik de achterste knop om vermaakt te worden!");
@@ -431,6 +432,7 @@ public class Nao {
                         setBackgroundmovement(false);
                         try {
                             // Do something when middle button is pressed
+                            play("/opt/aldebaran/var/www/apps/movement/bell.wav");
                             postureInput("StandInit", 0.5f);
                             animateSpeech(" ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Het werkt als volgt: Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen!");
                             Thread.sleep(500);
@@ -455,6 +457,7 @@ public class Nao {
                     if (touch >= touchThreshold) {
                         setBackgroundmovement(false);
                         try {
+                            play("/opt/aldebaran/var/www/apps/movement/bell.wav");
                             postureInput("StandInit", 0.5f);
                             animateSpeech(" ^start(animations/Stand/BodyTalk/BodyTalk_10) Bent u klaar om te zien hoe de dans van kinderen voor kinderen eruit ziet? Geniet ervan!");
                             this.gedrukteKnop = knoppen.REAR;
