@@ -1,4 +1,4 @@
-package src.vision;
+package src.interaction_engine;
 
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.Session;
