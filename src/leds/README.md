@@ -6,4 +6,4 @@ set an RGB value as the eye colour and a method to get
 random eye colour. 
 
 This is the UML diagram:
-![](../img/OogController.png)
+![](../img/EyeController.png)
