@@ -5,11 +5,15 @@ import com.aldebaran.qi.Session;
 import com.aldebaran.qi.helper.proxies.ALSystem;
 
 public class Setup {
-    private ALSystem systeem;
+    // Created an acces modifier for ALSystem
+    private ALSystem system;
+
+    // Created a constructor called setup to that initializes the ALSystem
     public Setup(Session session) throws Exception {
-        this.systeem = new ALSystem(session);
+        this.system = new ALSystem(session);
     }
+    // Created this method so we can change the name of the NAO to our desired name
     public void changeName(String name) throws CallError, InterruptedException {
-        this.systeem.setRobotName(name);
+        this.system.setRobotName(name);
     }
 }
