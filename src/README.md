@@ -1,41 +1,55 @@
 ## PAD-04
-NAO robot programming
+NAO robot programming project, year one computer engineering HvA
 
-## Uitleg
-For this project we created two main functions for our NAO robot to do. The first is an adapted version of simon says 
+## What we did
+For this project we created three main functions. Two of these functions can be controlled by pressing a button on 
+the robots head. The first function is designed to detect humans in a certain range. The way this function works 
+is as follows:
 
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+When a person walks by the NAO, in the range given by us. The NAO will start interacting with that person. He 
+interacts by welcoming the person walking by and waves at them. Then he proceeds to give them an introduction on what 
+the functions are and how people can start the desired function.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+The second function (the second button on the robots head) is an adapted version of simon says using the NAO's red 
+ball detection module to check whether a "command" is properly executed. An example of a command is: simon says put 
+your hands above your head. The users then put their hands (with a red balloon between their hands) above their heads. 
+The NAO checks if the move is made correctly, otherwise it will tell the user to adjust the position of the balloon to 
+the proper position.
+
+The third function (the third button on the robots head) is a dance show we created to entertain the users. The dance 
+show is accompanied by music and disco eyes. Our inspiration for the dance was "kinderen voor kinderen", which is a 
+Dutch initiative to promote health and fitness for children.
+
+ 
+###### Kinderen voor kinderen link: https://www.youtube.com/watch?v=QUMygc3_JWA
 
 ## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+GIF/video of function one and two
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+To use this code in java you will need an SDK and a JDK that are compatible with your operating system and the NAO 
+version. 
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Apart from that make sure that the name of the nao in the configure file corresponds with the proper name of your 
+NAO robot running your java code on the NAO.
+
+A helpful tip to get you started using the NAO is to download Choregraphe. If you have a mac this might prove a bit
+difficult, but it is possible. Depending on your processor (Intel of mac) there are solutions that work to a certain
+degree. One such solution is by getting a MAC user with the app to put it on a USB stick and download the app from 
+there.
 
 ## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+A very helpful link is the aldebaran documentation for the NAO. There are NAOqi and NAO documentation. Both are 
+equally useful. In the NAOqi documentation you'll find the API's that can be used to program the NAO. In the NAO 
+documentation you'll find a technical overview of 
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+###### NAOqi link: http://doc.aldebaran.com/2-5/index_dev_guide.html
+###### NAO link: http://doc.aldebaran.com/2-5/home_nao.html
 
 ## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+This project was made possible by Ahmed El Ela and Valentijn Bruggeman (myself)
 
-## License
-For open source projects, say how it is licensed.
+Our group started out with two others, but they quit the study around halfway without any major contributions.
 
 ## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Done
