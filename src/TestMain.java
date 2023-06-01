@@ -8,6 +8,7 @@ public class TestMain {
         naoTyrone.talking("Verbonden");
         naoTyrone.volume(50);
         naoTyrone.setLanguage("Dutch");
+        naoTyrone.bepaalOogKleur("white",0.5f);
         Thread.sleep(2000);
 //        naoTyrone.waitForPeople();
 

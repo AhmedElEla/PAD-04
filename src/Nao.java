@@ -91,18 +91,18 @@ public class Nao {
         ALbasicawareness = new BasicAwareness(application.session());
         ALautonomouslife = new AutonomousLife(application.session());
 
-        memory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
-            if(waitForPeople) {
-                if (id > 0) {
-
-                    System.out.println("print 1 wait for peeople");
-                    animateSpeech("^start (movements1/wave) Welkom! klik op het eerste knop op mijn hoofd om de intro te beginnen ^wait (movements1/wave)");
-                    autonomousState("disabled");
-                    waitForPeople = false;
-
-                }
-            }
-        });
+//        memory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
+//            if(waitForPeople) {
+//                if (id > 0) {
+//
+//                    System.out.println("print 1 wait for peeople");
+//                    animateSpeech("^start (movements1/wave) Welkom! klik op het eerste knop op mijn hoofd om de intro te beginnen ^wait (movements1/wave)");
+//                    autonomousState("disabled");
+//                    waitForPeople = false;
+//
+//                }
+//            }
+//        });
     }
 // robot instelling
     public void naoRobotNaam(String name) throws CallError, InterruptedException {
@@ -161,16 +161,16 @@ public class Nao {
     public void animateSpeech(String text) throws CallError, InterruptedException {
         animatedSpeech.animateText(text);
     }
-    boolean waitForPeople = false;
-
-    public void waitForPeople() throws Exception {
-        autonomousState("solitary");
-        stimulusDetection("Movement", false);
-        stimulusDetection("People", true);
-        setEngagementMode("SemiEngaged");
-        setHeadTracker("Head");
-        waitForPeople = true;
-    }
+//    boolean waitForPeople = false;
+//
+//    public void waitForPeople() throws Exception {
+//        autonomousState("solitary");
+//        stimulusDetection("Movement", false);
+//        stimulusDetection("People", true);
+//        setEngagementMode("SemiEngaged");
+//        setHeadTracker("Head");
+//        waitForPeople = true;
+//    }
 
 //  do while loop om tijdelijk events te controllen
     public void doWhile(int millis, int time) throws Exception {
@@ -258,7 +258,7 @@ public class Nao {
         bepaalBehaviour("movement/ArmenLinksBoven");
         Thread.sleep(4000);
         while(this.ballPosition != positions.LINKSBOVEN) {
-            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar linksboven te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -273,7 +273,7 @@ public class Nao {
         bepaalBehaviour("movement/ArmenOmhoog");
         Thread.sleep(4000);
         while(this.ballPosition != positions.MIDDENBOVEN) {
-            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer boven uw hoofd te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -288,7 +288,7 @@ public class Nao {
         bepaalBehaviour("movement/ArmenRechtsBoven");
         Thread.sleep(4000);
         while(this.ballPosition != positions.RECHTSBOVEN) {
-            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar rechtsboven te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -303,7 +303,7 @@ public class Nao {
         bepaalBehaviour("movement/ArmenMidden");
         Thread.sleep(4000);
         while(this.ballPosition != positions.MIDDEN) {
-            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar het midden te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -318,7 +318,7 @@ public class Nao {
         bepaalBehaviour("movement/ArmenLinksOnder");
         Thread.sleep(4000);
         while(this.ballPosition != positions.LINKSONDER) {
-            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar linksonder te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -333,7 +333,7 @@ public class Nao {
         bepaalBehaviour("movement/ArmenOmlaag");
         Thread.sleep(4000);
         while(this.ballPosition != positions.MIDDENONDER) {
-            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer onder uw navel te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -348,7 +348,7 @@ public class Nao {
         bepaalBehaviour("movement/ArmenRechtsOnder");
         Thread.sleep(4000);
         while(this.ballPosition != positions.RECHTSONDER) {
-            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
+//            play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar rechtsonder te bewegen!");
             bepaalOogKleur("red", 0);
         }
@@ -463,7 +463,7 @@ public class Nao {
                             this.gedrukteKnop = knoppen.REAR;
                             bepaalBehaviour("movement/Dance 1");
                             Thread.sleep(500);
-                            bepaalOogKleur("green", 0f);
+                            bepaalOogKleur("white", 0.5f);
                         } catch (Exception e) {
                             System.out.println(e);
                             throw new RuntimeException(e);
