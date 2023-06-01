@@ -65,3 +65,5 @@ Our group started out with two others, but they quit the study around halfway wi
 
 ## Project status
 Done
+
+## UML diagram NAO class
