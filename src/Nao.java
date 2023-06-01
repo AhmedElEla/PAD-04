@@ -45,11 +45,8 @@ public class Nao {
     private TextToSpeech tts;
     private OogController ogen;
     private PostureController posture;
-    private MotionController motion;
     private RedBallDetection redBallDetection;
     private Memory memory;
-    private ALMemory newALMemory;
-    private static TrackerController redBallTracker;
 	private BehaviourController behaviour;
     public static float X;
     public static float Y;
@@ -63,6 +60,9 @@ public class Nao {
     private AudioController audioDevice;
     private BasicAwareness ALbasicawareness;
     private AutonomousLife ALautonomouslife;
+    private ALMemory newALMemory;
+    private static TrackerController redBallTracker;
+    private MotionController motion;
 
 // Verbind met robot
     public void verbind() throws Exception {
@@ -85,11 +85,11 @@ public class Nao {
         animatedSpeech = new AnimatedSpeech(application.session());
         systeem = new Setup(application.session());
         pointsList = new ArrayList<>();
-        Point point = new Point(X, Y);
         audioPlayer = new AudioController(application.session());
         audioDevice = new AudioController(application.session());
         ALbasicawareness = new BasicAwareness(application.session());
         ALautonomouslife = new AutonomousLife(application.session());
+        Point point = new Point(X, Y);
 
         memory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
             if(waitForPeople) {

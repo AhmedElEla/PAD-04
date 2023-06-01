@@ -9,7 +9,7 @@ public class TestMain {
         naoTyrone.volume(50);
         naoTyrone.setLanguage("Dutch");
         Thread.sleep(2000);
-//        naoTyrone.waitForPeople();
+        naoTyrone.waitForPeople();
 
         new Thread(new Nao.checkPoints(naoTyrone)).start();
         new Thread(new Nao.randomEyes(naoTyrone)).start();
