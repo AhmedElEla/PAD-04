@@ -57,7 +57,6 @@ public class Nao {
     private positions ballPosition;
     private knoppen gedrukteKnop;
     private AudioController audioPlayer;
-    private AudioController audioDevice;
     private BasicAwareness ALbasicawareness;
     private AutonomousLife ALautonomouslife;
     private ALMemory newALMemory;
@@ -86,7 +85,6 @@ public class Nao {
         systeem = new Setup(application.session());
         pointsList = new ArrayList<>();
         audioPlayer = new AudioController(application.session());
-        audioDevice = new AudioController(application.session());
         ALbasicawareness = new BasicAwareness(application.session());
         ALautonomouslife = new AutonomousLife(application.session());
         Point point = new Point(X, Y);
@@ -129,7 +127,7 @@ public class Nao {
         audioPlayer.playSFX(filename);
     }
     public void volume(int volume) throws Exception {
-        audioDevice.setOutputVolume(volume);
+		audioPlayer.setOutputVolume(volume);
     }
 
 // Armen bewegen
