@@ -5,7 +5,8 @@ of the speech module.
 
 ### AnimatedSpeech
 Consists of an import for the ALAnimatedSpeech, a constructor
-and one method.
+and one method. The method turns a string text with a tag for an animation into the robot speaking 
+moving.
 
 This is the UML diagram: 
 ![](../img/AnimatedSpeech.png)
