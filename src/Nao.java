@@ -128,7 +128,6 @@ public class Nao {
     public void play(String filename) throws CallError, InterruptedException {
         audioPlayer.playSFX(filename);
     }
-
     public void volume(int volume) throws Exception {
         audioDevice.setOutputVolume(volume);
     }
