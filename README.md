@@ -25,14 +25,14 @@ Dutch initiative to promote health and fitness for children.
 
 ## README for the other modules
 
-* [Audio module](./src/audio/README.md)
-* [Configuration module](./src/configuration/README.md)
-* [Core module](./src/core/README.md)
-* [LED's module](./src/leds/README.md)
-* [Memory module](./src/memory/README.md)
-* [Motion module](./src/motion/README.md)
-* [Speech module](./src/speech/README.md)
-* [Vision module](./src/vision/README.md)
+* [Audio module](./src/audio)
+* [Configuration module](./src/configuration)
+* [Core module](./src/core)
+* [LED's module](./src/leds)
+* [Memory module](./src/memory)
+* [Motion module](./src/motion)
+* [Speech module](./src/speech)
+* [Vision module](./src/vision)
 
 
 ## Visuals
