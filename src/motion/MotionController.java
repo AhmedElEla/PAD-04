@@ -15,23 +15,23 @@ public class MotionController {
     public MotionController(Session session) throws Exception {
         robotMotion = new ALMotion(session);
     }
-    public void bepaalMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
+    public void determineMotion(String names, double angleLists, float timeLists, boolean isAbsolute) throws Exception {
         this.robotMotion.angleInterpolation(names, angleLists, timeLists, isAbsolute);
     }
     public void shoulderPitchControl(double RPitchAngleLists, double LPitchAngleLists) throws Exception {
-        bepaalMotion("RShoulderPitch", RPitchAngleLists, 2f, true);
-        bepaalMotion("LShoulderPitch", LPitchAngleLists, 2f, true);
+        determineMotion("RShoulderPitch", RPitchAngleLists, 2f, true);
+        determineMotion("LShoulderPitch", LPitchAngleLists, 2f, true);
     }
     public void fingerControl() throws CallError, InterruptedException {
         this.robotMotion.openHand("RHand");
         this.robotMotion.openHand("LHand");
     }
     public void wristControl(double RWristAngleLists, double LWristAngleLists) throws Exception {
-        bepaalMotion("RWristYaw", RWristAngleLists, 0.5f,true);
-        bepaalMotion("LWristYaw", LWristAngleLists, 0.5f,true);
+        determineMotion("RWristYaw", RWristAngleLists, 0.5f,true);
+        determineMotion("LWristYaw", LWristAngleLists, 0.5f,true);
     }
     public void shoulderRollControl(double RRollAngleLists, double LRollAngleLists) throws Exception {
-        bepaalMotion("RShoulderRoll", RRollAngleLists, 1f, true);
-        bepaalMotion("LShoulderRoll", LRollAngleLists, 1f, true);
+        determineMotion("RShoulderRoll", RRollAngleLists, 1f, true);
+        determineMotion("LShoulderRoll", LRollAngleLists, 1f, true);
     }
 }

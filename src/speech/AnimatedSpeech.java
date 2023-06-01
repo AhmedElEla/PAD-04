@@ -9,7 +9,7 @@ public class AnimatedSpeech {
     public AnimatedSpeech(Session session) throws Exception {
         this.animatedSpeech = new ALAnimatedSpeech(session);
     }
-    public void animateText(String text) throws CallError, InterruptedException {
+    public void animatedText(String text) throws CallError, InterruptedException {
         this.animatedSpeech.say(text);
     }
 }

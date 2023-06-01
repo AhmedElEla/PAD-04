@@ -9,7 +9,7 @@ public class BehaviourController {
     public BehaviourController(Session session) throws Exception {
         robotBehaviour = new ALBehaviorManager(session);
     }
-    public void bepaalBehaviour(String behavior) throws CallError, InterruptedException {
+    public void behaviour(String behavior) throws CallError, InterruptedException {
         this.robotBehaviour.startBehavior(behavior);
     }
 }

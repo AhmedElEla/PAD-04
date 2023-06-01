@@ -8,12 +8,11 @@ package src;
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.helper.EventCallback;
-import com.aldebaran.qi.helper.proxies.ALMemory;
 import src.audio.AudioController;
 import src.configuration.ConfigureNao;
 import src.configuration.Setup;
 import src.core.BehaviourController;
-import src.leds.OogController;
+import src.leds.EyeController;
 import src.motion.MotionController;
 import src.motion.PostureController;
 import src.motion.TrackerController;
@@ -27,149 +26,145 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Nao {
-    enum positions {
-        LINKSBOVEN,
-        MIDDENBOVEN,
-        RECHTSBOVEN,
-        MIDDEN,
-        LINKSONDER,
-        MIDDENONDER,
-        RECHTSONDER,
+public class NAO {
+    enum Positions {
+        TOPLEFT,
+        TOPCENTER,
+        TOPRIGHT,
+        MIDDLE,
+        BOTTOMLEFT,
+        BOTTOMCENTER,
+        BOTTOMRIGHT,
     }
-    enum knoppen {
+    enum Buttons {
         MIDDLE,
         REAR,
     }
-    private Application application;
-    private TextToSpeech tts;
-    private OogController ogen;
-    private PostureController posture;
-    private RedBallDetection redBallDetection;
-    private Memory memory;
-	private BehaviourController behaviour;
+    final static int EEN = 1;
+    final static int NULL = 0;
+    final static float NULLF = 0;
+    final static int TIEN = 10;
     public static float X;
     public static float Y;
-	private BackgroundMovement ALbackgroundmovement;
-    private AnimatedSpeech animatedSpeech;
-    private Setup systeem;
+    public static boolean humanDetection = false;
+    private Application application;
+    private TextToSpeech ALTextToSpeech;
+    private EyeController ALLeds;
+    private PostureController ALRobotPosture;
+    private RedBallDetection ALRedBallDetection;
+    private Memory ALMemory;
+	private BehaviourController ALBehaviourManager;
+	private BackgroundMovement ALbackgroundMovement;
+    private AnimatedSpeech ALAnimatedSpeech;
+    private Setup ALSystem;
     private ArrayList<Point> pointsList;
-    private positions ballPosition;
-    private knoppen gedrukteKnop;
-    private AudioController audioPlayer;
-    private BasicAwareness ALbasicawareness;
-    private AutonomousLife ALautonomouslife;
-    private ALMemory newALMemory;
-    private static TrackerController redBallTracker;
-    private MotionController motion;
+    private Positions ballPosition;
+    private Buttons pressedButton;
+    private AudioController ALAudioPlayer;
+    private BasicAwareness ALBasicAwareness;
+    private AutonomousLife ALAutonomousLife;
+    private static TrackerController ALTracker;
+    private MotionController ALMotion;
 
 // Verbind met robot
-    public void verbind() throws Exception {
+    public void connect() throws Exception {
         String robotUrl = "tcp://" + ConfigureNao.HOSTNAME + ":" + ConfigureNao.PORT;
         // Create a new application
         this.application = new Application(new String[]{}, robotUrl);
         // Start your application
         application.start();
 
-        tts = new TextToSpeech(application.session());
-        ogen = new OogController(application.session());
-        posture = new PostureController(application.session());
-        motion = new MotionController(application.session());
-        redBallDetection = new RedBallDetection(application.session());
-        memory = new Memory(application.session());
-        redBallTracker = new TrackerController(application.session());
-		behaviour = new BehaviourController(application.session());
-		newALMemory = new ALMemory(application.session());
-		ALbackgroundmovement = new BackgroundMovement(application.session());
-        animatedSpeech = new AnimatedSpeech(application.session());
-        systeem = new Setup(application.session());
+        ALTextToSpeech = new TextToSpeech(application.session());
+        ALLeds = new EyeController(application.session());
+        ALRobotPosture = new PostureController(application.session());
+        ALMotion = new MotionController(application.session());
+        ALRedBallDetection = new RedBallDetection(application.session());
+        ALMemory = new Memory(application.session());
+        ALTracker = new TrackerController(application.session());
+		ALBehaviourManager = new BehaviourController(application.session());
+		ALbackgroundMovement = new BackgroundMovement(application.session());
+        ALAnimatedSpeech = new AnimatedSpeech(application.session());
+        ALSystem = new Setup(application.session());
         pointsList = new ArrayList<>();
-        audioPlayer = new AudioController(application.session());
-        ALbasicawareness = new BasicAwareness(application.session());
-        ALautonomouslife = new AutonomousLife(application.session());
+        ALAudioPlayer = new AudioController(application.session());
+        ALBasicAwareness = new BasicAwareness(application.session());
+        ALAutonomousLife = new AutonomousLife(application.session());
         Point point = new Point(X, Y);
 
-        memory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
-            if(waitForPeople) {
+        ALMemory.subscribeToEvent("EngagementZones/PersonEnteredZone2", (EventCallback<Integer>) id -> {
+            if(humanDetection) {
                 if (id > 0) {
 
                     System.out.println("print 1 wait for peeople");
-                    animateSpeech("^start (movements1/wave) Welkom! klik op het eerste knop op mijn hoofd om de intro te beginnen ^wait (movements1/wave)");
-                    autonomousState("disabled");
-                    waitForPeople = false;
+                    animatedSpeech("^start (movements1/wave) Welkom! klik op het eerste knop op mijn hoofd om de intro te beginnen ^wait (movements1/wave)");
+                    setAutonomousState("disabled");
+                    humanDetection = false;
 
                 }
             }
         });
     }
 // robot instelling
-    public void naoRobotNaam(String name) throws CallError, InterruptedException {
-        systeem.changeName(name);
+    public void naoRobotName(String name) throws CallError, InterruptedException {
+        ALSystem.changeName(name);
     }
 // Praten
     public void talking(String tekst) throws Exception {
-        this.tts.talk(tekst);
+        this.ALTextToSpeech.talk(tekst);
     }
     public void setLanguage(String language) throws CallError, InterruptedException {
-        this.tts.Language(language);
+        this.ALTextToSpeech.Language(language);
     }
-
 // Oog leds bedienen
-    public void bepaalOogKleur(String color, float duration) throws Exception {
-        ogen.bepaalOogKleur(color, duration);
+    public void EyeColour(String color, float duration) throws Exception {
+        ALLeds.determineEyeColour(color, duration);
     }
     public void randomEyeControl(float duration) throws CallError, InterruptedException {
-        ogen.randomEyes(duration);
+        ALLeds.randomEyes(duration);
     }
-
 // Audio player voor SFX in behaviours
     public void play(String filename) throws CallError, InterruptedException {
-        audioPlayer.playSFX(filename);
+        ALAudioPlayer.playSFX(filename);
     }
     public void volume(int volume) throws Exception {
-		audioPlayer.setOutputVolume(volume);
+		ALAudioPlayer.setOutputVolume(volume);
     }
-
 // Armen bewegen
     // Posture (stand, crouch & sit)
     public void postureInput(String postureName, float maxSpeedFraction) throws Exception {
-        posture.postureInput(postureName, maxSpeedFraction);
+        ALRobotPosture.postureInput(postureName, maxSpeedFraction);
     }
-	public void bepaalBehaviour(String behavior) throws CallError, InterruptedException{
-        behaviour.bepaalBehaviour(behavior);
+	public void determineBehaviour(String behavior) throws CallError, InterruptedException{
+        ALBehaviourManager.behaviour(behavior);
     }
-	public void setBackgroundmovement(boolean enabled) throws CallError, InterruptedException {
-        ALbackgroundmovement.moveInBackground(enabled);
+	public void setBackgroundMovement(boolean enabled) throws CallError, InterruptedException {
+        ALbackgroundMovement.moveInBackground(enabled);
 	}
-
 // Autonomous life
     public void setEngagementMode (String modename) throws CallError, InterruptedException {
-        ALbasicawareness.engagementMode(modename);
+        ALBasicAwareness.engagementMode(modename);
     }
     public void setHeadTracker (String trackingmode) throws CallError, InterruptedException {
-        ALbasicawareness.headTracker(trackingmode);
+        ALBasicAwareness.headTracker(trackingmode);
     }
-    public void stimulusDetection (String stimtype, boolean enable) throws CallError, InterruptedException {
-        ALbasicawareness.stimulusMode(stimtype, enable);
+    public void setStimulusDetection(String stimtype, boolean enable) throws CallError, InterruptedException {
+        ALBasicAwareness.stimulusMode(stimtype, enable);
     }
-    public void autonomousState (String state) throws CallError, InterruptedException {
-        ALautonomouslife.autonomousState(state);
+    public void setAutonomousState(String state) throws CallError, InterruptedException {
+        ALAutonomousLife.autonomousState(state);
     }
-    public void animateSpeech(String text) throws CallError, InterruptedException {
-        animatedSpeech.animateText(text);
+    public void animatedSpeech(String text) throws CallError, InterruptedException {
+        ALAnimatedSpeech.animatedText(text);
     }
-    boolean waitForPeople = false;
-
-    public void waitForPeople() throws Exception {
-        autonomousState("solitary");
-        stimulusDetection("Movement", false);
-        stimulusDetection("People", true);
+    public void humanDetection() throws Exception {
+        setAutonomousState("solitary");
+        setStimulusDetection("Movement", false);
+        setStimulusDetection("People", true);
         setEngagementMode("SemiEngaged");
         setHeadTracker("Head");
-        waitForPeople = true;
+        humanDetection = true;
     }
-
-//  do while loop om tijdelijk events te controllen
+//  Do while loop om tijdelijk events te controllen
     public void doWhile(int millis, int time) throws Exception {
         int counter = 0;
         do {
@@ -178,11 +173,11 @@ public class Nao {
         } while (counter < time);
     }
 
-//  rood herkennen methode met enum definitie per "locatie"
+//  Rood herkennen methode met enum definitie per "locatie"
     public void detectRedBall() throws Exception {
         System.out.println("Startg");
-        redBallDetection.subscribe();
-        memory.subscribeToEvent("redBallDetected", o -> {
+        ALRedBallDetection.subscribe();
+        ALMemory.subscribeToEvent("redBallDetected", o -> {
             List<Object> data = (List<Object>) o;
             List<Float> BallInfo = (List<Float>) data.get(1);
             X = BallInfo.get(0);
@@ -193,45 +188,45 @@ public class Nao {
 
             System.out.println("X: " + X + " Y: " + Y);
 
-            // LinksBoven
+            // Top left value
             if(X <= -0.13 && Y <= -0.10) {
-                this.ballPosition = positions.LINKSBOVEN;
-                System.out.println("LINKSBOVEN");
+                this.ballPosition = Positions.TOPLEFT;
+                System.out.println("TOPLEFT");
             }
-            // MiddenBoven
+            // Top center value
             else if (X >= -0.12 && X <= 0.12 && Y <= -0.10) {
-                this.ballPosition = positions.MIDDENBOVEN;
-                System.out.println("MIDDENBOVEN");
+                this.ballPosition = Positions.TOPCENTER;
+                System.out.println("TOPCENTER");
             }
-            // RechtsBoven
+            // Top right value
             else if (X >= 0.13 && X <= 2 && Y <= 0.10) {
-                this.ballPosition = positions.RECHTSBOVEN;
-                System.out.println("RECHTSBOVEN");
+                this.ballPosition = Positions.TOPRIGHT;
+                System.out.println("TOPRIGHT");
             }
-            // Midden
+            // Middle value
             else if (Y >= -0.09f && Y <= 0.09f) {
-                this.ballPosition = positions.MIDDEN;
-                System.out.println("MIDDEN");
+                this.ballPosition = Positions.MIDDLE;
+                System.out.println("MIDDLE");
             }
-            // LinksOnder
+            // Bottom left value
             else if (X <= -0.13 && Y >= 0.1) {
-                this.ballPosition = positions.LINKSONDER;
-                System.out.println("LINKSONDER");
+                this.ballPosition = Positions.BOTTOMLEFT;
+                System.out.println("BOTTOMLEFT");
             }
-            // MiddenOnder
+            // Bottom center value
             else if (X >= -0.12 && X <= 0.12 && Y >= 0.1) {
-                this.ballPosition = positions.MIDDENONDER;
-                System.out.println("MIDDENONDER");
+                this.ballPosition = Positions.BOTTOMCENTER;
+                System.out.println("BOTTOMCENTER");
             }
-            // RechtsOnder
+            // Bottom right value
             else if (X >= 0.10 && X <= 2 && Y >= 0.1) {
-                this.ballPosition = positions.RECHTSONDER;
-                System.out.println("RECHTSONDER");
+                this.ballPosition = Positions.BOTTOMRIGHT;
+                System.out.println("BOTTOMRIGHT");
             }
 
             pointsList.add(new Point(X, Y));
 
-            if (pointsList.size() == 10) {
+            if (pointsList.size() == TIEN) {
                 try {
                     processPointsList();
                 } catch (Exception e) {
@@ -249,169 +244,169 @@ public class Nao {
         }
         pointsList.clear();
     }
-    public void linksBoven() throws Exception {
+    public void topLeft() throws Exception {
         postureInput("StandInit", 0.3f);
         talking("Cijmon zegt armen links boven");
-        bepaalBehaviour("movement/ArmenLinksBoven");
+        determineBehaviour("movement/ArmenLinksBoven");
         Thread.sleep(4000);
-        while(this.ballPosition != positions.LINKSBOVEN) {
+        while(this.ballPosition != Positions.TOPLEFT) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar linksboven te bewegen!");
-            bepaalOogKleur("red", 0);
+            EyeColour("red", NULLF);
         }
-        bepaalOogKleur("green", 0);
+        EyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Goed zo");
         Thread.sleep(500);
     }
-    public void middenBoven() throws Exception {
+    public void topCenter() throws Exception {
         postureInput("StandInit", 0.3f);
         talking("Cijmon zegt armen boven uw hoofd");
-        bepaalBehaviour("movement/ArmenOmhoog");
+        determineBehaviour("movement/ArmenOmhoog");
         Thread.sleep(4000);
-        while(this.ballPosition != positions.MIDDENBOVEN) {
+        while(this.ballPosition != Positions.TOPCENTER) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer boven uw hoofd te bewegen!");
-            bepaalOogKleur("red", 0);
+            EyeColour("red", NULLF);
         }
-        bepaalOogKleur("green", 0);
+        EyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Lekker bezig");
         Thread.sleep(500);
     }
-    public void rechtsBoven() throws Exception {
+    public void topRight() throws Exception {
         postureInput("StandInit", 0.3f);
         talking("Cijmon zegt armen rechtsboven");
-        bepaalBehaviour("movement/ArmenRechtsBoven");
+        determineBehaviour("movement/ArmenRechtsBoven");
         Thread.sleep(4000);
-        while(this.ballPosition != positions.RECHTSBOVEN) {
+        while(this.ballPosition != Positions.TOPRIGHT) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar rechtsboven te bewegen!");
-            bepaalOogKleur("red", 0);
+            EyeColour("red", NULLF);
         }
-        bepaalOogKleur("green", 0);
+        EyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("U doet het prachtig");
         Thread.sleep(500);
     }
-    public void midden() throws Exception {
+    public void middle() throws Exception {
         postureInput("StandInit", 0.3f);
         talking("Cijmon zegt armen in het midden");
-        bepaalBehaviour("movement/ArmenMidden");
+        determineBehaviour("movement/ArmenMidden");
         Thread.sleep(4000);
-        while(this.ballPosition != positions.MIDDEN) {
+        while(this.ballPosition != Positions.MIDDLE) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar het midden te bewegen!");
-            bepaalOogKleur("red", 0);
+            EyeColour("red", NULLF);
         }
-        bepaalOogKleur("green", 0);
+        EyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Wauw perfect");
         Thread.sleep(500);
     }
-    public void linksOnder() throws Exception {
+    public void bottomLeft() throws Exception {
         postureInput("StandInit", 0.3f);
         talking("Cijmon zegt armen linksonder");
-        bepaalBehaviour("movement/ArmenLinksOnder");
+        determineBehaviour("movement/ArmenLinksOnder");
         Thread.sleep(4000);
-        while(this.ballPosition != positions.LINKSONDER) {
+        while(this.ballPosition != Positions.BOTTOMLEFT) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar linksonder te bewegen!");
-            bepaalOogKleur("red", 0);
+            EyeColour("red", NULLF);
         }
-        bepaalOogKleur("green", 0);
+        EyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Goedgedaan");
         Thread.sleep(500);
     }
-    public void middenOnder() throws Exception {
+    public void bottomCenter() throws Exception {
         postureInput("StandInit", 0.3f);
         talking("Cijmon zegt armen onder uw navel");
-        bepaalBehaviour("movement/ArmenOmlaag");
+        determineBehaviour("movement/ArmenOmlaag");
         Thread.sleep(4000);
-        while(this.ballPosition != positions.MIDDENONDER) {
+        while(this.ballPosition != Positions.BOTTOMCENTER) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer onder uw navel te bewegen!");
-            bepaalOogKleur("red", 0);
+            EyeColour("red", NULLF);
         }
-        bepaalOogKleur("green", 0);
+        EyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("Fantastisch");
         Thread.sleep(500);
     }
-    public void rechtsOnder() throws Exception {
+    public void bottomRight() throws Exception {
         postureInput("StandInit", 0.3f);
         talking("Cijmon zegt armen rechtsonder");
-        bepaalBehaviour("movement/ArmenRechtsOnder");
+        determineBehaviour("movement/ArmenRechtsOnder");
         Thread.sleep(4000);
-        while(this.ballPosition != positions.RECHTSONDER) {
+        while(this.ballPosition != Positions.BOTTOMRIGHT) {
             play("/opt/aldebaran/var/www/apps/movement/mixkit-wrong-answer-fail-notification-946.wav");
             talking("Probeer uw armen iets meer naar rechtsonder te bewegen!");
-            bepaalOogKleur("red", 0);
+            EyeColour("red", NULLF);
         }
-        bepaalOogKleur("green", 0);
+        EyeColour("green", NULLF);
         play("/opt/aldebaran/var/www/apps/movement/y2mate.com-Correct-sound-effect.ogg");
         talking("U bent de beste!");
         Thread.sleep(500);
     }
     public void simonSays() throws Exception {
-        List<positions> movesList = new ArrayList<>();
+        List<Positions> movesList = new ArrayList<>();
         Random random = new Random();
 
         // Generate 20 random moves
-        for (int i = 0; i < 6; i++) {
-            positions move;
-            int lastMove = movesList.size() - 1;
+        for (int i = NULL; i < 6; i++) {
+            Positions move;
+            int lastMove = movesList.size() - EEN;
 
             // Generate a random move that is not the same as the previous move
             do {
-                move = positions.values()[random.nextInt(positions.values().length)];
-            } while (lastMove >= 0 && move == movesList.get(lastMove));
+                move = Positions.values()[random.nextInt(Positions.values().length)];
+            } while (lastMove >= NULL && move == movesList.get(lastMove));
 
             movesList.add(move);
 
             // Switch case method for each move
             switch (move) {
-                case LINKSBOVEN:
-                    linksBoven();
+                case TOPLEFT:
+                    topLeft();
                     break;
-                case MIDDENBOVEN:
-                    middenBoven();
+                case TOPCENTER:
+                    topCenter();
                     break;
-                case RECHTSBOVEN:
-                    rechtsBoven();
+                case TOPRIGHT:
+                    topRight();
                     break;
-                case MIDDEN:
-                    midden();
+                case MIDDLE:
+                    middle();
                     break;
-                case LINKSONDER:
-                    linksOnder();
+                case BOTTOMLEFT:
+                    bottomLeft();
                     break;
-                case MIDDENONDER:
-                    middenOnder();
+                case BOTTOMCENTER:
+                    bottomCenter();
                     break;
-                case RECHTSONDER:
-                    rechtsOnder();
+                case BOTTOMRIGHT:
+                    bottomRight();
                     break;
             }
         }
-        animateSpeech(" ^start (animations/Stand/Gestures/Enthusiastic_5) Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
+        animatedSpeech(" ^start (animations/Stand/Gestures/Enthusiastic_5) Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
 
 //  Hoofd knoppen besturing
 	public void touchButton(String sensorName) throws Exception {
         switch (sensorName) {
             case "Front":
-                memory.subscribeToEvent("FrontTactilTouched", o -> {
+                ALMemory.subscribeToEvent("FrontTactilTouched", o -> {
                     float touch = (float)o;
-                    float touchThreshold = 0.5f;
-                    if (touch >= touchThreshold) {
-                        setBackgroundmovement(false);
+                    final float TOUCH_THRESHOLD = 0.5f;
+                    if (touch >= TOUCH_THRESHOLD) {
+                        setBackgroundMovement(false);
                         try {
                             play("/opt/aldebaran/var/www/apps/movement/bell.wav");
                             // Do something when front button is pressed
                             postureInput("StandInit", 0.5f);
-                            animateSpeech("^startTag(Hey_1) Hallo, ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Cijmon. Ik ben gemaakt om jullie te helpen bewegen! Ik heb twee spel modes! 1 is gemaakt om mij na te doen en de andere is voor uw amusement! Klik de knop op het midden van mijn hoofd om mij na te doen of klik de achterste knop om vermaakt te worden!");
+                            animatedSpeech("^startTag(Hey_1) Hallo, ^wait(Hey_1) ^start(animations/Stand/Gestures/Explain_10) mijn naam is Cijmon. Ik ben gemaakt om jullie te helpen bewegen! Ik heb twee spel modes! 1 is gemaakt om mij na te doen en de andere is voor uw amusement! Klik de knop op het midden van mijn hoofd om mij na te doen of klik de achterste knop om vermaakt te worden!");
                             Thread.sleep(500);
                         } catch (Exception e) {
                             System.out.println(e);
@@ -422,22 +417,22 @@ public class Nao {
                 break;
 
             case "Middle":
-                memory.subscribeToEvent("MiddleTactilTouched", o -> {
+                ALMemory.subscribeToEvent("MiddleTactilTouched", o -> {
                     float touch = (float)o;
-                    float touchThreshold = 0.5f;
-                    if (touch >= touchThreshold) {
-                        setBackgroundmovement(false);
+                    final float TOUCH_THRESHOLD = 0.5f;
+                    if (touch >= TOUCH_THRESHOLD) {
+                        setBackgroundMovement(false);
                         try {
                             // Do something when middle button is pressed
                             play("/opt/aldebaran/var/www/apps/movement/bell.wav");
                             postureInput("StandInit", 0.5f);
-                            animateSpeech(" ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Het werkt als volgt: Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen!");
+                            animatedSpeech(" ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Het werkt als volgt: Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen!");
                             Thread.sleep(500);
                             //detectRedBall();
-                            this.gedrukteKnop = knoppen.MIDDLE;
+                            this.pressedButton = Buttons.MIDDLE;
                             simonSays();
-                            bepaalOogKleur("green", 0f);
-                            redBallDetection.unsubscribe();
+                            EyeColour("green", NULLF);
+                            ALRedBallDetection.unsubscribe();
                             postureInput("Crouch", 0.5f);
                         } catch (Exception e) {
                             System.out.println(e);
@@ -448,19 +443,19 @@ public class Nao {
                 break;
 
             case "Rear":
-                memory.subscribeToEvent("RearTactilTouched", o -> {
+                ALMemory.subscribeToEvent("RearTactilTouched", o -> {
                     float touch = (float)o;
-                    float touchThreshold = 0.5f;
-                    if (touch >= touchThreshold) {
-                        setBackgroundmovement(false);
+                    final float TOUCH_THRESHOLD = 0.5f;
+                    if (touch >= TOUCH_THRESHOLD) {
+                        setBackgroundMovement(false);
                         try {
                             play("/opt/aldebaran/var/www/apps/movement/bell.wav");
                             postureInput("StandInit", 0.5f);
-                            animateSpeech(" ^start(animations/Stand/BodyTalk/BodyTalk_10) Bent u klaar om te zien hoe de dans van kinderen voor kinderen eruit ziet? Geniet ervan!");
-                            this.gedrukteKnop = knoppen.REAR;
-                            bepaalBehaviour("movement/Dance 1");
+                            animatedSpeech(" ^start(animations/Stand/BodyTalk/BodyTalk_10) Bent u klaar om te zien hoe de dans van kinderen voor kinderen eruit ziet? Geniet ervan!");
+                            this.pressedButton = Buttons.REAR;
+                            determineBehaviour("movement/Dance 1");
                             Thread.sleep(500);
-                            bepaalOogKleur("green", 0f);
+                            EyeColour("green", NULLF);
                         } catch (Exception e) {
                             System.out.println(e);
                             throw new RuntimeException(e);
@@ -476,8 +471,8 @@ public class Nao {
 
 //  Threads om tegelijkertijd functies uit te voeren
     static class checkPoints implements Runnable {
-        private Nao tyrone2;
-        public checkPoints (Nao tyrone2) {
+        private NAO tyrone2;
+        public checkPoints (NAO tyrone2) {
             this.tyrone2 = tyrone2;
         }
         @Override
@@ -488,7 +483,7 @@ public class Nao {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                if (this.tyrone2.gedrukteKnop == knoppen.MIDDLE) {
+                if (this.tyrone2.pressedButton == Buttons.MIDDLE) {
                     System.out.println("detecting redball");
                     try {
                         this.tyrone2.detectRedBall();
@@ -497,14 +492,14 @@ public class Nao {
                         e.printStackTrace();
                         throw new RuntimeException(e);
                     }
-                    this.tyrone2.gedrukteKnop = null;
+                    this.tyrone2.pressedButton = null;
                 }
             }
         }
     }
     static class randomEyes implements Runnable {
-        private Nao tyrone3;
-        public randomEyes (Nao tyrone3) {
+        private NAO tyrone3;
+        public randomEyes (NAO tyrone3) {
             this.tyrone3 = tyrone3;
         }
         @Override
@@ -515,7 +510,7 @@ public class Nao {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                if (this.tyrone3.gedrukteKnop == knoppen.REAR) {
+                if (this.tyrone3.pressedButton == Buttons.REAR) {
                     System.out.println("thread random eyes");
                     try {
                         this.tyrone3.randomEyeControl(1f);
@@ -529,8 +524,6 @@ public class Nao {
         }
     }
 }
-
-
 
 // Code dat gemaakt is door ons maar niet nodig blijkt te zijn bij het uiteindelijke product
 

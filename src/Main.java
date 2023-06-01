@@ -7,14 +7,14 @@ package src;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        Nao naoTyrone = new Nao();
-        naoTyrone.verbind();
+        NAO naoTyrone = new NAO();
+        naoTyrone.connect();
         naoTyrone.talking("Verbonden");
         naoTyrone.postureInput("Standinit", 1f);
 
         naoTyrone.detectRedBall();
 
-        naoTyrone.setBackgroundmovement(true);
+        naoTyrone.setBackgroundMovement(true);
 
         naoTyrone.touchButton("Front");
         naoTyrone.touchButton("Middle");

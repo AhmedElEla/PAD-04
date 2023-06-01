@@ -2,17 +2,17 @@ package src;
 
 public class TestMain {
     public static void main(String[] args) throws Exception {
-        Nao naoTyrone = new Nao();
+        NAO naoTyrone = new NAO();
 
-        naoTyrone.verbind();
+        naoTyrone.connect();
         naoTyrone.talking("Verbonden");
-        naoTyrone.volume(50);
+        naoTyrone.volume(100);
         naoTyrone.setLanguage("Dutch");
         Thread.sleep(2000);
-        naoTyrone.waitForPeople();
+        naoTyrone.humanDetection();
 
-        new Thread(new Nao.checkPoints(naoTyrone)).start();
-        new Thread(new Nao.randomEyes(naoTyrone)).start();
+        new Thread(new NAO.checkPoints(naoTyrone)).start();
+        new Thread(new NAO.randomEyes(naoTyrone)).start();
 
         naoTyrone.touchButton("Front");
         naoTyrone.touchButton("Middle");
