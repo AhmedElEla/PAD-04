@@ -1,6 +1,25 @@
 ## PAD-04
 NAO robot programming project, year one computer engineering HvA
 
+## Authors and acknowledgment
+This project was made possible by Ahmed El Ela and Valentijn Bruggeman (myself)
+
+Our group started out with two others, but they quit the study around halfway without any major contributions.
+
+
+## Visuals
+### The robot fully dressed
+![](src/img/NAO.png)
+
+### The robot's first function
+![](src/img/intro.gif)
+
+### The robot's second function
+![](src/img/simonSays.gif)
+
+### The robot's third function
+![](src/img/kvk.gif)
+
 ## What we did
 For this project we created three main functions. Two of these functions can be controlled by pressing a button on 
 the robots head. The first function is designed to detect humans in a certain range. The way this function works 
@@ -35,7 +54,6 @@ Dutch initiative to promote health and fitness for children.
 * [Vision module](./src/vision)
 
 
-## Visuals
 GIF/video of function one and two
 
 ## Installation
@@ -57,11 +75,6 @@ documentation you'll find a technical overview of
 
 ###### NAOqi link: http://doc.aldebaran.com/2-5/index_dev_guide.html
 ###### NAO link: http://doc.aldebaran.com/2-5/home_nao.html
-
-## Authors and acknowledgment
-This project was made possible by Ahmed El Ela and Valentijn Bruggeman (myself)
-
-Our group started out with two others, but they quit the study around halfway without any major contributions.
 
 ## Project status
 Done

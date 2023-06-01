@@ -22,7 +22,6 @@ import src.motion.MotionController;
 import src.motion.PostureController;
 import src.motion.TrackerController;
 import src.memory.Memory;
-import src.motion.*;
 import src.point.Point;
 import src.speech.AnimatedSpeech;
 import src.interaction_engine.BasicAwareness;
@@ -519,7 +518,7 @@ public class NAO {
                             //detectRedBall();
                             this.pressedButton = Buttons.MIDDLE;
                             simonSays();
-                            eyeColour("green", NULLF);
+                            eyeColour("white", NULLF);
                             ALRedBallDetection.unsubscribe();
                             postureInput("Crouch", 0.5f);
                         } catch (Exception e) {
@@ -543,7 +542,7 @@ public class NAO {
                             this.pressedButton = Buttons.REAR;
                             determineBehaviour("movement/Dance 1");
                             Thread.sleep(500);
-                            eyeColour("green", NULLF);
+                            eyeColour("white", NULLF);
                         } catch (Exception e) {
                             System.out.println(e);
                             throw new RuntimeException(e);
@@ -611,6 +610,7 @@ public class NAO {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    this.tyrone3.pressedButton = null;
                 }
             }
         }
