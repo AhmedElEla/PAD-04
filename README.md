@@ -23,6 +23,18 @@ Dutch initiative to promote health and fitness for children.
  
 ###### Kinderen voor kinderen link: https://www.youtube.com/watch?v=QUMygc3_JWA
 
+## README for the other modules
+
+* [Audio module](./src/audio/README.md)
+* [Configuration module](./src/configuration/README.md)
+* [Core module](./src/core/README.md)
+* [LED's module](./src/leds/README.md)
+* [Memory module](./src/memory/README.md)
+* [Motion module](./src/motion/README.md)
+* [Speech module](./src/speech/README.md)
+* [Vision module](./src/vision/README.md)
+
+
 ## Visuals
 GIF/video of function one and two
 
