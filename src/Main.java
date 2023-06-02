@@ -8,18 +8,22 @@ package src;
 public class Main {
     public static void main(String[] args) throws Exception {
         NAO naoTyrone = new NAO();
+
         naoTyrone.connect();
+        naoTyrone.naoRobotName("Simon");
+        naoTyrone.setLanguage("Dutch");
+        naoTyrone.volume(30);
         naoTyrone.talking("Verbonden");
-        naoTyrone.postureInput("Standinit", 1f);
+        Thread.sleep(2000);
+        naoTyrone.humanDetection();
 
-        naoTyrone.detectRedBall();
-
-        naoTyrone.setBackgroundMovement(true);
+        new Thread(new NAO.checkPoints(naoTyrone)).start();
+        new Thread(new NAO.randomEyes(naoTyrone)).start();
 
         naoTyrone.touchButton("Front");
         naoTyrone.touchButton("Middle");
         naoTyrone.touchButton("Rear");
 
-        naoTyrone.doWhile(1000, 100);
+        naoTyrone.doWhile(1000, 10000);
     }
 }
