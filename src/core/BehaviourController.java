@@ -13,6 +13,6 @@ public class BehaviourController {
     }
     // Created a method that is designed so we can import behaviours from Choreographe
     public void behaviour(String behavior) throws CallError, InterruptedException {
-        this.robotBehaviour.startBehavior(behavior);
+        this.robotBehaviour.runBehavior(behavior);
     }
 }
