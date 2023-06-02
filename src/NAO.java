@@ -470,7 +470,7 @@ public class NAO {
                     break;
             }
         }
-        animatedSpeech(" ^start (animations/Stand/Gestures/Enthusiastic_5) Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
+        animatedSpeech(" ^start (animations/Stand/Gestures/BowShort_1) Bedankt voor het spelen, hopelijk heeft uw net zoveel plezier gehad bij het spelen als wij dat hebben gehad met het maken van dit spel!");
     }
 
     /**
@@ -512,6 +512,7 @@ public class NAO {
                         try {
                             // Do something when middle button is pressed
                             play("/opt/aldebaran/var/www/apps/movement/bell.wav");
+                            eyeColour("white", NULLF);
                             postureInput("StandInit", 0.5f);
                             animatedSpeech(" ^start(animations/Stand/Gestures/Enthusiastic_5) Dit spel heet Cijmon zegt! Het werkt als volgt: Doe mijn bewegingen zo goed mogelijk na en probeer zoveel mogelijk plezier te hebben bij het spelen!");
                             Thread.sleep(500);
@@ -540,9 +541,14 @@ public class NAO {
                             postureInput("StandInit", 0.5f);
                             animatedSpeech(" ^start(animations/Stand/BodyTalk/BodyTalk_10) Bent u klaar om te zien hoe de dans van kinderen voor kinderen eruit ziet? Geniet ervan!");
                             this.pressedButton = Buttons.REAR;
+                            volume(30);
                             determineBehaviour("movement/Dance 1");
                             Thread.sleep(500);
-                            eyeColour("white", NULLF);
+                            animatedSpeech(" ^start (animations/Stand/Gestures/BowShort_1) Bedankt voor uw tijd, ik hoop dat jullie het een mooie voorstelling vonden! ");
+                            postureInput("Crouch", 0.3f);
+                            eyeColour("white", 1F);
+                            volume(30);
+
                         } catch (Exception e) {
                             System.out.println(e);
                             throw new RuntimeException(e);
@@ -604,13 +610,21 @@ public class NAO {
                 if (this.tyrone3.pressedButton == Buttons.REAR) {
                     System.out.println("thread random eyes");
                     try {
-                        this.tyrone3.randomEyeControl(1f);
+                        this.tyrone3.randomEyeControl(20f);
                     } catch (CallError e) {
                         throw new RuntimeException(e);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    try {
+                        this.tyrone3.eyeColour("white", NULLF);
+                        System.out.println("white");
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     this.tyrone3.pressedButton = null;
+
+
                 }
             }
         }
