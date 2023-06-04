@@ -32,13 +32,13 @@ Dutch initiative to promote health and fitness for children.
 ### The robot fully dressed
 ![](src/img/NAODressed.png)
 
-### The robot's first function
+### The robot's first function; roughly shown as a gif
 ![](src/img/intro.gif)
 
-### The robot's second function
+### The robot's second function; roughly shown as a gif
 ![](src/img/simonSays.gif)
 
-### The robot's third function
+### The robot's third function; roughly shown as a gif
 ![](src/img/kvk.gif)
 
 ## README for the other modules
