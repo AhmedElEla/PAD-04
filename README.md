@@ -2,14 +2,35 @@
 NAO robot programming project, year one computer engineering HvA
 
 ## Authors and acknowledgment
-This project was made possible by Ahmed El Ela and Valentijn Bruggeman (myself)
+This project was made possible by Ahmed El Ela and Valentijn Bruggeman
 
 Our group started out with two others, but they quit the study around halfway without any major contributions.
 
+## What we did
+For this project we created three main functions. Two of these functions can be controlled by pressing a button on
+the robots head. The first function is designed to detect humans in a certain range. The way this function works
+is as follows:
+
+When a person walks by the NAO, in the range given by us. The NAO will start interacting with that person. He
+interacts by welcoming the person walking by and waves at them. Then he proceeds to give them an introduction on what
+the functions are and how people can start the desired function.
+
+The second function (the second button on the robots head) is an adapted version of simon says using the NAO's red
+ball detection module to check whether a "command" is properly executed. An example of a command is: simon says put
+your hands above your head. The users then put their hands (with a red balloon between their hands) above their heads.
+The NAO checks if the move is made correctly, otherwise it will tell the user to adjust the position of the balloon to
+the proper position.
+
+The third function (the third button on the robots head) is a dance show we created to entertain the users. The dance
+show is accompanied by music and disco eyes. Our inspiration for the dance was "kinderen voor kinderen", which is a
+Dutch initiative to promote health and fitness for children.
+
+
+###### Kinderen voor kinderen link: https://www.youtube.com/watch?v=QUMygc3_JWA
 
 ## Visuals
 ### The robot fully dressed
-![](src/img/NAO.png)
+![](src/img/NAODressed.png)
 
 ### The robot's first function
 ![](src/img/intro.gif)
@@ -19,28 +40,6 @@ Our group started out with two others, but they quit the study around halfway wi
 
 ### The robot's third function
 ![](src/img/kvk.gif)
-
-## What we did
-For this project we created three main functions. Two of these functions can be controlled by pressing a button on 
-the robots head. The first function is designed to detect humans in a certain range. The way this function works 
-is as follows:
-
-When a person walks by the NAO, in the range given by us. The NAO will start interacting with that person. He 
-interacts by welcoming the person walking by and waves at them. Then he proceeds to give them an introduction on what 
-the functions are and how people can start the desired function.
-
-The second function (the second button on the robots head) is an adapted version of simon says using the NAO's red 
-ball detection module to check whether a "command" is properly executed. An example of a command is: simon says put 
-your hands above your head. The users then put their hands (with a red balloon between their hands) above their heads. 
-The NAO checks if the move is made correctly, otherwise it will tell the user to adjust the position of the balloon to 
-the proper position.
-
-The third function (the third button on the robots head) is a dance show we created to entertain the users. The dance 
-show is accompanied by music and disco eyes. Our inspiration for the dance was "kinderen voor kinderen", which is a 
-Dutch initiative to promote health and fitness for children.
-
- 
-###### Kinderen voor kinderen link: https://www.youtube.com/watch?v=QUMygc3_JWA
 
 ## README for the other modules
 
@@ -52,9 +51,6 @@ Dutch initiative to promote health and fitness for children.
 * [Motion module](./src/motion)
 * [Speech module](./src/speech)
 * [Vision module](./src/vision)
-
-
-GIF/video of function one and two
 
 ## Installation
 To use this code in java you will need an SDK and a JDK that are compatible with your operating system and the NAO 
@@ -80,3 +76,4 @@ documentation you'll find a technical overview of
 Done
 
 ## UML diagram NAO class
+![](src/img/NAO.png)
